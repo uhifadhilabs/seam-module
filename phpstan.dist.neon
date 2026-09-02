@@ -1,0 +1,19 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - tests
+    excludePaths:
+        analyse:
+            # THE RED SPECIFICATION. tests/Phase2 describes the runtime that
+            # arrives by extraction from the host in phase 2; it names classes
+            # and service ids that do not exist yet, so static analysis cannot
+            # resolve them and would report the absence as an error rather than
+            # as the point. The suite is excluded from `composer test` for the
+            # same reason (see phpunit.dist.xml) and php-cs-fixer still covers
+            # it — style is checkable without the classes.
+            #
+            # When the extraction lands, this exclusion is deleted in the same
+            # commit that moves the files into tests/{Unit,Integration}. If it
+            # is still here, the extraction is not finished.
+            - tests/Phase2

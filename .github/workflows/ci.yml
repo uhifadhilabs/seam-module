@@ -1,0 +1,92 @@
+name: CI
+
+# Gatekeeper: every push and pull request must pass the full standard
+# (code style -> static analysis -> tests) before it is valid for review.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.4', '8.5']
+
+    # Real PostGIS, standing ready. `composer check` runs the SCAFFOLD suite,
+    # which boots a kernel and opens no connection — the catalogue entities
+    # arrive with the phase-2 extraction. The service is here in the siblings'
+    # shape so that the first entity needs no CI change, and so the phase2
+    # suite can be switched on here the day it goes green.
+    services:
+      postgres:
+        image: ghcr.io/fundistadi/postgis:17
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: trunk_bundle_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      TRUNK_TEST_DATABASE_URL: "postgresql://app:app@127.0.0.1:5432/trunk_bundle_test?serverVersion=17&charset=utf8"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ctype, iconv, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Code style (php-cs-fixer)
+        run: composer cs:check
+
+      - name: Static analysis (PHPStan max)
+        run: composer phpstan
+
+      # The scaffold suite. It is green and it stays green — a failure here is a
+      # broken build, never a pending feature.
+      - name: Tests (PHPUnit)
+        run: composer test
+
+      # THE RED SPECIFICATION, REPORTED AND NOT ENFORCED. tests/Phase2 describes
+      # the runtime that phase 2 extracts from the host; it fails today because
+      # the implementation does not exist yet, which is the point of writing it
+      # first. Running it here keeps the todo list visible in every build
+      # without ever letting "red by design" be mistaken for "broken" — the job
+      # does not fail on it.
+      #
+      # When the extraction lands, this step loses its `continue-on-error` and
+      # the files move into tests/{Unit,Integration}.
+      - name: Specification for phase 2 (expected to fail until the extraction)
+        run: composer test:phase2
+        continue-on-error: true
