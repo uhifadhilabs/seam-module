@@ -3,8 +3,7 @@
 The **seam**: the module seam runtime every uhifadhi module registers with. A
 [uhifadhi](https://github.com/uhifadhilabs) platform bundle.
 
-> **Status: the runtime is here.** The seam was extracted out of the
-> [uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) and into this
+> **> [uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) and into this
 > bundle, against a specification that was written first and failing. See
 > [How this was built](#how-this-was-built).
 
@@ -12,10 +11,8 @@ The **seam**: the module seam runtime every uhifadhi module registers with. A
 
 - [The architecture](#the-architecture)
 - [Charter](#charter)
-- [How this was built](#how-this-was-built)
 - [What it guarantees](#what-it-guarantees)
 - [Boundaries: what the seam is not](#boundaries-what-the-seam-is-not)
-- [Deltas from the host's previous behaviour](#deltas-from-the-hosts-previous-behaviour)
 - [What is here](#what-is-here)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -56,23 +53,6 @@ installation has. A module is whatever tagged itself, and everything the seam
 treats specially (`pinned`, `base`) is a flag the provider declares, never a
 slug the runtime recognises. A test sweeps `src/` for that property.
 
-## How this was built
-
-The module seam already existed, working, inside the
-[uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) application. This
-repository extracted it — and because this project is test-first, the
-specification was written *before* the move rather than after it: 47 tests
-naming classes and service ids that did not exist yet, red by design, in a
-suite of their own so that "red by design" and "broken" could never be
-confused. The extraction is the commit that made them pass and folded them into
-`tests/Unit` and `tests/Integration`, where they are now simply tests.
-
-```bash
-composer check   # cs -> phpstan max -> the whole suite. CI gates on this.
-```
-
-There is one suite and one verdict. A failure here is a failure.
-
 ## What it guarantees
 
 Every row below is a test, and the table is the order they were written in:
@@ -90,7 +70,7 @@ Every row below is a test, and the table is the order they were written in:
 | 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Integration/Area/CataloguePersistenceTest` |
 | 10 | Installability: the seam alone boots without an area mapping and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
 
-### The attention-list promise (spec 3)
+### The attention-list promise
 
 Every contribution a module makes to a shared surface — an attention item, a
 now-tile, a map layer, a KPI — is keyed by its module slug, and the promise the
@@ -135,45 +115,6 @@ a page — a view-model, and the seam has no viewer.
 
 Concretely: this bundle ships **no `templates/` directory, no controllers and no
 routes**, and `Unit/BoundaryTest` fails the build if that changes.
-
-## Deltas from the host's previous behaviour
-
-Where the host's behaviour was accidental or undocumented, the specification
-pinned the honest version rather than the incumbent one. Each of these is a
-deliberate change the extraction made:
-
-1. **`position()` is honoured.** `ModuleProviderInterface::position()` is
-   documented as an ordering hint, and in the host nothing read it — the seed
-   passed its own loop index and the provider's answer was discarded. A contract method
-   nothing reads is a lie in the contract, and an author who sets it has no way
-   to find out it did nothing. The seam honours a declared position and uses
-   registration order only as the tie-break (which, given the trait default of
-   `0`, leaves the common case unchanged).
-2. **There is no hub row.** The host's seed command still claimed in its
-   docblock that the catalogue was "the host's own hub plus every provider"; the
-   code had not created a hub row since the catalogue became provider-driven.
-   The seam states the honest rule: every row comes from a provider, and
-   `pinned` is a flag a provider declares — the runtime never knows the hub's
-   slug.
-3. **The command is namespaced.** `seam:catalogue:seed`, because a bundle's
-   command belongs in the bundle's namespace — with `app:seed:catalogue` kept as
-   an alias, because that string is in the deploy pipeline and in every module's
-   README, and renaming it silently would break a deploy rather than a test.
-4. **The tables are deliberately unprefixed.** Every module prefixes its tables
-   with its domain word; the seam keeps `module` and `area_module`. A rename
-   here is a production migration on the platform's most-referenced tables,
-   bought with nothing but consistency — and the prefix rule exists to stop two
-   bundles colliding on a common noun, which cannot happen to the runtime every
-   bundle registers with.
-5. **Permissions are the module half only.** The host's permission catalogue
-   merges its own built-in enum with module declarations. The seam collects only the declarations; the host keeps its
-   own enum and stays the only thing that decides who holds what. A runtime that
-   also owned the host's built-in permissions would own the host's team model with it.
-6. **A declaration is deployment-wide, not per area** — a module switched off
-   everywhere still declares its permissions, so an admin can assign one that
-   currently guards nothing. This is the seam's honest state today; it is pinned
-   in a test rather than quietly narrowed, because narrowing it is a ruling
-   about the team model.
 
 ## What is here
 
