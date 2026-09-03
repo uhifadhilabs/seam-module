@@ -91,8 +91,11 @@ final class BundleBootTest extends TrunkKernelTestCase
         // host did nothing to configure beyond installing it. Note the kernel
         // this runs on: the trunk alone, with no host resolving the area
         // interface, which a host that has not got there yet must still boot.
-        self::assertSame(
-            [AreaModule::class, Module::class],
+        // Canonicalising, not ordering: what comes out of the driver is whatever
+        // order the directory was read in, which is the filesystem's business and
+        // not a promise this bundle makes. The claim is that both are mapped.
+        self::assertEqualsCanonicalizing(
+            [Module::class, AreaModule::class],
             array_map(
                 static fn (ClassMetadata $metadata): string => $metadata->getName(),
                 $em->getMetadataFactory()->getAllMetadata(),
