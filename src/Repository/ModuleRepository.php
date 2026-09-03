@@ -27,9 +27,14 @@ use UhifadhiLabs\Trunk\Entity\Module;
  * {@see \UhifadhiLabs\Trunk\Service\ModuleCatalogue} answers the second one and
  * is what a surface should read.
  *
+ * NOT FINAL. This bundle is installed by other packages, and a Doctrine
+ * repository is the documented place to add a query — or to stand in for one
+ * in somebody else's test. Sealing it would make the trunk's query surface the
+ * only one its consumers may ever have.
+ *
  * @extends ServiceEntityRepository<Module>
  */
-final class ModuleRepository extends ServiceEntityRepository
+class ModuleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

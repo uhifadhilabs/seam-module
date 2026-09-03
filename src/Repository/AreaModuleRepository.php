@@ -27,9 +27,14 @@ use UhifadhiLabs\Trunk\Entity\AreaModule;
  * a cache in front of these two methods is precisely how that promise stops
  * being true.
  *
+ * NOT FINAL. This bundle is installed by other packages, and a Doctrine
+ * repository is the documented place to add a query — or to stand in for one
+ * in somebody else's test. Sealing it would make the trunk's query surface the
+ * only one its consumers may ever have.
+ *
  * @extends ServiceEntityRepository<AreaModule>
  */
-final class AreaModuleRepository extends ServiceEntityRepository
+class AreaModuleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
