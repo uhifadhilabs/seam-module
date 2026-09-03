@@ -42,11 +42,7 @@ to.
 the fastest way to explain the shape to somebody new, and it is kept *only*
 here — in prose. The packages themselves are named for what they do, so that a
 newcomer reading an import knows what they are looking at without having been
-told the metaphor first. This one was called `trunk-module` (namespace
-`Uhifadhi\Trunk\`) until that rule was written down, and the sentence the
-rename bought is the whole architecture in eight words:
-
-> **A module registers with the seam and renders in the shell.**
+told the metaphor first.**
 
 ## Charter
 
