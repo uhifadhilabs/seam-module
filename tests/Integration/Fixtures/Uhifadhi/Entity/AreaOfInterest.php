@@ -43,8 +43,8 @@ use Uhifadhi\Seam\Entity\AreaInterface;
  * renamed. The `use` statement above DID follow — that is the seam's own
  * interface, not the impersonation. Sweeping the namespace on line 14 into a
  * rename would break nothing and fail nothing; it would simply stop testing
- * what this file exists to test. A project planted
- * from the seed names its area `App\Entity\AreaOfInterest` instead; either
+ * what this file exists to test. A project installed
+ * from the skeleton names its area `App\Entity\AreaOfInterest` instead; either
  * spelling resolves through the same interface, which is the whole point.
  *
  * The alternative — storing a bare area id or uuid on the row — was considered

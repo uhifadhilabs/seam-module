@@ -30,7 +30,7 @@ namespace Uhifadhi\Seam\Entity;
  *
  * The placeholder is deliberate: Unit\BoundaryTest sweeps this directory for the
  * host tree under either root an application may carry, so no example here may
- * spell one out. A project planted from the uhifadhi seed is stock Symfony — its
+ * spell one out. A project installed from the uhifadhi skeleton is stock Symfony — its
  * root is the ordinary one every Symfony application ships with — so the
  * doctrine-bundle recipe's own mapping prefix already covers the area entity,
  * and the line above is the only wiring the seam asks for. The README and the

@@ -214,7 +214,7 @@ bin/console seam:catalogue:seed
 
 `doctrine/doctrine-migrations-bundle` is a dependency of **this** bundle: the
 bundle that adds tables brings the tool that creates them, the same way it has
-always brought the ORM. A planted project that lacked it had no
+always brought the ORM. An installed project that lacked it had no
 `doctrine:migrations:*` commands at all and no hint that it should.
 
 What the seam deliberately does **not** ship is migration versions. The tables

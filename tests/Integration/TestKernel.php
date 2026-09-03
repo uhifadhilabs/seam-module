@@ -24,10 +24,10 @@ use Uhifadhi\Seam\UhifadhiSeamBundle;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 /**
- * THE SEED, PLUS THE SEAM, AND NOTHING ELSE: framework + doctrine + this
+ * THE SKELETON, PLUS THE SEAM, AND NOTHING ELSE: framework + doctrine + this
  * bundle. That is not a convenience for testing — it is the growth step this
  * bundle exists to make possible, and the kernel here is as close as a test can
- * get to a freshly planted installation with one ring on it.
+ * get to a fresh installation with one ring on it.
  *
  * It opens no database connection. That is what the bundle's own boot has to
  * survive — a host that has not migrated yet, or has not resolved the area

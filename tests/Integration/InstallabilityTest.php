@@ -23,7 +23,7 @@ use Doctrine\Persistence\Mapping\MappingException;
  * about that road, pinned here so the documentation cannot quietly become a
  * lie.
  *
- * Both were found the same way: by planting a project with
+ * Both were found the same way: by installing a project with
  * `composer create-project` and following the instructions as written. Neither
  * survived the walk, and the recipe's comments now say what these tests say.
  *
@@ -35,7 +35,7 @@ use Doctrine\Persistence\Mapping\MappingException;
  *    that boots without the mapping and cannot be schema'd without it.
  *
  * 2. THE TOOL THAT CREATES THOSE TABLES SHIPS WITH THE RING THAT ADDS THEM.
- *    A planted project had no `doctrine:migrations:*` commands, because nothing
+ *    An installed project had no `doctrine:migrations:*` commands, because nothing
  *    in the chain required the bundle — the seam contributed two tables and
  *    left the operator to discover there was nothing to create them with.
  */
@@ -88,7 +88,7 @@ final class InstallabilityTest extends SeamKernelTestCase
     {
         self::assertTrue(
             class_exists(DoctrineMigrationsBundle::class),
-            'a planted project gets doctrine:migrations:* because the seam requires the bundle',
+            'an installed project gets doctrine:migrations:* because the seam requires the bundle',
         );
 
         self::assertSame(

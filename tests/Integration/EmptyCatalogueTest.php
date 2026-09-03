@@ -17,7 +17,7 @@ use Uhifadhi\Seam\Tests\Integration\Fixtures\CollectedModules;
 use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /**
- * THE GROWTH STEP: seed + seam, and no modules at all.
+ * THE GROWTH STEP: skeleton + seam, and no modules at all.
  *
  * This is what a real installation looks like the moment after
  * `composer require uhifadhi/seam-module` and before the first branch — and it

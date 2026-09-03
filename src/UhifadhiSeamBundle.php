@@ -23,7 +23,7 @@ use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
 /**
  * The SEAM — the runtime every uhifadhi module registers with.
  *
- * The seed is planted, the seam carries, the branches are the modules and the
+ * The skeleton is installed, the seam carries, the branches are the modules and the
  * shell is what you see. This ring is the carrying: the module catalogue, the
  * per-area record of what is switched on, the permissions modules declare, and
  * the seed command that keeps the catalogue in step with what is installed.
@@ -74,7 +74,7 @@ final class UhifadhiSeamBundle extends AbstractBundle
         // a module BUNDLE still writes the tag by hand. Both ends meet here.
         //
         // Lifted from the host's Kernel::build(): it lives with the collector,
-        // not in the application, so a freshly planted seed plus this bundle is
+        // not in the application, so a fresh installation plus this bundle is
         // already a working seam.
         $container->registerForAutoconfiguration(ModuleProviderInterface::class)
             ->addTag(self::MODULE_TAG);

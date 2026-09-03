@@ -73,8 +73,8 @@ final class BoundaryTest extends TestCase
 
     /**
      * The impersonatable HOST TREE. Every subtree an application owns, under
-     * either root a host may carry: the product host is `Uhifadhi\`, a freshly
-     * planted seed is stock-Symfony `App\`. These are exactly the FQCNs a test
+     * either root a host may carry: the product host is `Uhifadhi\`, a project
+     * installed from the skeleton is stock-Symfony `App\`. These are exactly the FQCNs a test
      * stub is allowed to impersonate (tests/Integration/Fixtures/Uhifadhi/…) and
      * exactly the ones the shipped runtime must never name.
      *
@@ -101,7 +101,7 @@ final class BoundaryTest extends TestCase
      * The seam is `Uhifadhi\Seam\` now, so the root alone proves nothing —
      * what still proves something is the SUBTREE. `Uhifadhi\Seam\Service\…` is
      * the seam's own; `Uhifadhi\Service\…` is the host's, and so is
-     * `App\Service\…` in a planted seed. The narrowing is a real loss of reach
+     * `App\Service\…` in an installed project. The narrowing is a real loss of reach
      * (a host tree not on the list slips through) traded for a rule that is
      * true; the list is cheap to extend when a host grows a tree.
      *

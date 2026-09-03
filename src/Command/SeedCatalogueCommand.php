@@ -51,7 +51,7 @@ use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
  * command that deletes data on a missing dependency is a command nobody should
  * run on production.
  *
- * ZERO MODULES IS A SUCCESSFUL SEED. A freshly planted installation with no
+ * ZERO MODULES IS A SUCCESSFUL SEED. A fresh installation with no
  * branches on it runs this and is told, correctly, that there was nothing to do.
  */
 #[AsCommand(
