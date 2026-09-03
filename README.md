@@ -10,7 +10,7 @@ The **seam**: the module seam runtime every uhifadhi module registers with. A
 ## Contents
 
 - [The architecture](#the-architecture)
-- [Charter](#charter)
+- [What it owns](#what-it-owns)
 - [What it guarantees](#what-it-guarantees)
 - [Boundaries: what the seam is not](#boundaries-what-the-seam-is-not)
 - [What is here](#what-is-here)
@@ -28,7 +28,7 @@ with the seam** (`uhifadhi/seam-module` — this repository) and **renders in
 the shell** (`uhifadhi/shell-module`); everything a deployment can do —
 patrols, incidents, rosters — is a module.
 
-## Charter
+## What it owns
 
 **The seam carries; it does not show.** It owns four things and no more:
 
