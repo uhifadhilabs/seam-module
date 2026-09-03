@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,15 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Unit\DependencyInjection;
+namespace Uhifadhi\Seam\Tests\Unit\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
-use Uhifadhi\Trunk\DependencyInjection\TrunkConfiguration;
+use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
 
-final class TrunkConfigurationTest extends TestCase
+final class SeamConfigurationTest extends TestCase
 {
     /**
      * @param array<string, mixed> $config
@@ -28,11 +28,11 @@ final class TrunkConfigurationTest extends TestCase
      */
     private function process(array $config): array
     {
-        $builder = new TreeBuilder('trunk');
-        TrunkConfiguration::define($builder->getRootNode());
+        $builder = new TreeBuilder('seam');
+        SeamConfiguration::define($builder->getRootNode());
 
         /** @var array<string, mixed> $processed */
-        $processed = new Processor()->process($builder->buildTree(), ['trunk' => $config]);
+        $processed = new Processor()->process($builder->buildTree(), ['seam' => $config]);
 
         return $processed;
     }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,35 +11,35 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Area;
+namespace Uhifadhi\Seam\Tests\Integration\Area;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Uhifadhi\Entity\AreaOfInterest;
-use Uhifadhi\Trunk\Entity\AreaInterface;
-use Uhifadhi\Trunk\Entity\AreaModule;
-use Uhifadhi\Trunk\Entity\Module;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaModule;
+use Uhifadhi\Seam\Entity\Module;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
  * WHAT THE EXTRACTION MOVES, AND WHAT IT MUST NOT RENAME.
  *
- * The trunk takes ownership of two tables that already exist, already hold
+ * The seam takes ownership of two tables that already exist, already hold
  * production data, and are already the most-referenced tables in the platform.
  * That makes this specification unusual: most of it is about things staying
  * exactly as they are.
  *
  * TABLE NAMES ARE NOT COSMETIC. The module guide has bundles prefix their
  * tables with their domain word (`sightings_observation`), and by that rule
- * these would become `trunk_module` and `trunk_area_module`. They do not. A
+ * these would become `seam_module` and `seam_area_module`. They do not. A
  * rename here is a production migration on the platform's central tables, paid
  * for in downtime and risk, bought with nothing but consistency — and the
  * prefix rule exists to stop two bundles colliding on a common noun, which
  * cannot happen to the runtime every bundle registers with. The convention is
- * followed by every branch and deliberately not by the trunk; this test is that
+ * followed by every branch and deliberately not by the seam; this test is that
  * decision, written where a refactor will trip over it.
  *
  * THE AREA IS THE HOST'S. An AreaModule points at an area, and the host owns
- * areas — so the trunk maps the association to its own interface and the host
+ * areas — so the seam maps the association to its own interface and the host
  * resolves it (see the AreaOfInterest fixture for why not a bare id).
  */
 final class CataloguePersistenceTest extends InstallationTestCase
@@ -90,9 +90,9 @@ final class CataloguePersistenceTest extends InstallationTestCase
     }
 
     /**
-     * THE AREA SEAM. The trunk maps its association to an interface it owns; a
+     * THE AREA SEAM. The seam maps its association to an interface it owns; a
      * host resolves that interface to its own area entity. This is what lets the
-     * trunk hold the per-area table without requiring — or defining — the host's
+     * seam hold the per-area table without requiring — or defining — the host's
      * area model.
      */
     public function testTheAreaAssociationIsResolvedToTheHostsOwnEntity(): void
@@ -102,9 +102,9 @@ final class CataloguePersistenceTest extends InstallationTestCase
         $association = $this->metadata(AreaModule::class)->getAssociationMapping('area');
 
         self::assertSame(AreaOfInterest::class, $association->targetEntity,
-            'the host resolved the trunk\'s area interface to its own entity');
+            'the host resolved the seam\'s area interface to its own entity');
         self::assertTrue(interface_exists(AreaInterface::class),
-            'and the interface the trunk maps is the trunk\'s to publish');
+            'and the interface the seam maps is the seam\'s to publish');
     }
 
     /**
@@ -114,7 +114,7 @@ final class CataloguePersistenceTest extends InstallationTestCase
      */
     public function testDeletingAnAreaTakesItsAssignmentsWithIt(): void
     {
-        $this->install(['sightings' => ['core' => true]]);
+        $this->install(['sightings' => ['base' => true]]);
         $area = $this->area();
         $this->seed();
 

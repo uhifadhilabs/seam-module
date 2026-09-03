@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,16 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
 
 /**
- * WHERE A MODULE'S TILE LINKS — the one piece of routing the trunk carries, and
+ * WHERE A MODULE'S TILE LINKS — the one piece of routing the seam carries, and
  * it carries no routes of its own.
  *
  * A resolution, not a redirect: the answer is "what route name, if any, does
- * this module own?", and something in the canopy turns that into a link with the
+ * this module own?", and something in the shell turns that into a link with the
  * area's uuid. Nothing is rendered here.
  *
  * READ FROM THE PROVIDER, NEVER FROM A COLUMN. A route name is code: it changes

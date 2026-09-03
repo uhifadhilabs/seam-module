@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Permission;
+namespace Uhifadhi\Seam\Tests\Integration\Permission;
 
 use Uhifadhi\ModuleContracts\ModulePermission;
-use Uhifadhi\Trunk\Service\ModulePermissionCatalogue;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Service\ModulePermissionCatalogue;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 6 — PERMISSIONS DECLARED BY MODULES, SURFACED THROUGH THE SEAM.
@@ -26,26 +26,26 @@ use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
  * Installing a module must never hand an existing user a new power, and this
  * suite is where that stays true.
  *
- * WHAT THE TRUNK OWNS, HONESTLY. The host's own permission catalogue merges two
- * sources: its core enum (Areas, Ingestion, Modules, Team — the host's, because
- * the host owns areas and team) and whatever modules declare. The trunk owns
+ * WHAT THE SEAM OWNS, HONESTLY. The host's own permission catalogue merges two
+ * sources: its own built-in enum (Areas, Ingestion, Modules, Team — the host's, because
+ * the host owns areas and team) and whatever modules declare. The seam owns
  * only the second half. It collects the declarations and hands them over
  * grouped; the host folds them into its catalogue and remains the only thing
  * that decides who holds what. That split is deliberate — a runtime that also
- * owned the core permissions would own the host's team model with it.
+ * owned the host's built-in permissions would own the host's team model with it.
  *
  * A DELTA WORTH KNOWING: a declaration is deployment-wide, not per area. A
  * module installed on the deployment declares its permissions even in areas
  * where it is switched off — an admin can therefore assign a permission that
  * currently guards nothing anywhere. That is the honest state of the seam, and
  * it is pinned below rather than quietly fixed here, because narrowing it is a
- * ruling about the team model and not the trunk's to make.
+ * ruling about the team model and not the seam's to make.
  */
 final class ModulePermissionCatalogueTest extends InstallationTestCase
 {
     private function permissions(): ModulePermissionCatalogue
     {
-        $catalogue = $this->service('trunk.permissions');
+        $catalogue = $this->service('seam.permissions');
         \assert($catalogue instanceof ModulePermissionCatalogue);
 
         return $catalogue;
@@ -83,7 +83,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
 
     /**
      * The matrix's shape: grouped under the umbrella heading the module chose.
-     * The trunk groups and does not sort by anything it invents — the umbrella
+     * The seam groups and does not sort by anything it invents — the umbrella
      * is the module's own word for itself.
      */
     public function testDeclarationsAreGroupedByUmbrellaForTheMatrix(): void
@@ -144,7 +144,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     }
 
     /**
-     * A DECLARATION CARRIES NO HOLDERS. The trunk hands the host a value, an
+     * A DECLARATION CARRIES NO HOLDERS. The seam hands the host a value, an
      * umbrella and an action — and nothing that could name a role, a position or
      * a default grant, because there is nowhere in the contract to put one. This
      * asserts the shape of what crosses the seam, which is the only place the

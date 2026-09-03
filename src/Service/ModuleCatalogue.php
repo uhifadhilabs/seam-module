@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
-use Uhifadhi\Trunk\Entity\Module;
-use Uhifadhi\Trunk\Repository\ModuleRepository;
+use Uhifadhi\Seam\Entity\Module;
+use Uhifadhi\Seam\Repository\ModuleRepository;
 
 /**
  * WHAT MODULES THIS DEPLOYMENT HAS — read once, in one place, by everything that
@@ -33,7 +33,7 @@ use Uhifadhi\Trunk\Repository\ModuleRepository;
  *
  * The intersection is computed per call, from the providers actually registered
  * in this container and the rows actually in the table. Nothing is memoised;
- * see {@see \Uhifadhi\Trunk\Repository\AreaModuleRepository} for why.
+ * see {@see \Uhifadhi\Seam\Repository\AreaModuleRepository} for why.
  */
 final readonly class ModuleCatalogue
 {

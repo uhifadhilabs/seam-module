@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
 use Uhifadhi\ModuleContracts\ModulePermission;
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
@@ -29,13 +29,13 @@ use Uhifadhi\ModuleContracts\ModuleProviderInterface;
  *
  * THE MODULE HALF, AND ONLY THAT. A host has permissions of its own — for the
  * things it owns — and it remains the only thing that decides who holds what.
- * The trunk collects declarations. A runtime that also owned the host's core
+ * The seam collects declarations. A runtime that also owned the host's built-in
  * permissions would own its team model with them.
  *
  * A DECLARATION IS DEPLOYMENT-WIDE, NOT PER AREA. A module switched off in every
  * area still declares, so an admin can assign a permission that currently guards
  * nothing anywhere. That is the honest state of the seam; narrowing it is a
- * ruling about the team model, and not the trunk's to make.
+ * ruling about the team model, and not the seam's to make.
  *
  * IT DIES WITH THE MODULE. Uninstalling the bundle removes the provider, and the
  * declaration goes with it — a value left behind is a power an admin can still
@@ -87,7 +87,7 @@ final readonly class ModulePermissionCatalogue
 
     /**
      * A matrix's shape: grouped under the umbrella heading the module chose. The
-     * grouping is the whole of it — no sorting by anything the trunk invents,
+     * grouping is the whole of it — no sorting by anything the seam invents,
      * because the umbrella is the module's own word for itself.
      *
      * @return array<string, list<ModulePermission>>

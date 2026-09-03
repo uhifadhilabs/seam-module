@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Seam\Tests\Integration\Fixtures;
 
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
 use Uhifadhi\ModuleContracts\ModuleProviderTrait;
@@ -19,7 +19,7 @@ use Uhifadhi\ModuleContracts\ModuleProviderTrait;
 /**
  * THE SMALLEST HONEST MODULE: slug, name, category, and the trait for
  * everything else. This is what the guide tells a third party to write, so it
- * is what the trunk has to carry — a stand-in for a module bundle, deliberately
+ * is what the seam has to carry — a stand-in for a module bundle, deliberately
  * fictional ("sightings") so nothing here names a real one.
  */
 final class BareModuleProvider implements ModuleProviderInterface

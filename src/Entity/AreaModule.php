@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Entity;
+namespace Uhifadhi\Seam\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Uhifadhi\Trunk\Entity\Trait\TimestampableTrait;
-use Uhifadhi\Trunk\Entity\Trait\UuidTrait;
-use Uhifadhi\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Seam\Entity\Trait\TimestampableTrait;
+use Uhifadhi\Seam\Entity\Trait\UuidTrait;
+use Uhifadhi\Seam\Repository\AreaModuleRepository;
 
 /**
  * A {@see Module} as one area holds it: on the area's sub-nav or parked in its
@@ -29,7 +29,7 @@ use Uhifadhi\Trunk\Repository\AreaModuleRepository;
  *
  * THE AREA IS THE HOST'S. The association is mapped to {@see AreaInterface} and
  * a host resolves it to its own entity with `resolve_target_entities`; that is
- * what lets the trunk own this table without defining — or requiring — anybody's
+ * what lets the seam own this table without defining — or requiring — anybody's
  * area model.
  */
 #[ORM\Entity(repositoryClass: AreaModuleRepository::class)]

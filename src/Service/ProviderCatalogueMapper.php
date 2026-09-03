@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
-use Uhifadhi\Trunk\Enum\ModuleCategory;
-use Uhifadhi\Trunk\Enum\ModuleStatus;
+use Uhifadhi\Seam\Enum\ModuleCategory;
+use Uhifadhi\Seam\Enum\ModuleStatus;
 
 /**
  * A provider's answers, turned into a catalogue row.
@@ -27,11 +27,11 @@ use Uhifadhi\Trunk\Enum\ModuleStatus;
  * design — the module's tile still appears, filed somewhere sensible — which is
  * also its cost, so each fallback is chosen to be the one that is least wrong.
  *
- * INSTALLABLE OR CORE decides the INITIAL per-area state and nothing else. An
- * installable module arrives parked, so an admin opts it in per area; a core
+ * INSTALLABLE OR BASE decides the INITIAL per-area state and nothing else. An
+ * installable module arrives parked, so an admin opts it in per area; a base
  * module arrives active, because it is machinery other surfaces already import
  * and an area with it switched off does not have fewer features, it has broken
- * screens. Afterwards the area governs itself: core is not pinned, not
+ * screens. Afterwards the area governs itself: base is not pinned, not
  * permanent, and the seed is create-only.
  *
  * Pure mapping — no container, no database, no clock.
@@ -40,7 +40,7 @@ final readonly class ProviderCatalogueMapper
 {
     /**
      * @param string $defaultCategory where this DEPLOYMENT files a module it cannot place
-     *                                (the `trunk.default_category` key), so the platform
+     *                                (the `seam.default_category` key), so the platform
      *                                default is not hardcoded a second time here
      */
     public function __construct(
@@ -69,7 +69,7 @@ final readonly class ProviderCatalogueMapper
             // Null means "whatever the host draws by default" — rendering is not decided here.
             'icon' => $provider->icon(),
             'pinned' => $provider->pinned(),
-            'active' => $provider->core(),
+            'active' => $provider->base(),
             'position' => $this->position($provider, $registrationOrder),
         ];
     }

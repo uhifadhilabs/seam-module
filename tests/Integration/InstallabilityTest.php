@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration;
+namespace Uhifadhi\Seam\Tests\Integration;
 
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +19,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\Mapping\MappingException;
 
 /**
- * FROM `composer require` TO TABLES — the two claims the trunk's recipe makes
+ * FROM `composer require` TO TABLES — the two claims the seam's recipe makes
  * about that road, pinned here so the documentation cannot quietly become a
  * lie.
  *
@@ -36,17 +36,17 @@ use Doctrine\Persistence\Mapping\MappingException;
  *
  * 2. THE TOOL THAT CREATES THOSE TABLES SHIPS WITH THE RING THAT ADDS THEM.
  *    A planted project had no `doctrine:migrations:*` commands, because nothing
- *    in the chain required the bundle — the trunk contributed two tables and
+ *    in the chain required the bundle — the seam contributed two tables and
  *    left the operator to discover there was nothing to create them with.
  */
-final class InstallabilityTest extends TrunkKernelTestCase
+final class InstallabilityTest extends SeamKernelTestCase
 {
     /**
-     * The trunk alone boots. That is the state a host is in between
+     * The seam alone boots. That is the state a host is in between
      * `composer require` and writing its area entity, and it must not be a
      * broken one.
      */
-    public function testTheTrunkAloneBootsWithoutAnAreaMapping(): void
+    public function testTheSeamAloneBootsWithoutAnAreaMapping(): void
     {
         self::bootKernel();
 
@@ -58,7 +58,7 @@ final class InstallabilityTest extends TrunkKernelTestCase
      *
      * The message matters as much as the failure: it is the string an operator
      * pastes into a search box, and it is quoted verbatim in
-     * `config/packages/trunk.yaml` so that the answer is in the file the error
+     * `config/packages/seam.yaml` so that the answer is in the file the error
      * is about.
      */
     public function testWithoutTheAreaMappingThereIsNoSchemaToCreate(): void
@@ -69,18 +69,18 @@ final class InstallabilityTest extends TrunkKernelTestCase
         $metadata = $em->getMetadataFactory()->getAllMetadata();
 
         $this->expectException(MappingException::class);
-        $this->expectExceptionMessage("Class 'Uhifadhi\\Trunk\\Entity\\AreaInterface' does not exist");
+        $this->expectExceptionMessage("Class 'Uhifadhi\\Seam\\Entity\\AreaInterface' does not exist");
 
         new SchemaTool($em)->getCreateSchemaSql($metadata);
     }
 
     /**
-     * The migrations bundle is the trunk's dependency, not the host's homework.
+     * The migrations bundle is the seam's dependency, not the host's homework.
      *
      * A bundle that contributes tables owns the need for a migration tool the
-     * same way it owns the need for the ORM — which the trunk has always
-     * required. What the trunk deliberately does NOT ship is migration
-     * versions: the tables are the trunk's, but the migration history belongs
+     * same way it owns the need for the ORM — which the seam has always
+     * required. What the seam deliberately does NOT ship is migration
+     * versions: the tables are the seam's, but the migration history belongs
      * to the installation, and a vendor replaying its own versions into it
      * would fight every `doctrine:migrations:diff` the host ever runs.
      */
@@ -88,13 +88,13 @@ final class InstallabilityTest extends TrunkKernelTestCase
     {
         self::assertTrue(
             class_exists(DoctrineMigrationsBundle::class),
-            'a planted project gets doctrine:migrations:* because the trunk requires the bundle',
+            'a planted project gets doctrine:migrations:* because the seam requires the bundle',
         );
 
         self::assertSame(
             [],
             glob(\dirname(__DIR__, 2).'/migrations/*.php') ?: [],
-            'and the trunk ships no versions of its own: the history is the host\'s',
+            'and the seam ships no versions of its own: the history is the host\'s',
         );
     }
 

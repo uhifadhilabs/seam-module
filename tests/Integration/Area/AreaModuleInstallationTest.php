@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Area;
+namespace Uhifadhi\Seam\Tests\Integration\Area;
 
 use Uhifadhi\Entity\AreaOfInterest;
-use Uhifadhi\Trunk\Entity\AreaModule;
-use Uhifadhi\Trunk\Service\AreaModuleLedger;
-use Uhifadhi\Trunk\Service\AreaModuleService;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Entity\AreaModule;
+use Uhifadhi\Seam\Service\AreaModuleLedger;
+use Uhifadhi\Seam\Service\AreaModuleService;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 3 — PER-AREA INSTALL STATE: the record of what each area actually has.
@@ -36,7 +36,7 @@ final class AreaModuleInstallationTest extends InstallationTestCase
 {
     private function areaModules(): AreaModuleService
     {
-        $service = $this->service('trunk.area_modules');
+        $service = $this->service('seam.area_modules');
         \assert($service instanceof AreaModuleService);
 
         return $service;
@@ -44,7 +44,7 @@ final class AreaModuleInstallationTest extends InstallationTestCase
 
     private function ledger(): AreaModuleLedger
     {
-        $ledger = $this->service('trunk.area_module_ledger');
+        $ledger = $this->service('seam.area_module_ledger');
         \assert($ledger instanceof AreaModuleLedger);
 
         return $ledger;
@@ -83,9 +83,9 @@ final class AreaModuleInstallationTest extends InstallationTestCase
      * choice that is not real: an area with the machinery other surfaces import
      * switched off does not have fewer features, it has broken screens.
      */
-    public function testACoreModuleIsSeededActiveForEveryArea(): void
+    public function testABaseModuleIsSeededActiveForEveryArea(): void
     {
-        $area = $this->areaAfterInstalling(['ferries' => ['core' => true]]);
+        $area = $this->areaAfterInstalling(['ferries' => ['base' => true]]);
 
         self::assertSame(['ferries'], $this->activeSlugs($area));
     }
@@ -127,7 +127,7 @@ final class AreaModuleInstallationTest extends InstallationTestCase
      * that switching a module off takes its contributions off the page. Not on
      * the next deploy, not after a cache warm: the same day, on the next read.
      *
-     * The trunk cannot test the attention list itself (it draws nothing, and it
+     * The seam cannot test the attention list itself (it draws nothing, and it
      * knows no module). What it CAN pin is the thing that list is derived from:
      * the moment a module is uninstalled for an area, that area's ledger stops
      * counting it as present and starts counting it as absent, from the
@@ -176,13 +176,13 @@ final class AreaModuleInstallationTest extends InstallationTestCase
 
     /**
      * A PINNED MODULE CAN NEVER BE SWITCHED OFF. Pinned is the hub every area
-     * leads with; an area without it has no front door. Note what the trunk
+     * leads with; an area without it has no front door. Note what the seam
      * knows here and what it does not: it enforces the FLAG, and has no idea
      * which module carries it.
      */
     public function testAPinnedModuleCannotBeUninstalledForAnArea(): void
     {
-        $area = $this->areaAfterInstalling(['hub' => ['pinned' => true, 'core' => true]]);
+        $area = $this->areaAfterInstalling(['hub' => ['pinned' => true, 'base' => true]]);
 
         $this->areaModules()->uninstall($area, 'hub');
 

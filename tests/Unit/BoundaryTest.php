@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Unit;
+namespace Uhifadhi\Seam\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
@@ -26,14 +26,14 @@ use PHPUnit\Framework\TestCase;
  *
  * Three rules:
  *
- *  1. The trunk names no module. Not a slug, not a namespace. Everything it
+ *  1. The seam names no module. Not a slug, not a namespace. Everything it
  *     treats specially is a flag a provider declares.
- *  2. The trunk names no host. It is installed BY an application; it does not
+ *  2. The seam names no host. It is installed BY an application; it does not
  *     reach back into one. REDEFINED at the namespace alignment — see
- *     testTheTrunkReachesIntoNoHostApplication for what the rule now forbids
+ *     testTheSeamReachesIntoNoHostApplication for what the rule now forbids
  *     and why it cannot be "no Uhifadhi\ in src/" any more.
- *  3. The trunk renders nothing. See the README's boundaries section: the
- *     module grid, the customize screen and every tile is the canopy's.
+ *  3. The seam renders nothing. See the README's boundaries section: the
+ *     module grid, the customize screen and every tile is the shell's.
  */
 final class BoundaryTest extends TestCase
 {
@@ -41,8 +41,8 @@ final class BoundaryTest extends TestCase
 
     /**
      * Real modules, plus the two the platform is likeliest to smuggle in:
-     * "overview" (the pinned hub — pinned is a flag, not a slug the trunk knows)
-     * and "map" (the first core module — core is a flag too).
+     * "overview" (the pinned hub — pinned is a flag, not a slug the seam knows)
+     * and "map" (the first base module — base is a flag too).
      */
     public static function moduleNames(): \Generator
     {
@@ -55,7 +55,7 @@ final class BoundaryTest extends TestCase
      * @param non-empty-string $name
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('moduleNames')]
-    public function testTheTrunkKnowsNoModuleByName(string $name): void
+    public function testTheSeamKnowsNoModuleByName(string $name): void
     {
         $offenders = [];
         foreach (self::sources() as $path => $code) {
@@ -65,8 +65,8 @@ final class BoundaryTest extends TestCase
         }
 
         self::assertSame([], $offenders, \sprintf(
-            'The trunk must not name the "%s" module. A module is whatever tagged itself; '
-            .'pinned and core are flags a provider declares, never slugs the runtime recognises.',
+            'The seam must not name the "%s" module. A module is whatever tagged itself; '
+            .'pinned and base are flags a provider declares, never slugs the runtime recognises.',
             $name,
         ));
     }
@@ -91,16 +91,16 @@ final class BoundaryTest extends TestCase
     }
 
     /**
-     * The trunk is installed by an application and never reaches back into one.
+     * The seam is installed by an application and never reaches back into one.
      * A host reference in src/ means the extraction copied a host class instead
      * of moving it.
      *
      * REDEFINED at the namespace alignment. The rule used to read "no
-     * `Uhifadhi\` in src/", which worked while the trunk shipped as
-     * `UhifadhiLabs\Trunk\` and `Uhifadhi\` could only mean the application.
-     * The trunk is `Uhifadhi\Trunk\` now, so the root alone proves nothing —
-     * what still proves something is the SUBTREE. `Uhifadhi\Trunk\Service\…` is
-     * the trunk's own; `Uhifadhi\Service\…` is the host's, and so is
+     * `Uhifadhi\` in src/", which worked while the seam shipped as
+     * `UhifadhiLabs\Seam\` and `Uhifadhi\` could only mean the application.
+     * The seam is `Uhifadhi\Seam\` now, so the root alone proves nothing —
+     * what still proves something is the SUBTREE. `Uhifadhi\Seam\Service\…` is
+     * the seam's own; `Uhifadhi\Service\…` is the host's, and so is
      * `App\Service\…` in a planted seed. The narrowing is a real loss of reach
      * (a host tree not on the list slips through) traded for a rule that is
      * true; the list is cheap to extend when a host grows a tree.
@@ -108,7 +108,7 @@ final class BoundaryTest extends TestCase
      * @param non-empty-string $namespace
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('hostNamespaces')]
-    public function testTheTrunkReachesIntoNoHostApplication(string $namespace): void
+    public function testTheSeamReachesIntoNoHostApplication(string $namespace): void
     {
         $offenders = [];
         foreach (self::sources() as $path => $code) {
@@ -118,21 +118,21 @@ final class BoundaryTest extends TestCase
         }
 
         self::assertSame([], $offenders, \sprintf(
-            'The trunk must not depend on the host application namespace "%s\\".',
+            'The seam must not depend on the host application namespace "%s\\".',
             $namespace,
         ));
     }
 
     /**
-     * THE TRUNK RENDERS NOTHING. No templates directory, no controllers, no
+     * THE SEAM RENDERS NOTHING. No templates directory, no controllers, no
      * routes — a module grid is a picture of the catalogue, and pictures are the
-     * canopy's. The README says why at length; this is the part a refactor
+     * shell's. The README says why at length; this is the part a refactor
      * cannot quietly disagree with.
      */
-    public function testTheTrunkShipsNoUserInterface(): void
+    public function testTheSeamShipsNoUserInterface(): void
     {
-        self::assertDirectoryDoesNotExist(self::SRC.'/../templates', 'Templates belong to the canopy.');
-        self::assertDirectoryDoesNotExist(self::SRC.'/Controller', 'Controllers belong to the canopy.');
+        self::assertDirectoryDoesNotExist(self::SRC.'/../templates', 'Templates belong to the shell.');
+        self::assertDirectoryDoesNotExist(self::SRC.'/Controller', 'Controllers belong to the shell.');
 
         $offenders = [];
         foreach (self::sources() as $path => $code) {
@@ -143,7 +143,7 @@ final class BoundaryTest extends TestCase
             }
         }
 
-        self::assertSame([], $offenders, 'The trunk exposes data and services; it draws nothing.');
+        self::assertSame([], $offenders, 'The seam exposes data and services; it draws nothing.');
     }
 
     /**

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Entity;
+namespace Uhifadhi\Seam\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Uhifadhi\Trunk\Entity\Trait\TimestampableTrait;
-use Uhifadhi\Trunk\Entity\Trait\UuidTrait;
-use Uhifadhi\Trunk\Enum\ModuleCategory;
-use Uhifadhi\Trunk\Enum\ModuleStatus;
-use Uhifadhi\Trunk\Repository\ModuleRepository;
+use Uhifadhi\Seam\Entity\Trait\TimestampableTrait;
+use Uhifadhi\Seam\Entity\Trait\UuidTrait;
+use Uhifadhi\Seam\Enum\ModuleCategory;
+use Uhifadhi\Seam\Enum\ModuleStatus;
+use Uhifadhi\Seam\Repository\ModuleRepository;
 
 /**
  * ONE ROW OF THE CATALOGUE: a module this deployment has, as the deployment
@@ -31,7 +31,7 @@ use Uhifadhi\Trunk\Repository\ModuleRepository;
  * identity.
  *
  * THE TABLE IS DELIBERATELY UNPREFIXED. Every branch bundle prefixes its tables
- * with its domain word, and by that rule this would be `trunk_module`. It is
+ * with its domain word, and by that rule this would be `seam_module`. It is
  * not: renaming it is a production migration on the platform's most-referenced
  * table, bought with nothing but consistency — and the prefix rule exists to
  * stop two bundles colliding on a common noun, which cannot happen to the
@@ -71,7 +71,7 @@ class Module
     #[ORM\Column(name: 'data_source', length: 80)]
     private string $dataSource = '';
 
-    /** Always on an area, never reorderable or removable. A flag a provider declares — the trunk knows no slug that carries it. */
+    /** Always on an area, never reorderable or removable. A flag a provider declares — the seam knows no slug that carries it. */
     #[ORM\Column(name: 'pinned')]
     private bool $pinned = false;
 
@@ -79,7 +79,7 @@ class Module
     #[ORM\Column(name: 'position')]
     private int $position = 0;
 
-    /** The icon name a module asks for, or null for whatever the host draws by default. Rendering is not the trunk's to decide. */
+    /** The icon name a module asks for, or null for whatever the host draws by default. Rendering is not the seam's to decide. */
     #[ORM\Column(name: 'icon', length: 40, nullable: true)]
     private ?string $icon = null;
 

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Repository;
+namespace Uhifadhi\Seam\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Uhifadhi\Trunk\Entity\Module;
+use Uhifadhi\Seam\Entity\Module;
 
 /**
  * The catalogue table's query surface.
@@ -24,12 +24,12 @@ use Uhifadhi\Trunk\Entity\Module;
  * wrote them — removing a module bundle leaves its row and the areas' data
  * behind on purpose — so "every row in this table" and "every module this
  * deployment has" are different questions.
- * {@see \Uhifadhi\Trunk\Service\ModuleCatalogue} answers the second one and
+ * {@see \Uhifadhi\Seam\Service\ModuleCatalogue} answers the second one and
  * is what a surface should read.
  *
  * NOT FINAL. This bundle is installed by other packages, and a Doctrine
  * repository is the documented place to add a query — or to stand in for one
- * in somebody else's test. Sealing it would make the trunk's query surface the
+ * in somebody else's test. Sealing it would make the seam's query surface the
  * only one its consumers may ever have.
  *
  * @extends ServiceEntityRepository<Module>

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,44 +11,44 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration;
+namespace Uhifadhi\Seam\Tests\Integration;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use Uhifadhi\Trunk\Entity\AreaModule;
-use Uhifadhi\Trunk\Entity\Module;
-use Uhifadhi\Trunk\UhifadhiTrunkBundle;
+use Uhifadhi\Seam\Entity\AreaModule;
+use Uhifadhi\Seam\Entity\Module;
+use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /**
- * The smoke test: registering the trunk in a real kernel compiles a real
+ * The smoke test: registering the seam in a real kernel compiles a real
  * container. Everything else in this repository — and every module that ever
  * registers with the seam — rides on that.
  */
-final class BundleBootTest extends TrunkKernelTestCase
+final class BundleBootTest extends SeamKernelTestCase
 {
     public function testTheBundleBootsInAHostKernel(): void
     {
         $kernel = self::bootKernel();
 
-        self::assertArrayHasKey('UhifadhiTrunkBundle', $kernel->getBundles());
+        self::assertArrayHasKey('UhifadhiSeamBundle', $kernel->getBundles());
         self::assertInstanceOf(
-            UhifadhiTrunkBundle::class,
-            $kernel->getBundle('UhifadhiTrunkBundle'),
+            UhifadhiSeamBundle::class,
+            $kernel->getBundle('UhifadhiSeamBundle'),
         );
     }
 
     /**
-     * Config lives under "trunk:", not the class-derived "uhifadhi_labs_trunk:"
+     * Config lives under "seam:", not the class-derived "uhifadhi_seam:"
      * — the alias is part of the host contract and every installation writes it.
      */
-    public function testItsConfigurationIsKeyedByTheTrunkAlias(): void
+    public function testItsConfigurationIsKeyedByTheSeamAlias(): void
     {
         $kernel = self::bootKernel();
 
-        self::assertSame('trunk', $kernel->getBundle('UhifadhiTrunkBundle')
+        self::assertSame('seam', $kernel->getBundle('UhifadhiSeamBundle')
             ->getContainerExtension()?->getAlias());
     }
 
@@ -61,12 +61,12 @@ final class BundleBootTest extends TrunkKernelTestCase
     {
         self::bootKernel();
 
-        self::assertSame('operations', self::getContainer()->getParameter('trunk.default_category'));
-        self::assertFalse(self::getContainer()->getParameter('trunk.dev_tools'));
+        self::assertSame('operations', self::getContainer()->getParameter('seam.default_category'));
+        self::assertFalse(self::getContainer()->getParameter('seam.dev_tools'));
     }
 
     /**
-     * Zero-config persistence: the trunk maps its own entity directory, so a
+     * Zero-config persistence: the seam maps its own entity directory, so a
      * host never writes a doctrine mappings block for the catalogue tables —
      * `composer require` is the whole of the installation.
      */
@@ -86,10 +86,10 @@ final class BundleBootTest extends TrunkKernelTestCase
         }
 
         self::assertInstanceOf(MappingDriverChain::class, $driver);
-        self::assertArrayHasKey('Uhifadhi\Trunk\Entity', $driver->getDrivers());
+        self::assertArrayHasKey('Uhifadhi\Seam\Entity', $driver->getDrivers());
         // And the catalogue is what comes out of it — mapped by a bundle the
         // host did nothing to configure beyond installing it. Note the kernel
-        // this runs on: the trunk alone, with no host resolving the area
+        // this runs on: the seam alone, with no host resolving the area
         // interface, which a host that has not got there yet must still boot.
         // Canonicalising, not ordering: what comes out of the driver is whatever
         // order the directory was read in, which is the filesystem's business and

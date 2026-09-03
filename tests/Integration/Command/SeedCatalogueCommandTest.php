@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Command;
+namespace Uhifadhi\Seam\Tests\Integration\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Uhifadhi\Trunk\Service\AreaModuleService;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Service\AreaModuleService;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 5 — THE SEED IS CREATE-ONLY, AND THAT IS A PRODUCTION PROMISE.
@@ -38,7 +38,7 @@ final class SeedCatalogueCommandTest extends InstallationTestCase
 {
     private function areaModules(): AreaModuleService
     {
-        $service = $this->service('trunk.area_modules');
+        $service = $this->service('seam.area_modules');
         \assert($service instanceof AreaModuleService);
 
         return $service;
@@ -57,13 +57,13 @@ final class SeedCatalogueCommandTest extends InstallationTestCase
         \assert(null !== $kernel);
         $application = new Application($kernel);
 
-        $command = $application->find('trunk:catalogue:seed');
+        $command = $application->find('seam:catalogue:seed');
 
         self::assertContains('app:seed:catalogue', $command->getAliases());
     }
 
     /**
-     * ZERO MODULES IS A SUCCESSFUL SEED. Freshly planted seed, one trunk, no
+     * ZERO MODULES IS A SUCCESSFUL SEED. Freshly planted seed, one seam, no
      * branches: the command has to run and report nothing rather than fail on
      * an empty iterator.
      */
@@ -91,13 +91,13 @@ final class SeedCatalogueCommandTest extends InstallationTestCase
     }
 
     /**
-     * THE DEPLOY LESSON, IN ONE TEST. An admin parked a core module and turned
+     * THE DEPLOY LESSON, IN ONE TEST. An admin parked a base module and turned
      * on an installable one — two deliberate decisions, both the opposite of
      * what the seed would have written. The next deploy must leave both alone.
      */
     public function testADeployNeverOverrulesAnAdminsPerAreaChoices(): void
     {
-        $this->install(['ferries' => ['core' => true], 'sightings' => []]);
+        $this->install(['ferries' => ['base' => true], 'sightings' => []]);
         $area = $this->area();
         $this->seed();
 
@@ -106,7 +106,7 @@ final class SeedCatalogueCommandTest extends InstallationTestCase
 
         $this->seed();
 
-        self::assertFalse($this->areaModules()->isActive($area, 'ferries'), 'a core module the admin parked stays parked');
+        self::assertFalse($this->areaModules()->isActive($area, 'ferries'), 'a base module the admin parked stays parked');
         self::assertTrue($this->areaModules()->isActive($area, 'sightings'), 'a module the admin switched on stays on');
     }
 

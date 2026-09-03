@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Repository;
+namespace Uhifadhi\Seam\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Uhifadhi\Trunk\Entity\AreaInterface;
-use Uhifadhi\Trunk\Entity\AreaModule;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaModule;
 
 /**
  * Per-area install state, read in the area's own order.
@@ -29,7 +29,7 @@ use Uhifadhi\Trunk\Entity\AreaModule;
  *
  * NOT FINAL. This bundle is installed by other packages, and a Doctrine
  * repository is the documented place to add a query — or to stand in for one
- * in somebody else's test. Sealing it would make the trunk's query surface the
+ * in somebody else's test. Sealing it would make the seam's query surface the
  * only one its consumers may ever have.
  *
  * @extends ServiceEntityRepository<AreaModule>

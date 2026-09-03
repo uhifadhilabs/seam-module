@@ -1,6 +1,6 @@
 {
-    "name": "uhifadhi/trunk-module",
-    "description": "The trunk: the module seam runtime every uhifadhi module registers with — the catalogue, per-area installation, the permission declarations modules contribute, and the seed that keeps them in step.",
+    "name": "uhifadhi/seam-module",
+    "description": "The seam: the module seam runtime every uhifadhi module registers with — the catalogue, per-area installation, the permission declarations modules contribute, and the seed that keeps them in step.",
     "type": "symfony-bundle",
     "keywords": [
         "module",
@@ -30,16 +30,16 @@
         "symfony/framework-bundle": "^7.3 || ^8.0",
         "symfony/http-kernel": "^7.3 || ^8.0",
         "symfony/uid": "^7.3 || ^8.0",
-        "uhifadhi/module-contracts": "^0.1"
+        "uhifadhi/module-contracts": "dev-main"
     },
     "autoload": {
         "psr-4": {
-            "Uhifadhi\\Trunk\\": "src/"
+            "Uhifadhi\\Seam\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Uhifadhi\\Trunk\\Tests\\": "tests/",
+            "Uhifadhi\\Seam\\Tests\\": "tests/",
             "Uhifadhi\\Entity\\": "tests/Integration/Fixtures/Uhifadhi/Entity/"
         }
     },

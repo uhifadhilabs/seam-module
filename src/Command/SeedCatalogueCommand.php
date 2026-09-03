@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Command;
+namespace Uhifadhi\Seam\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -20,12 +20,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
-use Uhifadhi\Trunk\Entity\AreaInterface;
-use Uhifadhi\Trunk\Entity\AreaModule;
-use Uhifadhi\Trunk\Entity\Module;
-use Uhifadhi\Trunk\Repository\AreaModuleRepository;
-use Uhifadhi\Trunk\Repository\ModuleRepository;
-use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaModule;
+use Uhifadhi\Seam\Entity\Module;
+use Uhifadhi\Seam\Repository\AreaModuleRepository;
+use Uhifadhi\Seam\Repository\ModuleRepository;
+use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
 
 /**
  * RECONCILE THE CATALOGUE WITH WHAT IS INSTALLED — the command a deploy runs.
@@ -33,7 +33,7 @@ use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
  * PROVIDER-DRIVEN, WITHOUT EXCEPTION. Every row comes from a tagged
  * {@see ModuleProviderInterface}: a module bundle declares itself and appears
  * here, and nothing else does. There is no row the runtime writes for itself and
- * no slug it recognises — `pinned` and `core` are flags a provider declares.
+ * no slug it recognises — `pinned` and `base` are flags a provider declares.
  *
  * CREATE-ONLY, AND THAT IS A PRODUCTION PROMISE. This runs on every deploy,
  * against a database with real areas configured by real admins, and there is no
@@ -44,7 +44,7 @@ use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
  *   the per-area row is the ADMIN'S — the seed creates it when it is missing and
  *   never revisits it again.
  *
- * An admin who parked a core module is not overruled by a deploy. A deploy that
+ * An admin who parked a base module is not overruled by a deploy. A deploy that
  * reorders the catalogue does not reshuffle anybody's sub-nav. And an uninstalled
  * module's rows are LEFT ALONE rather than deleted: a bundle removed by mistake
  * and reinstalled next morning finds every area as it left it, and a deploy
@@ -55,11 +55,18 @@ use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
  * branches on it runs this and is told, correctly, that there was nothing to do.
  */
 #[AsCommand(
-    name: 'trunk:catalogue:seed',
-    // The old host name survives as an alias, because that string is written
-    // into deploy pipelines and into every module's README: renaming it
-    // silently would break a deploy rather than a test.
-    aliases: ['app:seed:catalogue'],
+    name: 'seam:catalogue:seed',
+    // BOTH OLD NAMES SURVIVE AS ALIASES, and neither is dead weight.
+    //
+    //   app:seed:catalogue    the host's name, from before the extraction.
+    //   trunk:catalogue:seed  this bundle's name, from before it was the seam.
+    //
+    // Each is written into a deploy pipeline somewhere, and a command name is
+    // the one part of a rename that breaks a DEPLOY rather than a test — it
+    // fails at 3am on a machine nobody is watching, not in CI. Aliases are
+    // free; the pipeline that still says the old thing keeps working, and the
+    // documentation only ever teaches the new one.
+    aliases: ['app:seed:catalogue', 'trunk:catalogue:seed'],
     description: 'Reconcile the module catalogue with the installed module providers (idempotent).',
 )]
 final class SeedCatalogueCommand extends Command
@@ -143,7 +150,7 @@ final class SeedCatalogueCommand extends Command
      * EVERY AREA, WITHOUT KNOWING WHAT AN AREA IS. The host resolved
      * {@see AreaInterface} to its own entity when it mapped this bundle's
      * association, so the concrete class is already recorded there — asking
-     * Doctrine for it is how the trunk iterates a model it does not define.
+     * Doctrine for it is how the seam iterates a model it does not define.
      *
      * A host that installed the bundle without resolving the interface has an
      * unusable per-area table; there are no areas to backfill, and saying so is

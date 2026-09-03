@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Unit\Catalogue;
+namespace Uhifadhi\Seam\Tests\Unit\Catalogue;
 
 use PHPUnit\Framework\TestCase;
-use Uhifadhi\Trunk\Enum\ModuleCategory;
-use Uhifadhi\Trunk\Enum\ModuleStatus;
-use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\SpecModuleProvider;
+use Uhifadhi\Seam\Enum\ModuleCategory;
+use Uhifadhi\Seam\Enum\ModuleStatus;
+use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\SpecModuleProvider;
 
 /**
  * SPEC 4 — CATEGORY MAPPING, AND WHAT AN UNPLACED MODULE IS.
  *
- * A provider's category and status are strings the trunk COERCES rather than
+ * A provider's category and status are strings the seam COERCES rather than
  * trusts: a module bundle is written by someone else, ships on its own release
  * cadence, and must not be able to break the catalogue for every other module
  * with a typo. The coercion is silent by design — the module's tile still
@@ -94,7 +94,7 @@ final class ProviderCatalogueMapperTest extends TestCase
 
     /**
      * The fallback is the deployment's, not the mapper's. A deployment that
-     * configures `trunk.default_category` is telling the trunk where its
+     * configures `seam.default_category` is telling the seam where its
      * unplaced modules belong, and the mapper must read it rather than hardcode
      * the platform default a second time.
      */
@@ -108,22 +108,22 @@ final class ProviderCatalogueMapperTest extends TestCase
     /**
      * SPEC 3, THE SEEDING HALF. An installable module arrives PARKED, so an
      * admin opts it in per area — right for a capability an area may not want.
-     * A core module arrives ACTIVE, because it is machinery other surfaces
+     * A base module arrives ACTIVE, because it is machinery other surfaces
      * already import and an area with it off does not have fewer features, it
      * has broken screens.
      *
-     * The flag decides the INITIAL state and nothing else. Core is not pinned
+     * The flag decides the INITIAL state and nothing else. Base is not pinned
      * and not permanent: the customize screen still governs the area afterwards,
-     * and the seed is create-only, so an admin who later switches a core module
+     * and the seed is create-only, so an admin who later switches a base module
      * off is not overruled on the next deploy.
      */
-    public function testAnInstallableModuleArrivesParkedAndACoreModuleArrivesActive(): void
+    public function testAnInstallableModuleArrivesParkedAndABaseModuleArrivesActive(): void
     {
         self::assertFalse($this->mapper()->toRow(new SpecModuleProvider('sightings'), 0)['active']);
 
-        $core = $this->mapper()->toRow(new SpecModuleProvider('ferries', ['core' => true]), 0);
-        self::assertTrue($core['active'], 'machinery other surfaces depend on is not an opt-in');
-        self::assertFalse($core['pinned'], 'core is the initial state; pinned is the ordering — separate questions');
+        $base = $this->mapper()->toRow(new SpecModuleProvider('ferries', ['base' => true]), 0);
+        self::assertTrue($base['active'], 'machinery other surfaces depend on is not an opt-in');
+        self::assertFalse($base['pinned'], 'base is the initial state; pinned is the ordering — separate questions');
     }
 
     /**
@@ -135,7 +135,7 @@ final class ProviderCatalogueMapperTest extends TestCase
      * discarded. A contract method nothing reads is a lie in the contract, and a
      * module author who sets it has no way to discover that it did nothing.
      *
-     * The trunk honours it: a declared position wins, and registration order is
+     * The seam honours it: a declared position wins, and registration order is
      * only the tie-break for the modules that declared none (which, thanks to
      * the trait default of 0, is most of them — so the common case is unchanged).
      */

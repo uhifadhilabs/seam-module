@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\DependencyInjection;
+namespace Uhifadhi\Seam\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 /**
  * The bundle's semantic configuration — how a host configures the seam runtime
- * in config/packages/trunk.yaml:
+ * in config/packages/seam.yaml:
  *
- *   trunk:
+ *   seam:
  *     default_category: operations   # where an unplaced module is filed
  *     dev_tools: false               # dev-only tooling (when@dev / when@test)
  *
- * DELIBERATELY TINY, and it should stay that way. The trunk's job is to carry
+ * DELIBERATELY TINY, and it should stay that way. The seam's job is to carry
  * what modules declare; nearly everything a deployment might want to say is
  * said by a module's own config, not here. There is no key for "which modules
  * exist" and there never will be — installing the bundle IS the declaration.
@@ -32,12 +32,12 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
  * Static so the tree is testable with a plain Processor and shared verbatim by
  * the bundle's configure().
  */
-final class TrunkConfiguration
+final class SeamConfiguration
 {
     public static function define(NodeDefinition|ArrayNodeDefinition $root): void
     {
         if (!$root instanceof ArrayNodeDefinition) {
-            throw new \LogicException('The trunk root node must be an array node.');
+            throw new \LogicException('The seam root node must be an array node.');
         }
 
         $root

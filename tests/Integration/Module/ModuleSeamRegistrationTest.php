@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,21 +11,21 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Module;
+namespace Uhifadhi\Seam\Tests\Integration\Module;
 
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\BareModuleProvider;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\CollectedModules;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\TaggedByHandModuleProvider;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\TwoModuleKernel;
-use Uhifadhi\Trunk\Tests\Integration\TrunkKernelTestCase;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\BareModuleProvider;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\CollectedModules;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\TaggedByHandModuleProvider;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\TwoModuleKernel;
+use Uhifadhi\Seam\Tests\Integration\SeamKernelTestCase;
 
 /**
  * REGISTRATION, AT THE SEAM ITSELF. "Install the bundle and you are in the
- * catalogue" is two claims: that a provider reaches the trunk (here), and that
- * the trunk then puts it in the catalogue ({@see \Uhifadhi\Trunk\Tests\Integration\Catalogue\ModuleCatalogueTest}).
+ * catalogue" is two claims: that a provider reaches the seam (here), and that
+ * the seam then puts it in the catalogue ({@see \Uhifadhi\Seam\Tests\Integration\Catalogue\ModuleCatalogueTest}).
  * This is the first half, at the tag, before any of it has been read.
  */
-final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
+final class ModuleSeamRegistrationTest extends SeamKernelTestCase
 {
     protected static function getKernelClass(): string
     {
@@ -40,7 +40,7 @@ final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
         $collected = self::getContainer()->get(CollectedModules::class);
         $modules = $collected->bySlug();
 
-        self::assertArrayHasKey('sightings', $modules, 'an autoconfigured provider is tagged by the trunk');
+        self::assertArrayHasKey('sightings', $modules, 'an autoconfigured provider is tagged by the seam');
         self::assertArrayHasKey('ferries', $modules, "a module bundle's hand-tagged provider arrives the same way");
         self::assertInstanceOf(BareModuleProvider::class, $modules['sightings']);
         self::assertInstanceOf(TaggedByHandModuleProvider::class, $modules['ferries']);
@@ -49,10 +49,10 @@ final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
     /**
      * THE TRAIT DEFAULTS ARE THE CONTRACT'S ANSWER for everything a module did
      * not say, and they have to survive the trip through the container — a
-     * module that declares three methods must reach the trunk as a live,
-     * unpinned, non-core, generically-rendered module with no permissions.
+     * module that declares three methods must reach the seam as a live,
+     * unpinned, non-base, generically-rendered module with no permissions.
      *
-     * core() = false above all: it is the difference between "an area opts into
+     * base() = false above all: it is the difference between "an area opts into
      * this" and "this is on everywhere", and the safe answer has to be the one
      * you get by saying nothing.
      */
@@ -67,7 +67,7 @@ final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
         self::assertSame('live', $module->status());
         self::assertNull($module->dataSource());
         self::assertFalse($module->pinned());
-        self::assertFalse($module->core(), 'saying nothing must never mean "on in every area"');
+        self::assertFalse($module->base(), 'saying nothing must never mean "on in every area"');
         self::assertSame(0, $module->position());
         self::assertNull($module->icon());
         self::assertNull($module->entryRoute(), 'no entry route = the generic module page');
@@ -75,16 +75,16 @@ final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
     }
 
     /**
-     * A module that DOES declare core() keeps it. The trunk never infers this
+     * A module that DOES declare base() keeps it. The seam never infers this
      * from a slug it recognises — the flag is the whole mechanism.
      */
-    public function testACoreModuleSaysSoItself(): void
+    public function testABaseModuleSaysSoItself(): void
     {
         self::bootKernel();
 
         /** @var CollectedModules $collected */
         $collected = self::getContainer()->get(CollectedModules::class);
 
-        self::assertTrue($collected->bySlug()['ferries']->core());
+        self::assertTrue($collected->bySlug()['ferries']->base());
     }
 }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace Uhifadhi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Uhifadhi\Trunk\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaInterface;
 
 /**
- * THE HOST'S AREA, PLAYED BY A STAND-IN — and the reason the trunk needs a seam
- * here at all.
+ * THE HOST'S AREA, PLAYED BY A STAND-IN — and the reason the seam needs a
+ * published interface here at all.
  *
  * An area belongs to the host application: the host owns areas, team and
- * nothing else (that is the lean-flat-host ruling). The trunk owns the record
+ * nothing else (that is the lean-flat-host ruling). The seam owns the record
  * of which modules an area has, which means its AreaModule row has to point at
- * a class the trunk does not define and must not require.
+ * a class the seam does not define and must not require.
  *
- * The answer is Doctrine's own: the trunk maps the association to
+ * The answer is Doctrine's own: the seam maps the association to
  * {@see AreaInterface} and the host resolves that interface to its real entity
  * with `doctrine.orm.resolve_target_entities`. This fixture is a host, minimally
- * — a real entity in the host's namespace, implementing the trunk's interface,
+ * — a real entity in the host's namespace, implementing the seam's interface,
  * autoloaded in this suite alone (see composer.json autoload-dev).
  *
  * A STUB, AND IT IMPERSONATES A REAL FQCN. `Uhifadhi\Entity\AreaOfInterest` is
@@ -36,15 +36,20 @@ use Uhifadhi\Trunk\Entity\AreaInterface;
  * suite exercises the seam a real installation exercises. It is marked as a stub
  * three ways: by location (tests/Integration/Fixtures/ under the impersonated
  * tree), by the autoload-dev mapping that scopes it to the dev autoloader, and
- * by this paragraph. It did NOT move with the namespace alignment — the trunk's
- * own code went `UhifadhiLabs\Trunk\` → `Uhifadhi\Trunk\`, but a stub follows
- * the class it impersonates, and the host was not renamed. A project planted
+ * by this paragraph. It has now sat still through TWO renames of the bundle
+ * around it: this package's own code went `UhifadhiLabs\Trunk\` →
+ * `Uhifadhi\Trunk\` → `Uhifadhi\Seam\`, and this class did not move once,
+ * because a stub follows the class it impersonates and the host was never
+ * renamed. The `use` statement above DID follow — that is the seam's own
+ * interface, not the impersonation. Sweeping the namespace on line 14 into a
+ * rename would break nothing and fail nothing; it would simply stop testing
+ * what this file exists to test. A project planted
  * from the seed names its area `App\Entity\AreaOfInterest` instead; either
  * spelling resolves through the same interface, which is the whole point.
  *
  * The alternative — storing a bare area id or uuid on the row — was considered
  * and rejected: it would make every "the modules of this area" query a manual
- * join the trunk writes by hand, and it would let a row point at an area that
+ * join the seam writes by hand, and it would let a row point at an area that
  * no longer exists, which is exactly the kind of orphan the ON DELETE CASCADE
  * on this association prevents today.
  */

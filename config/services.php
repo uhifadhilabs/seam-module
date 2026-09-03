@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -13,23 +13,23 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Uhifadhi\Trunk\Command\SeedCatalogueCommand;
-use Uhifadhi\Trunk\Repository\AreaModuleRepository;
-use Uhifadhi\Trunk\Repository\ModuleRepository;
-use Uhifadhi\Trunk\Service\AreaModuleLedger;
-use Uhifadhi\Trunk\Service\AreaModuleService;
-use Uhifadhi\Trunk\Service\ModuleCatalogue;
-use Uhifadhi\Trunk\Service\ModuleEntryRouteResolver;
-use Uhifadhi\Trunk\Service\ModulePermissionCatalogue;
-use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
-use Uhifadhi\Trunk\UhifadhiTrunkBundle;
+use Uhifadhi\Seam\Command\SeedCatalogueCommand;
+use Uhifadhi\Seam\Repository\AreaModuleRepository;
+use Uhifadhi\Seam\Repository\ModuleRepository;
+use Uhifadhi\Seam\Service\AreaModuleLedger;
+use Uhifadhi\Seam\Service\AreaModuleService;
+use Uhifadhi\Seam\Service\ModuleCatalogue;
+use Uhifadhi\Seam\Service\ModuleEntryRouteResolver;
+use Uhifadhi\Seam\Service\ModulePermissionCatalogue;
+use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
+use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /*
  * The bundle's static service wiring.
  *
  * PHP (not YAML) on purpose: a reusable bundle must not force symfony/yaml onto
  * hosts, and FQCN references stay refactor-safe and phpstan-checked. Imported by
- * UhifadhiTrunkBundle::loadExtension(), which keeps only the config-DRIVEN
+ * UhifadhiSeamBundle::loadExtension(), which keeps only the config-DRIVEN
  * definitions.
  *
  * Everything below is defined EXPLICITLY — no autowire(), no autoconfigure(),
@@ -45,13 +45,13 @@ use Uhifadhi\Trunk\UhifadhiTrunkBundle;
  * should be; a host that wants one aliases it, and the specification suite does
  * exactly that.
  *
- *   trunk.catalogue             what modules this deployment has
- *   trunk.provider_mapper       provider -> catalogue row (category coercion)
- *   trunk.area_modules          per-area install state: install, uninstall, order
- *   trunk.area_module_ledger    what an area has and what it does not
- *   trunk.entry_routes          where a module's tile links
- *   trunk.permissions           the permissions installed modules declare
- *   trunk.seed_catalogue        the create-only catalogue seed command
+ *   seam.catalogue             what modules this deployment has
+ *   seam.provider_mapper       provider -> catalogue row (category coercion)
+ *   seam.area_modules          per-area install state: install, uninstall, order
+ *   seam.area_module_ledger    what an area has and what it does not
+ *   seam.entry_routes          where a module's tile links
+ *   seam.permissions           the permissions installed modules declare
+ *   seam.seed_catalogue        the create-only catalogue seed command
  */
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();
@@ -62,7 +62,7 @@ return static function (ContainerConfigurator $container): void {
      * makes uninstalling a bundle take its module, its route and its declared
      * permissions with it on the next request rather than on the next deploy.
      */
-    $providers = tagged_iterator(UhifadhiTrunkBundle::MODULE_TAG);
+    $providers = tagged_iterator(UhifadhiSeamBundle::MODULE_TAG);
 
     /*
      * Repositories keep FQCN ids — the one place the bundle-alias prefix cannot
@@ -80,35 +80,35 @@ return static function (ContainerConfigurator $container): void {
         ->args([service('doctrine')])
         ->tag('doctrine.repository_service');
 
-    $services->set('trunk.provider_mapper', ProviderCatalogueMapper::class)
-        ->args([param('trunk.default_category')]);
+    $services->set('seam.provider_mapper', ProviderCatalogueMapper::class)
+        ->args([param('seam.default_category')]);
 
-    $services->set('trunk.catalogue', ModuleCatalogue::class)
+    $services->set('seam.catalogue', ModuleCatalogue::class)
         ->args([service(ModuleRepository::class), $providers]);
 
-    $services->set('trunk.area_modules', AreaModuleService::class)
+    $services->set('seam.area_modules', AreaModuleService::class)
         ->args([
             service('doctrine.orm.entity_manager'),
             service(AreaModuleRepository::class),
-            service('trunk.catalogue'),
+            service('seam.catalogue'),
         ]);
 
-    $services->set('trunk.area_module_ledger', AreaModuleLedger::class)
-        ->args([service('trunk.catalogue'), service(AreaModuleRepository::class)]);
+    $services->set('seam.area_module_ledger', AreaModuleLedger::class)
+        ->args([service('seam.catalogue'), service(AreaModuleRepository::class)]);
 
-    $services->set('trunk.entry_routes', ModuleEntryRouteResolver::class)
+    $services->set('seam.entry_routes', ModuleEntryRouteResolver::class)
         ->args([$providers]);
 
-    $services->set('trunk.permissions', ModulePermissionCatalogue::class)
+    $services->set('seam.permissions', ModulePermissionCatalogue::class)
         ->args([$providers]);
 
     // Not autoconfigured (nothing here is), so the console tag is written out.
-    $services->set('trunk.seed_catalogue', SeedCatalogueCommand::class)
+    $services->set('seam.seed_catalogue', SeedCatalogueCommand::class)
         ->args([
             service('doctrine.orm.entity_manager'),
             service(ModuleRepository::class),
             service(AreaModuleRepository::class),
-            service('trunk.provider_mapper'),
+            service('seam.provider_mapper'),
             $providers,
         ])
         ->tag('console.command');

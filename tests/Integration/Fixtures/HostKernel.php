@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,15 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Seam\Tests\Integration\Fixtures;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Uhifadhi\Trunk\Tests\Integration\TestKernel;
-use Uhifadhi\Trunk\UhifadhiTrunkBundle;
+use Uhifadhi\Seam\Tests\Integration\TestKernel;
+use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /**
- * A HOST, MINIMALLY: the trunk, plus the three things a real installation
- * contributes — an area entity, the resolution of the trunk's area interface to
+ * A HOST, MINIMALLY: the seam, plus the three things a real installation
+ * contributes — an area entity, the resolution of the seam's area interface to
  * it, and whichever modules happen to be installed.
  *
  * INSTALLING A MODULE IS BOOTING A DIFFERENT KERNEL, and that is not a testing
@@ -27,7 +27,7 @@ use Uhifadhi\Trunk\UhifadhiTrunkBundle;
  * about uninstalling therefore boots a kernel without that provider, which is
  * the only honest way to assert what an uninstall does.
  *
- * The aliases below are also the trunk's PUBLISHED SERVICE IDS. The bundle's
+ * The aliases below are also the seam's PUBLISHED SERVICE IDS. The bundle's
  * services are private, as a reusable bundle's should be, so a public alias is
  * the sanctioned way to observe exactly the ones a specification is about — and
  * the extraction has to land on these names (config/services.php lists the same
@@ -54,7 +54,7 @@ final class HostKernel extends TestKernel
         $container->extension('doctrine', [
             'orm' => [
                 'resolve_target_entities' => [
-                    \Uhifadhi\Trunk\Entity\AreaInterface::class => \Uhifadhi\Entity\AreaOfInterest::class,
+                    \Uhifadhi\Seam\Entity\AreaInterface::class => \Uhifadhi\Entity\AreaOfInterest::class,
                 ],
                 'mappings' => [
                     'TestHost' => [
@@ -83,16 +83,16 @@ final class HostKernel extends TestKernel
         foreach (array_keys(self::$modules) as $slug) {
             $services->set('test.module.'.$slug, SpecModuleProvider::class)
                 ->args([$slug])
-                ->tag(UhifadhiTrunkBundle::MODULE_TAG);
+                ->tag(UhifadhiSeamBundle::MODULE_TAG);
         }
 
         foreach ([
-            'trunk.catalogue',
-            'trunk.provider_mapper',
-            'trunk.area_modules',
-            'trunk.area_module_ledger',
-            'trunk.entry_routes',
-            'trunk.permissions',
+            'seam.catalogue',
+            'seam.provider_mapper',
+            'seam.area_modules',
+            'seam.area_module_ledger',
+            'seam.entry_routes',
+            'seam.permissions',
         ] as $id) {
             $services->alias('test.'.$id, $id)->public();
         }
@@ -105,7 +105,7 @@ final class HostKernel extends TestKernel
      */
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/trunk-module-tests/cache/installation/'
+        return sys_get_temp_dir().'/seam-module-tests/cache/installation/'
             .substr(hash('xxh128', serialize(self::$modules)), 0, 12);
     }
 }

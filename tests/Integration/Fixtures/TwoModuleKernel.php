@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Seam\Tests\Integration\Fixtures;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Uhifadhi\Trunk\Tests\Integration\TestKernel;
-use Uhifadhi\Trunk\UhifadhiTrunkBundle;
+use Uhifadhi\Seam\Tests\Integration\TestKernel;
+use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /**
- * The trunk with two modules on it, arriving by each of the seam's two
+ * The seam with two modules on it, arriving by each of the seam's two
  * entrances:
  *
  *  - {@see BareModuleProvider} is AUTOCONFIGURED, the way a module defined by
- *    the host application itself is, and gets the tag from the trunk's
+ *    the host application itself is, and gets the tag from the seam's
  *    registerForAutoconfiguration();
  *  - {@see TaggedByHandModuleProvider} stands in for an installed module
  *    BUNDLE, whose services are never autoconfigured and which therefore writes
@@ -43,6 +43,6 @@ final class TwoModuleKernel extends TestKernel
             ->autoconfigure();
 
         $services->set(TaggedByHandModuleProvider::class)
-            ->tag(UhifadhiTrunkBundle::MODULE_TAG);
+            ->tag(UhifadhiSeamBundle::MODULE_TAG);
     }
 }

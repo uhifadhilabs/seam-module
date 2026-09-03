@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Uhifadhi\Trunk\Entity\AreaInterface;
-use Uhifadhi\Trunk\Entity\AreaModule;
-use Uhifadhi\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaModule;
+use Uhifadhi\Seam\Repository\AreaModuleRepository;
 
 /**
  * PER-AREA INSTALL STATE: what THIS area has switched on, and the writes that
@@ -30,7 +30,7 @@ use Uhifadhi\Trunk\Repository\AreaModuleRepository;
  * from the deployment.
  *
  * IT DECIDES NOTHING ABOUT WHAT IS DRAWN. It answers in rows; grouping them into
- * a grid, a shop or a sub-nav is a picture, and pictures are the canopy's.
+ * a grid, a shop or a sub-nav is a picture, and pictures are the shell's.
  */
 final readonly class AreaModuleService
 {

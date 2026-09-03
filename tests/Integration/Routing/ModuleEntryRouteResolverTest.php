@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Routing;
+namespace Uhifadhi\Seam\Tests\Integration\Routing;
 
-use Uhifadhi\Trunk\Service\ModuleEntryRouteResolver;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Service\ModuleEntryRouteResolver;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
- * WHERE A MODULE'S TILE LINKS — the one piece of routing the trunk carries, and
+ * WHERE A MODULE'S TILE LINKS — the one piece of routing the seam carries, and
  * it carries no routes of its own.
  *
- * This is a resolution, not a redirect: the trunk answers "what route name, if
- * any, does this module own?" and something in the canopy turns that into a
- * link with the area's uuid. The trunk itself never renders a tile.
+ * This is a resolution, not a redirect: the seam answers "what route name, if
+ * any, does this module own?" and something in the shell turns that into a
+ * link with the area's uuid. The seam itself never renders a tile.
  *
  * READ FROM THE PROVIDER, NEVER FROM A COLUMN. A route name is code: it changes
  * when a module refactors its controllers, and if the catalogue had stored it at
@@ -33,7 +33,7 @@ final class ModuleEntryRouteResolverTest extends InstallationTestCase
 {
     private function resolver(): ModuleEntryRouteResolver
     {
-        $resolver = $this->service('trunk.entry_routes');
+        $resolver = $this->service('seam.entry_routes');
         \assert($resolver instanceof ModuleEntryRouteResolver);
 
         return $resolver;

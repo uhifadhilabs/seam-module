@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Enum;
+namespace Uhifadhi\Seam\Enum;
 
 /**
  * How far along a module is: {@see Live} — rendering real data — or
@@ -19,7 +19,7 @@ namespace Uhifadhi\Trunk\Enum;
  * status chip a catalogue card shows, and nothing else: a template module is
  * installed, switchable and routable exactly like a live one.
  *
- * Coerced, never trusted (see {@see \Uhifadhi\Trunk\Service\ProviderCatalogueMapper}):
+ * Coerced, never trusted (see {@see \Uhifadhi\Seam\Service\ProviderCatalogueMapper}):
  * a provider hands over a string, and anything unrecognised is Live, because a
  * module that is installed is running.
  */

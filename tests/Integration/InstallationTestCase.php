@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,25 +11,25 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration;
+namespace Uhifadhi\Seam\Tests\Integration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Uhifadhi\Entity\AreaOfInterest;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\HostKernel;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\HostKernel;
 
 /**
  * Shared plumbing for the specifications that need a database and a set of
  * installed modules.
  *
- * The database is the fundi cluster's `trunk_bundle_test` (port 5434). Unlike
- * its sibling bundles the trunk genuinely owns tables — the catalogue and the
+ * The database is the fundi cluster's `seam_bundle_test` (port 5434). Unlike
+ * its sibling bundles the seam genuinely owns tables — the catalogue and the
  * per-area install record are its data, not the host's — so there is no honest
  * version of this suite that avoids a connection.
  */
-abstract class InstallationTestCase extends TrunkKernelTestCase
+abstract class InstallationTestCase extends SeamKernelTestCase
 {
     protected static function getKernelClass(): string
     {
@@ -91,7 +91,7 @@ abstract class InstallationTestCase extends TrunkKernelTestCase
     }
 
     /**
-     * Run the catalogue seed. The command is `trunk:catalogue:seed` — a bundle's
+     * Run the catalogue seed. The command is `seam:catalogue:seed` — a bundle's
      * command belongs in its own namespace — and it keeps the host's
      * `app:seed:catalogue` as an alias, because that string is written down in
      * the deploy pipeline and in every module's README, and an extraction that
@@ -102,7 +102,7 @@ abstract class InstallationTestCase extends TrunkKernelTestCase
         $kernel = self::$kernel;
         \assert(null !== $kernel);
 
-        $tester = new CommandTester(new Application($kernel)->find('trunk:catalogue:seed'));
+        $tester = new CommandTester(new Application($kernel)->find('seam:catalogue:seed'));
         $tester->execute([]);
         $tester->assertCommandIsSuccessful();
 

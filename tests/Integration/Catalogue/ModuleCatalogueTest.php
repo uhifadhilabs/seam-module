@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Catalogue;
+namespace Uhifadhi\Seam\Tests\Integration\Catalogue;
 
-use Uhifadhi\Trunk\Service\ModuleCatalogue;
-use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Seam\Service\ModuleCatalogue;
+use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 1 & 2 — REGISTRATION, AND ZERO.
  *
  * "Install the bundle and you are in the catalogue" is two claims. The first —
- * that a tagged provider reaches the trunk — is already green in
+ * that a tagged provider reaches the seam — is already green in
  * tests/Integration, because the tag and its autoconfiguration moved here with
- * the bundle. This is the second: that what reached the trunk is then READABLE
+ * the bundle. This is the second: that what reached the seam is then READABLE
  * as a catalogue, by every surface that wants to draw one, without any of them
  * walking the tag themselves.
  *
@@ -35,7 +35,7 @@ final class ModuleCatalogueTest extends InstallationTestCase
 {
     private function catalogue(): ModuleCatalogue
     {
-        $catalogue = $this->service('trunk.catalogue');
+        $catalogue = $this->service('seam.catalogue');
         \assert($catalogue instanceof ModuleCatalogue);
 
         return $catalogue;
@@ -43,7 +43,7 @@ final class ModuleCatalogueTest extends InstallationTestCase
 
     /**
      * ZERO IS A REAL NUMBER OF MODULES, and the first one every installation
-     * has. Seed + trunk and nothing else must give a working, empty catalogue —
+     * has. Seed + seam and nothing else must give a working, empty catalogue —
      * a runtime that only functions once a module is installed has a hidden
      * dependency on its own branches. The seed command runs, succeeds, and
      * writes nothing.

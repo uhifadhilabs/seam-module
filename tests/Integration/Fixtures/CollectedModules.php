@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Seam\Tests\Integration\Fixtures;
 
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
 
 /**
- * Everything that reached the module tag, in registration order — the trunk's
+ * Everything that reached the module tag, in registration order — the seam's
  * own catalogue receives exactly this iterator, and until the extraction lands
  * this fixture is the only thing that can observe it.
  */

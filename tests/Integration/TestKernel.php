@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,20 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration;
+namespace Uhifadhi\Seam\Tests\Integration;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
-use Uhifadhi\Trunk\Tests\Integration\Fixtures\CollectedModules;
-use Uhifadhi\Trunk\UhifadhiTrunkBundle;
+use Uhifadhi\Seam\Tests\Integration\Fixtures\CollectedModules;
+use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
 /**
- * THE SEED, PLUS THE TRUNK, AND NOTHING ELSE: framework + doctrine + this
+ * THE SEED, PLUS THE SEAM, AND NOTHING ELSE: framework + doctrine + this
  * bundle. That is not a convenience for testing — it is the growth step this
  * bundle exists to make possible, and the kernel here is as close as a test can
  * get to a freshly planted installation with one ring on it.
@@ -43,7 +43,7 @@ class TestKernel extends Kernel
     {
         yield new FrameworkBundle();
         yield new DoctrineBundle();
-        yield new UhifadhiTrunkBundle();
+        yield new UhifadhiSeamBundle();
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
@@ -58,26 +58,26 @@ class TestKernel extends Kernel
         ]);
 
         $container->extension('doctrine', [
-            'dbal' => ['url' => '%env(TRUNK_TEST_DATABASE_URL)%'],
+            'dbal' => ['url' => '%env(SEAM_TEST_DATABASE_URL)%'],
         ]);
 
         // The collecting end of the seam, made observable. Tagged services are
         // private, so without this fixture a test cannot see what reached the
-        // trunk at all. In a real installation the trunk's own catalogue is what
+        // seam at all. In a real installation the seam's own catalogue is what
         // receives this iterator.
         $container->services()
             ->set(CollectedModules::class)
-            ->args([tagged_iterator(UhifadhiTrunkBundle::MODULE_TAG)])
+            ->args([tagged_iterator(UhifadhiSeamBundle::MODULE_TAG)])
             ->public();
     }
 
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/trunk-module-tests/cache/'.$this->getEnvironment().'/'.static::class;
+        return sys_get_temp_dir().'/seam-module-tests/cache/'.$this->getEnvironment().'/'.static::class;
     }
 
     public function getLogDir(): string
     {
-        return sys_get_temp_dir().'/trunk-module-tests/log';
+        return sys_get_temp_dir().'/seam-module-tests/log';
     }
 }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,56 +11,56 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk;
+namespace Uhifadhi\Seam;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
-use Uhifadhi\Trunk\DependencyInjection\TrunkConfiguration;
+use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
 
 /**
- * The TRUNK — the seam runtime every uhifadhi module registers with.
+ * The SEAM — the runtime every uhifadhi module registers with.
  *
- * The seed is planted, the trunk carries, the branches are the modules and the
- * canopy is what you see. This ring is the carrying: the module catalogue, the
+ * The seed is planted, the seam carries, the branches are the modules and the
+ * shell is what you see. This ring is the carrying: the module catalogue, the
  * per-area record of what is switched on, the permissions modules declare, and
  * the seed command that keeps the catalogue in step with what is installed.
  *
  * IT RENDERS NOTHING. No templates, no controllers, no routes — the visible
- * crown is the canopy's job. The trunk answers questions in data and services,
+ * crown is the shell's job. The seam answers questions in data and services,
  * and anything that draws a module grid reads it. See the README's boundaries
  * section for why the grid is not here.
  *
  * IT KNOWS NO MODULE BY NAME — not one, not even the pinned hub every
  * installation has. A module is whatever tagged itself, and everything the
- * trunk treats specially (pinned, core) is a flag the provider declares, never
+ * seam treats specially (pinned, base) is a flag the provider declares, never
  * a slug the runtime recognises. A test sweeps src/ for that property, and the
  * sweep is why this paragraph names nothing either.
  *
  * PHASE 1 — this repository is the scaffold and the RED specification. The
  * runtime itself arrives in phase 2 by EXTRACTION from the host application,
  * against the failing suite in tests/Phase2. What is here today is the plug:
- * the bundle registers, its config is keyed under "trunk:", its entity
+ * the bundle registers, its config is keyed under "seam:", its entity
  * directory is mapped, and it autoconfigures the module tag.
  */
-final class UhifadhiTrunkBundle extends AbstractBundle
+final class UhifadhiSeamBundle extends AbstractBundle
 {
     /**
      * The tag every module provider carries. Published as a constant because
-     * the trunk is the end that COLLECTS it — a module bundle writes the string
+     * the seam is the end that COLLECTS it — a module bundle writes the string
      * by hand in its own extension (it is not autoconfigured), and a host or a
      * test that wants to stand in for the collector should not retype it.
      */
     public const string MODULE_TAG = 'uhifadhi.module';
 
-    /** Config lives under "trunk:", not the class-derived "uhifadhi_trunk:". */
-    protected string $extensionAlias = 'trunk';
+    /** Config lives under "seam:", not the class-derived "uhifadhi_seam:". */
+    protected string $extensionAlias = 'seam';
 
     public function configure(DefinitionConfigurator $definition): void
     {
-        TrunkConfiguration::define($definition->rootNode());
+        SeamConfiguration::define($definition->rootNode());
     }
 
     public function build(ContainerBuilder $container): void
@@ -82,7 +82,7 @@ final class UhifadhiTrunkBundle extends AbstractBundle
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        // Zero-config persistence: the trunk maps its own entities, so a host
+        // Zero-config persistence: the seam maps its own entities, so a host
         // never writes a doctrine mappings block for the catalogue tables.
         // Wired now, empty until the extraction lands — an attribute driver over
         // a directory with no entities simply contributes no metadata.
@@ -90,10 +90,10 @@ final class UhifadhiTrunkBundle extends AbstractBundle
             $container->extension('doctrine', [
                 'orm' => [
                     'mappings' => [
-                        'UhifadhiTrunk' => [
+                        'UhifadhiSeam' => [
                             'type' => 'attribute',
                             'dir' => __DIR__.'/Entity',
-                            'prefix' => 'Uhifadhi\\Trunk\\Entity',
+                            'prefix' => 'Uhifadhi\\Seam\\Entity',
                             'is_bundle' => false,
                         ],
                     ],
@@ -117,7 +117,7 @@ final class UhifadhiTrunkBundle extends AbstractBundle
         // this is an operations platform and an unplaced module is far likelier
         // to be somebody's daily work than a reading of the ecosystem.
         $builder->setParameter(
-            'trunk.default_category',
+            'seam.default_category',
             \is_string($config['default_category'] ?? null) ? $config['default_category'] : 'operations',
         );
 
@@ -125,6 +125,6 @@ final class UhifadhiTrunkBundle extends AbstractBundle
         // production installation never grows a command that writes invented
         // catalogue rows. Nothing claims it yet — the switch exists so the first
         // thing that needs it has somewhere to hang.
-        $builder->setParameter('trunk.dev_tools', true === ($config['dev_tools'] ?? false));
+        $builder->setParameter('seam.dev_tools', true === ($config['dev_tools'] ?? false));
     }
 }

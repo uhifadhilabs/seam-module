@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Enum;
+namespace Uhifadhi\Seam\Enum;
 
 /**
  * The taxonomy a module is filed under in the catalogue.
@@ -26,8 +26,8 @@ namespace Uhifadhi\Trunk\Enum;
  * OPERATIONS is that fourth reading, and after the operational pivot it is the
  * one most modules belong to — so it leads.
  *
- * IT LIVES IN THE TRUNK BECAUSE THE CATALOGUE COLUMN DOES. A category is not a
- * module's to define (a provider hands over a string, which the trunk coerces)
+ * IT LIVES IN THE SEAM BECAUSE THE CATALOGUE COLUMN DOES. A category is not a
+ * module's to define (a provider hands over a string, which the seam coerces)
  * and not the host's either (the host would be defining the enum its own
  * catalogue table stores). It is the vocabulary of the catalogue, and the
  * catalogue is here.

@@ -1,6 +1,6 @@
-# uhifadhi/trunk-module
+# uhifadhi/seam-module
 
-The **trunk**: the module seam runtime every uhifadhi module registers with. A
+The **seam**: the module seam runtime every uhifadhi module registers with. A
 [uhifadhi](https://github.com/uhifadhilabs) platform bundle.
 
 > **Status: the runtime is here.** The seam was extracted out of the
@@ -14,7 +14,7 @@ The **trunk**: the module seam runtime every uhifadhi module registers with. A
 - [Charter](#charter)
 - [How this was built](#how-this-was-built)
 - [What it guarantees](#what-it-guarantees)
-- [Boundaries: what the trunk is not](#boundaries-what-the-trunk-is-not)
+- [Boundaries: what the seam is not](#boundaries-what-the-seam-is-not)
 - [Deltas from the host's previous behaviour](#deltas-from-the-hosts-previous-behaviour)
 - [What is here](#what-is-here)
 - [Installation](#installation)
@@ -27,17 +27,30 @@ The **trunk**: the module seam runtime every uhifadhi module registers with. A
 Uhifadhi is structured like the thing it protects:
 
 > **the seed — [`uhifadhi/uhifadhi`](https://github.com/uhifadhilabs/uhifadhi)**
-> (planted once) → **`trunk-module`** (this repository: the
-> seam runtime every module registers with) → **branches** (the modules) →
-> **`canopy-module`** (the visible crown).
+> (planted once) → **the seam —
+> [`uhifadhi/seam-module`](https://github.com/uhifadhilabs/seam-module)** (this
+> repository: where every module registers) → **branches** (the modules) →
+> **the shell —
+> [`uhifadhi/shell-module`](https://github.com/uhifadhilabs/shell-module)**
+> (what you see).
 
 The seed is copied once and is then yours forever. Everything above it is a
-bundle, updated through composer. This ring is the one every other ring
-attaches to.
+bundle, updated through composer. This is the package every other one attaches
+to.
+
+**The tree is a picture, not a naming scheme.** It is kept here because it is
+the fastest way to explain the shape to somebody new, and it is kept *only*
+here — in prose. The packages themselves are named for what they do, so that a
+newcomer reading an import knows what they are looking at without having been
+told the metaphor first. This one was called `trunk-module` (namespace
+`Uhifadhi\Trunk\`) until that rule was written down, and the sentence the
+rename bought is the whole architecture in eight words:
+
+> **A module registers with the seam and renders in the shell.**
 
 ## Charter
 
-**The trunk carries; it does not show.** It owns four things and no more:
+**The seam carries; it does not show.** It owns four things and no more:
 
 - **The catalogue** — what modules exist in this deployment. Not a list anyone
   edits: a module is in the catalogue because its bundle is installed and its
@@ -56,8 +69,8 @@ functions once somebody installs a module has a hidden dependency on its own
 branches.
 
 **It knows no module by name.** Not one — not even the pinned hub every
-installation has. A module is whatever tagged itself, and everything the trunk
-treats specially (`pinned`, `core`) is a flag the provider declares, never a
+installation has. A module is whatever tagged itself, and everything the seam
+treats specially (`pinned`, `base`) is a flag the provider declares, never a
 slug the runtime recognises. A test sweeps `src/` for that property.
 
 ## How this was built
@@ -83,16 +96,16 @@ Every row below is a test, and the table is the order they were written in:
 
 | # | Behaviour | Where |
 |---|---|---|
-| 1 | A bundle tagging a provider `uhifadhi.module` appears in the catalogue; the trait defaults (`core()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (the seam half) + `Integration/Catalogue/ModuleCatalogueTest` |
+| 1 | A bundle tagging a provider `uhifadhi.module` appears in the catalogue; the trait defaults (`base()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (the seam half) + `Integration/Catalogue/ModuleCatalogueTest` |
 | 2 | Zero modules: the catalogue boots, is empty, and the seed succeeds writing nothing | `Integration/EmptyCatalogueTest` + `Integration/Catalogue/ModuleCatalogueTest` |
-| 3 | Per-area install/uninstall flips state for that area alone; `core()` seeds active and installable seeds parked; a pinned module can never be switched off; uninstalling removes the module's presence from the area's ledger immediately, and keeps its data | `Integration/Area/AreaModuleInstallationTest` |
+| 3 | Per-area install/uninstall flips state for that area alone; `base()` seeds active and installable seeds parked; a pinned module can never be switched off; uninstalling removes the module's presence from the area's ledger immediately, and keeps its data | `Integration/Area/AreaModuleInstallationTest` |
 | 4 | Category and status are coerced, never trusted; an unknown category falls back to **Operations** | `Unit/Catalogue/ProviderCatalogueMapperTest` |
 | 5 | The seed is idempotent and **create-only** for per-area rows: a deploy never overrules an admin's on/off or ordering, and never deletes an uninstalled module's history | `Integration/Command/SeedCatalogueCommandTest` |
 | 6 | Declared permissions surface through the seam, grouped by umbrella, first-declaration-wins, and vanish with the module — carrying no role and no holders | `Integration/Permission/ModulePermissionCatalogueTest` |
 | 7 | Boundaries: no module named in `src/`, no host namespace, no templates, no controllers, no routes | `Unit/BoundaryTest` |
 | 8 | A module's entry route is read live from its provider, never from a stored column | `Integration/Routing/ModuleEntryRouteResolverTest` |
 | 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Integration/Area/CataloguePersistenceTest` |
-| 10 | Installability: the trunk alone boots without an area mapping and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
+| 10 | Installability: the seam alone boots without an area mapping and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
 
 ### The attention-list promise (spec 3)
 
@@ -102,14 +115,14 @@ platform makes to an area manager is that switching a module off takes its
 contributions off the page **the same day**, not on the next deploy or after a
 cache warm.
 
-The trunk cannot test the attention list itself: it draws nothing and knows no
+The seam cannot test the attention list itself: it draws nothing and knows no
 module. What it can pin is what that list is derived from — the moment a module
 is uninstalled for an area, that area's ledger stops counting it present and
 starts counting it absent, read from the database, with no interval in between.
 Anything that caches that reading breaks the promise, and the test is where it
 would show.
 
-## Boundaries: what the trunk is not
+## Boundaries: what the seam is not
 
 **The module grid is not here, and neither is the customize screen.** This was
 the phase-1 decision worth arguing, so here is the argument.
@@ -119,12 +132,12 @@ runtime can — a catalogue, a per-area install record, a permission collector a
 a seed command are complete and meaningful with nothing rendering them, and a
 CLI or an API can use every one of them. A module grid cannot live alone: it is
 a *picture* of those answers, and it needs a layout, a stylesheet, a department
-lens over the ordering, and the viewer's identity — none of which the trunk has
+lens over the ordering, and the viewer's identity — none of which the seam has
 or should acquire.
 
 So the split is:
 
-| Belongs to the trunk | Belongs to the canopy / host |
+| Belongs to the seam | Belongs to the shell / host |
 |---|---|
 | the catalogue, in catalogue order | the module grid, its cards, its category pills |
 | per-area active/parked state and ordering | the customize screen and its forms |
@@ -135,7 +148,7 @@ So the split is:
 The host's `ModuleGridService` is the case that looks borderline: it returns
 arrays, not HTML. It stays out, because what it actually does is group cards by
 category **and by the viewer's department**, which is a reading for a person on
-a page — a view-model, and the trunk has no viewer.
+a page — a view-model, and the seam has no viewer.
 
 Concretely: this bundle ships **no `templates/` directory, no controllers and no
 routes**, and `Unit/BoundaryTest` fails the build if that changes.
@@ -150,29 +163,29 @@ deliberate change the extraction made:
    documented as an ordering hint, and in the host nothing read it — the seed
    passed its own loop index and the provider's answer was discarded. A contract method
    nothing reads is a lie in the contract, and an author who sets it has no way
-   to find out it did nothing. The trunk honours a declared position and uses
+   to find out it did nothing. The seam honours a declared position and uses
    registration order only as the tie-break (which, given the trait default of
    `0`, leaves the common case unchanged).
 2. **There is no hub row.** The host's seed command still claimed in its
    docblock that the catalogue was "the host's own hub plus every provider"; the
    code had not created a hub row since the catalogue became provider-driven.
-   The trunk states the honest rule: every row comes from a provider, and
+   The seam states the honest rule: every row comes from a provider, and
    `pinned` is a flag a provider declares — the runtime never knows the hub's
    slug.
-3. **The command is namespaced.** `trunk:catalogue:seed`, because a bundle's
+3. **The command is namespaced.** `seam:catalogue:seed`, because a bundle's
    command belongs in the bundle's namespace — with `app:seed:catalogue` kept as
    an alias, because that string is in the deploy pipeline and in every module's
    README, and renaming it silently would break a deploy rather than a test.
 4. **The tables are deliberately unprefixed.** Every branch prefixes its tables
-   with its domain word; the trunk keeps `module` and `area_module`. A rename
+   with its domain word; the seam keeps `module` and `area_module`. A rename
    here is a production migration on the platform's most-referenced tables,
    bought with nothing but consistency — and the prefix rule exists to stop two
    bundles colliding on a common noun, which cannot happen to the runtime every
    bundle registers with.
 5. **Permissions are the module half only.** The host's permission catalogue
-   merges its own core enum with module declarations. The trunk collects only the declarations; the host keeps its
+   merges its own built-in enum with module declarations. The seam collects only the declarations; the host keeps its
    own enum and stays the only thing that decides who holds what. A runtime that
-   also owned the core permissions would own the host's team model with it.
+   also owned the host's built-in permissions would own the host's team model with it.
 6. **A declaration is deployment-wide, not per area** — a module switched off
    everywhere still declares its permissions, so an admin can assign one that
    currently guards nothing. This is the seam's honest state today; it is pinned
@@ -183,8 +196,8 @@ deliberate change the extraction made:
 
 | Piece | File |
 |---|---|
-| The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiTrunkBundle.php` |
-| Config tree (`trunk:`) | `src/DependencyInjection/TrunkConfiguration.php` |
+| The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiSeamBundle.php` |
+| Config tree (`seam:`) | `src/DependencyInjection/SeamConfiguration.php` |
 | Static service wiring, and the published ids | `config/services.php` |
 | The area seam a host resolves | `src/Entity/AreaInterface.php` |
 | The catalogue and the per-area ledger | `src/Entity/`, `src/Repository/` |
@@ -199,24 +212,24 @@ doctrine mappings block for the catalogue tables.
 ## Installation
 
 ```bash
-composer require uhifadhi/trunk-module
+composer require uhifadhi/seam-module
 ```
 
 The bundle registers via Flex (`"type": "symfony-bundle"`), which adds
-`Uhifadhi\Trunk\UhifadhiTrunkBundle` to `config/bundles.php` and copies
-`config/packages/trunk.yaml` in.
+`Uhifadhi\Seam\UhifadhiSeamBundle` to `config/bundles.php` and copies
+`config/packages/seam.yaml` in.
 
 ### The area mapping is required, not optional
 
 This used to read as an extra you added when you wanted the per-area half. It
-is not. The trunk owns two tables and the per-area one has a `NOT NULL` foreign
+is not. The seam owns two tables and the per-area one has a `NOT NULL` foreign
 key to an area, so until the interface resolves to a class there is no schema
 to create — every tool that walks the association stops:
 
 ```console
 $ bin/console doctrine:schema:create
 In MappingException.php line 72:
-  Class 'Uhifadhi\Trunk\Entity\AreaInterface' does not exist
+  Class 'Uhifadhi\Seam\Entity\AreaInterface' does not exist
 ```
 
 Booting is fine — a host between `composer require` and its first entity must
@@ -226,11 +239,11 @@ So give the application an area entity implementing `AreaInterface` (it asks
 for `getId()` and nothing else) and name it:
 
 ```yaml
-# config/packages/trunk.yaml
+# config/packages/seam.yaml
 doctrine:
     orm:
         resolve_target_entities:
-            Uhifadhi\Trunk\Entity\AreaInterface: App\Entity\AreaOfInterest
+            Uhifadhi\Seam\Entity\AreaInterface: App\Entity\AreaOfInterest
 ```
 
 `App\Entity` is the PSR-4 root of a project planted from the
@@ -238,9 +251,9 @@ doctrine:
 the mapping prefix the doctrine-bundle recipe writes into
 `config/packages/doctrine.yaml` already covers the area entity and needs no
 correction. `Uhifadhi\` on its own is the platform's, not an application's — this
-bundle is `Uhifadhi\Trunk\` — so do not reach for it here. An existing host with
+bundle is `Uhifadhi\Seam\` — so do not reach for it here. An existing host with
 a root of its own substitutes that on the right-hand side; the left-hand side is
-the trunk's and never changes.
+the seam's and never changes.
 
 ### Then the tables
 
@@ -248,7 +261,7 @@ the trunk's and never changes.
 bin/console doctrine:database:create
 bin/console doctrine:migrations:diff      # your history, your migration
 bin/console doctrine:migrations:migrate
-bin/console trunk:catalogue:seed
+bin/console seam:catalogue:seed
 ```
 
 `doctrine/doctrine-migrations-bundle` is a dependency of **this** bundle: the
@@ -256,15 +269,15 @@ ring that adds tables brings the tool that creates them, the same way it has
 always brought the ORM. A planted project that lacked it had no
 `doctrine:migrations:*` commands at all and no hint that it should.
 
-What the trunk deliberately does **not** ship is migration versions. The tables
-are the trunk's; the migration history is the installation's, and a vendor
+What the seam deliberately does **not** ship is migration versions. The tables
+are the seam's; the migration history is the installation's, and a vendor
 replaying its own versions into it would fight every `diff` the host ever runs.
 
 ## Configuration
 
 ```yaml
-# config/packages/trunk.yaml
-trunk:
+# config/packages/seam.yaml
+seam:
     default_category: operations   # where an unplaced module is filed
     dev_tools: false               # dev-only tooling; enable via when@dev / when@test
 ```
@@ -284,12 +297,12 @@ composer check   # cs:check -> phpstan (max) -> the suite
 - PHP 8.4+, PHPStan level **max**, php-cs-fixer `@Symfony` + `@Symfony:risky`.
 - **Tests first, always.** This repository is that rule taken literally: the
   whole specification was written before a line of the runtime existed.
-- `tests/Integration/TestKernel.php` is the trunk alone — framework, doctrine,
+- `tests/Integration/TestKernel.php` is the seam alone — framework, doctrine,
   this bundle — and opens no connection, which is what a host that has not
   migrated yet must still be able to boot.
   `tests/Integration/Fixtures/HostKernel.php` adds a stand-in host on top and
-  does connect, because the trunk genuinely owns tables:
-  `postgresql://app:app@127.0.0.1:5434/trunk_bundle_test` on the fundi cluster.
+  does connect, because the seam genuinely owns tables:
+  `postgresql://app:app@127.0.0.1:5434/seam_bundle_test` on the fundi cluster.
 
 ## License
 

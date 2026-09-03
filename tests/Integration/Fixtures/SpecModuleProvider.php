@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Seam\Tests\Integration\Fixtures;
 
 use Uhifadhi\ModuleContracts\ModulePermission;
 use Uhifadhi\ModuleContracts\ModuleProviderInterface;
@@ -19,11 +19,11 @@ use Uhifadhi\ModuleContracts\ModuleProviderTrait;
 
 /**
  * A module, dialled to whatever a given specification needs. Fictional on
- * purpose — the trunk knows no real module by name, and neither does its suite.
+ * purpose — the seam knows no real module by name, and neither does its suite.
  *
  * @phpstan-type Overrides array{
  *     name?: string, category?: string, status?: string, source?: ?string,
- *     pinned?: bool, core?: bool, position?: int, icon?: ?string,
+ *     pinned?: bool, base?: bool, position?: int, icon?: ?string,
  *     entryRoute?: ?string, permissions?: list<ModulePermission>,
  * }
  */
@@ -94,9 +94,9 @@ final class SpecModuleProvider implements ModuleProviderInterface
         return true === ($this->overrides()['pinned'] ?? false);
     }
 
-    public function core(): bool
+    public function base(): bool
     {
-        return true === ($this->overrides()['core'] ?? false);
+        return true === ($this->overrides()['base'] ?? false);
     }
 
     public function position(): int

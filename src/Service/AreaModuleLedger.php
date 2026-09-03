@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the UhifadhiLabs Trunk Module.
+ * This file is part of the UhifadhiLabs Seam Module.
  *
  * (c) Ezekiel Mjema <https://github.com/eemjema>
  *
@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Uhifadhi\Trunk\Service;
+namespace Uhifadhi\Seam\Service;
 
-use Uhifadhi\Trunk\Entity\AreaInterface;
-use Uhifadhi\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Repository\AreaModuleRepository;
 
 /**
  * WHAT THIS AREA HAS AND WHAT IT DOES NOT — read once, in one place.
