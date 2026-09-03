@@ -85,7 +85,7 @@ final class InstallabilityTest extends SeamKernelTestCase
      * to the installation, and a vendor replaying its own versions into it
      * would fight every `doctrine:migrations:diff` the host ever runs.
      */
-    public function testTheMigrationToolArrivesWithTheRingThatAddsTables(): void
+    public function testTheMigrationToolArrivesWithTheBundleThatAddsTables(): void
     {
         self::assertTrue(
             class_exists(DoctrineMigrationsBundle::class),
