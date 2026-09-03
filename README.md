@@ -183,7 +183,7 @@ deliberate change the extraction made:
 
 | Piece | File |
 |---|---|
-| The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiLabsTrunkBundle.php` |
+| The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiTrunkBundle.php` |
 | Config tree (`trunk:`) | `src/DependencyInjection/TrunkConfiguration.php` |
 | Static service wiring, and the published ids | `config/services.php` |
 | The area seam a host resolves | `src/Entity/AreaInterface.php` |
@@ -203,7 +203,7 @@ composer require uhifadhi/trunk-module
 ```
 
 The bundle registers via Flex (`"type": "symfony-bundle"`), which adds
-`UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle` to `config/bundles.php` and copies
+`Uhifadhi\Trunk\UhifadhiTrunkBundle` to `config/bundles.php` and copies
 `config/packages/trunk.yaml` in.
 
 ### The area mapping is required, not optional
@@ -216,7 +216,7 @@ to create — every tool that walks the association stops:
 ```console
 $ bin/console doctrine:schema:create
 In MappingException.php line 72:
-  Class 'UhifadhiLabs\Trunk\Entity\AreaInterface' does not exist
+  Class 'Uhifadhi\Trunk\Entity\AreaInterface' does not exist
 ```
 
 Booting is fine — a host between `composer require` and its first entity must
@@ -230,15 +230,17 @@ for `getId()` and nothing else) and name it:
 doctrine:
     orm:
         resolve_target_entities:
-            UhifadhiLabs\Trunk\Entity\AreaInterface: Uhifadhi\Entity\AreaOfInterest
+            Uhifadhi\Trunk\Entity\AreaInterface: App\Entity\AreaOfInterest
 ```
 
-`Uhifadhi\Entity`, not `App\Entity` — that is the PSR-4 root of a project
-planted from the [seed](https://github.com/uhifadhilabs/uhifadhi). The stock
-doctrine-bundle recipe writes an `App\Entity` mapping prefix into
-`config/packages/doctrine.yaml`, which against a seed-planted project answers
-`The class 'Uhifadhi\Entity\AreaOfInterest' was not found in the chain
-configured namespaces App\Entity, …`. The seed ships that line corrected.
+`App\Entity` is the PSR-4 root of a project planted from the
+[seed](https://github.com/uhifadhilabs/uhifadhi) — the seed is stock Symfony, so
+the mapping prefix the doctrine-bundle recipe writes into
+`config/packages/doctrine.yaml` already covers the area entity and needs no
+correction. `Uhifadhi\` on its own is the platform's, not an application's — this
+bundle is `Uhifadhi\Trunk\` — so do not reach for it here. An existing host with
+a root of its own substitutes that on the right-hand side; the left-hand side is
+the trunk's and never changes.
 
 ### Then the tables
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Enum;
+namespace Uhifadhi\Trunk\Enum;
 
 /**
  * The taxonomy a module is filed under in the catalogue.

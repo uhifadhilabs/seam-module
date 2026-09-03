@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Unit;
+namespace Uhifadhi\Trunk\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +29,9 @@ use PHPUnit\Framework\TestCase;
  *  1. The trunk names no module. Not a slug, not a namespace. Everything it
  *     treats specially is a flag a provider declares.
  *  2. The trunk names no host. It is installed BY an application; it does not
- *     reach back into one.
+ *     reach back into one. REDEFINED at the namespace alignment — see
+ *     testTheTrunkReachesIntoNoHostApplication for what the rule now forbids
+ *     and why it cannot be "no Uhifadhi\ in src/" any more.
  *  3. The trunk renders nothing. See the README's boundaries section: the
  *     module grid, the customize screen and every tile is the canopy's.
  */
@@ -70,20 +72,55 @@ final class BoundaryTest extends TestCase
     }
 
     /**
-     * The trunk is installed by an application and never reaches back into one.
-     * A `Uhifadhi\` reference in src/ means the extraction copied a host class
-     * instead of moving it.
+     * The impersonatable HOST TREE. Every subtree an application owns, under
+     * either root a host may carry: the product host is `Uhifadhi\`, a freshly
+     * planted seed is stock-Symfony `App\`. These are exactly the FQCNs a test
+     * stub is allowed to impersonate (tests/Integration/Fixtures/Uhifadhi/…) and
+     * exactly the ones the shipped runtime must never name.
+     *
+     * @return \Generator<string, array{string}>
      */
-    public function testTheTrunkReachesIntoNoHostApplication(): void
+    public static function hostNamespaces(): \Generator
+    {
+        foreach (['Uhifadhi', 'App'] as $root) {
+            foreach (['Entity', 'Service', 'Repository', 'Controller', 'Module', 'Overview'] as $tree) {
+                $fqcn = $root.'\\'.$tree;
+                yield $fqcn => [$fqcn];
+            }
+        }
+    }
+
+    /**
+     * The trunk is installed by an application and never reaches back into one.
+     * A host reference in src/ means the extraction copied a host class instead
+     * of moving it.
+     *
+     * REDEFINED at the namespace alignment. The rule used to read "no
+     * `Uhifadhi\` in src/", which worked while the trunk shipped as
+     * `UhifadhiLabs\Trunk\` and `Uhifadhi\` could only mean the application.
+     * The trunk is `Uhifadhi\Trunk\` now, so the root alone proves nothing —
+     * what still proves something is the SUBTREE. `Uhifadhi\Trunk\Service\…` is
+     * the trunk's own; `Uhifadhi\Service\…` is the host's, and so is
+     * `App\Service\…` in a planted seed. The narrowing is a real loss of reach
+     * (a host tree not on the list slips through) traded for a rule that is
+     * true; the list is cheap to extend when a host grows a tree.
+     *
+     * @param non-empty-string $namespace
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hostNamespaces')]
+    public function testTheTrunkReachesIntoNoHostApplication(string $namespace): void
     {
         $offenders = [];
         foreach (self::sources() as $path => $code) {
-            if (str_contains($code, 'Uhifadhi\\Entity') || str_contains($code, 'Uhifadhi\\Service') || str_contains($code, 'Uhifadhi\\Repository')) {
+            if (str_contains($code, $namespace.'\\')) {
                 $offenders[] = $path;
             }
         }
 
-        self::assertSame([], $offenders, 'The trunk must not depend on a host application namespace.');
+        self::assertSame([], $offenders, \sprintf(
+            'The trunk must not depend on the host application namespace "%s\\".',
+            $namespace,
+        ));
     }
 
     /**

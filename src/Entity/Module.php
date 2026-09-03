@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Entity;
+namespace Uhifadhi\Trunk\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use UhifadhiLabs\Trunk\Entity\Trait\TimestampableTrait;
-use UhifadhiLabs\Trunk\Entity\Trait\UuidTrait;
-use UhifadhiLabs\Trunk\Enum\ModuleCategory;
-use UhifadhiLabs\Trunk\Enum\ModuleStatus;
-use UhifadhiLabs\Trunk\Repository\ModuleRepository;
+use Uhifadhi\Trunk\Entity\Trait\TimestampableTrait;
+use Uhifadhi\Trunk\Entity\Trait\UuidTrait;
+use Uhifadhi\Trunk\Enum\ModuleCategory;
+use Uhifadhi\Trunk\Enum\ModuleStatus;
+use Uhifadhi\Trunk\Repository\ModuleRepository;
 
 /**
  * ONE ROW OF THE CATALOGUE: a module this deployment has, as the deployment

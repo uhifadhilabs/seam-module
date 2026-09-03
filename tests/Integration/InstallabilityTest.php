@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration;
+namespace Uhifadhi\Trunk\Tests\Integration;
 
 use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,7 +69,7 @@ final class InstallabilityTest extends TrunkKernelTestCase
         $metadata = $em->getMetadataFactory()->getAllMetadata();
 
         $this->expectException(MappingException::class);
-        $this->expectExceptionMessage("Class 'UhifadhiLabs\\Trunk\\Entity\\AreaInterface' does not exist");
+        $this->expectExceptionMessage("Class 'Uhifadhi\\Trunk\\Entity\\AreaInterface' does not exist");
 
         new SchemaTool($em)->getCreateSchemaSql($metadata);
     }

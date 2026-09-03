@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Uhifadhi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use UhifadhiLabs\Trunk\Entity\AreaInterface;
+use Uhifadhi\Trunk\Entity\AreaInterface;
 
 /**
  * THE HOST'S AREA, PLAYED BY A STAND-IN — and the reason the trunk needs a seam
@@ -30,6 +30,17 @@ use UhifadhiLabs\Trunk\Entity\AreaInterface;
  * with `doctrine.orm.resolve_target_entities`. This fixture is a host, minimally
  * — a real entity in the host's namespace, implementing the trunk's interface,
  * autoloaded in this suite alone (see composer.json autoload-dev).
+ *
+ * A STUB, AND IT IMPERSONATES A REAL FQCN. `Uhifadhi\Entity\AreaOfInterest` is
+ * the uhifadhi host application's own class, spelled here byte-for-byte so the
+ * suite exercises the seam a real installation exercises. It is marked as a stub
+ * three ways: by location (tests/Integration/Fixtures/ under the impersonated
+ * tree), by the autoload-dev mapping that scopes it to the dev autoloader, and
+ * by this paragraph. It did NOT move with the namespace alignment — the trunk's
+ * own code went `UhifadhiLabs\Trunk\` → `Uhifadhi\Trunk\`, but a stub follows
+ * the class it impersonates, and the host was not renamed. A project planted
+ * from the seed names its area `App\Entity\AreaOfInterest` instead; either
+ * spelling resolves through the same interface, which is the whole point.
  *
  * The alternative — storing a bare area id or uuid on the row — was considered
  * and rejected: it would make every "the modules of this area" query a manual

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration;
+namespace Uhifadhi\Trunk\Tests\Integration;
 
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\CollectedModules;
-use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\CollectedModules;
+use Uhifadhi\Trunk\UhifadhiTrunkBundle;
 
 /**
  * THE GROWTH STEP: seed + trunk, and no modules at all.
@@ -56,7 +56,7 @@ final class EmptyCatalogueTest extends TrunkKernelTestCase
     {
         $kernel = self::bootKernel();
 
-        self::assertArrayHasKey('UhifadhiLabsTrunkBundle', $kernel->getBundles(), 'the trunk is installed');
+        self::assertArrayHasKey('UhifadhiTrunkBundle', $kernel->getBundles(), 'the trunk is installed');
 
         /** @var CollectedModules $collected */
         $collected = self::getContainer()->get(CollectedModules::class);
@@ -71,6 +71,6 @@ final class EmptyCatalogueTest extends TrunkKernelTestCase
      */
     public function testTheModuleTagNameIsPartOfThePublishedContract(): void
     {
-        self::assertSame('uhifadhi.module', UhifadhiLabsTrunkBundle::MODULE_TAG);
+        self::assertSame('uhifadhi.module', UhifadhiTrunkBundle::MODULE_TAG);
     }
 }

@@ -11,16 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration;
+namespace Uhifadhi\Trunk\Tests\Integration;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
-use UhifadhiLabs\Trunk\Entity\AreaModule;
-use UhifadhiLabs\Trunk\Entity\Module;
-use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
+use Uhifadhi\Trunk\Entity\AreaModule;
+use Uhifadhi\Trunk\Entity\Module;
+use Uhifadhi\Trunk\UhifadhiTrunkBundle;
 
 /**
  * The smoke test: registering the trunk in a real kernel compiles a real
@@ -33,10 +33,10 @@ final class BundleBootTest extends TrunkKernelTestCase
     {
         $kernel = self::bootKernel();
 
-        self::assertArrayHasKey('UhifadhiLabsTrunkBundle', $kernel->getBundles());
+        self::assertArrayHasKey('UhifadhiTrunkBundle', $kernel->getBundles());
         self::assertInstanceOf(
-            UhifadhiLabsTrunkBundle::class,
-            $kernel->getBundle('UhifadhiLabsTrunkBundle'),
+            UhifadhiTrunkBundle::class,
+            $kernel->getBundle('UhifadhiTrunkBundle'),
         );
     }
 
@@ -48,7 +48,7 @@ final class BundleBootTest extends TrunkKernelTestCase
     {
         $kernel = self::bootKernel();
 
-        self::assertSame('trunk', $kernel->getBundle('UhifadhiLabsTrunkBundle')
+        self::assertSame('trunk', $kernel->getBundle('UhifadhiTrunkBundle')
             ->getContainerExtension()?->getAlias());
     }
 
@@ -86,7 +86,7 @@ final class BundleBootTest extends TrunkKernelTestCase
         }
 
         self::assertInstanceOf(MappingDriverChain::class, $driver);
-        self::assertArrayHasKey('UhifadhiLabs\Trunk\Entity', $driver->getDrivers());
+        self::assertArrayHasKey('Uhifadhi\Trunk\Entity', $driver->getDrivers());
         // And the catalogue is what comes out of it — mapped by a bundle the
         // host did nothing to configure beyond installing it. Note the kernel
         // this runs on: the trunk alone, with no host resolving the area

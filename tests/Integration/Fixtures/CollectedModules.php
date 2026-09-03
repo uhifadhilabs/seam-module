@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
 
-use UhifadhiLabs\ModuleContracts\ModuleProviderInterface;
+use Uhifadhi\ModuleContracts\ModuleProviderInterface;
 
 /**
  * Everything that reached the module tag, in registration order — the trunk's

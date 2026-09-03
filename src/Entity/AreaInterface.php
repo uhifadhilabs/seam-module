@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Entity;
+namespace Uhifadhi\Trunk\Entity;
 
 /**
  * THE AREA SEAM — the one thing the trunk needs from its host, published as an
@@ -26,18 +26,20 @@ namespace UhifadhiLabs\Trunk\Entity;
  *     doctrine:
  *         orm:
  *             resolve_target_entities:
- *                 UhifadhiLabs\Trunk\Entity\AreaInterface: <YourRoot>\Entity\AreaOfInterest
+ *                 Uhifadhi\Trunk\Entity\AreaInterface: <YourRoot>\Entity\AreaOfInterest
  *
- * The placeholder is deliberate, and not only because Unit\BoundaryTest forbids
- * a host namespace in this directory: the stock doctrine-bundle recipe writes an
- * `App\Entity` mapping prefix, which is NOT the root of a project planted from
- * the uhifadhi seed, and an example spelling `App\Entity` here is how that trap
- * gets copied. The README and the recipe name the seed's real root.
+ * The placeholder is deliberate: Unit\BoundaryTest sweeps this directory for the
+ * host tree under either root an application may carry, so no example here may
+ * spell one out. A project planted from the uhifadhi seed is stock Symfony — its
+ * root is the ordinary one every Symfony application ships with — so the
+ * doctrine-bundle recipe's own mapping prefix already covers the area entity,
+ * and the line above is the only wiring the trunk asks for. The README and the
+ * recipe name the concrete class.
  *
  * REQUIRED, NOT OPTIONAL. The bundle boots without it — a host that has not
  * written its area entity yet must still boot — but nothing can build a schema
  * without it: the association below is NOT NULL, so every metadata walk stops
- * with "Class 'UhifadhiLabs\Trunk\Entity\AreaInterface' does not exist". See
+ * with "Class 'Uhifadhi\Trunk\Entity\AreaInterface' does not exist". See
  * Integration/InstallabilityTest.
  *
  * A bare id or uuid column was the alternative and was rejected: it would make

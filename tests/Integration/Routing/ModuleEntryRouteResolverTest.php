@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Routing;
+namespace Uhifadhi\Trunk\Tests\Integration\Routing;
 
-use UhifadhiLabs\Trunk\Service\ModuleEntryRouteResolver;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Trunk\Service\ModuleEntryRouteResolver;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * WHERE A MODULE'S TILE LINKS — the one piece of routing the trunk carries, and

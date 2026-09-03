@@ -13,23 +13,23 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use UhifadhiLabs\Trunk\Command\SeedCatalogueCommand;
-use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
-use UhifadhiLabs\Trunk\Repository\ModuleRepository;
-use UhifadhiLabs\Trunk\Service\AreaModuleLedger;
-use UhifadhiLabs\Trunk\Service\AreaModuleService;
-use UhifadhiLabs\Trunk\Service\ModuleCatalogue;
-use UhifadhiLabs\Trunk\Service\ModuleEntryRouteResolver;
-use UhifadhiLabs\Trunk\Service\ModulePermissionCatalogue;
-use UhifadhiLabs\Trunk\Service\ProviderCatalogueMapper;
-use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
+use Uhifadhi\Trunk\Command\SeedCatalogueCommand;
+use Uhifadhi\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Trunk\Repository\ModuleRepository;
+use Uhifadhi\Trunk\Service\AreaModuleLedger;
+use Uhifadhi\Trunk\Service\AreaModuleService;
+use Uhifadhi\Trunk\Service\ModuleCatalogue;
+use Uhifadhi\Trunk\Service\ModuleEntryRouteResolver;
+use Uhifadhi\Trunk\Service\ModulePermissionCatalogue;
+use Uhifadhi\Trunk\Service\ProviderCatalogueMapper;
+use Uhifadhi\Trunk\UhifadhiTrunkBundle;
 
 /*
  * The bundle's static service wiring.
  *
  * PHP (not YAML) on purpose: a reusable bundle must not force symfony/yaml onto
  * hosts, and FQCN references stay refactor-safe and phpstan-checked. Imported by
- * UhifadhiLabsTrunkBundle::loadExtension(), which keeps only the config-DRIVEN
+ * UhifadhiTrunkBundle::loadExtension(), which keeps only the config-DRIVEN
  * definitions.
  *
  * Everything below is defined EXPLICITLY — no autowire(), no autoconfigure(),
@@ -62,7 +62,7 @@ return static function (ContainerConfigurator $container): void {
      * makes uninstalling a bundle take its module, its route and its declared
      * permissions with it on the next request rather than on the next deploy.
      */
-    $providers = tagged_iterator(UhifadhiLabsTrunkBundle::MODULE_TAG);
+    $providers = tagged_iterator(UhifadhiTrunkBundle::MODULE_TAG);
 
     /*
      * Repositories keep FQCN ids — the one place the bundle-alias prefix cannot

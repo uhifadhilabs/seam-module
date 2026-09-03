@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Area;
+namespace Uhifadhi\Trunk\Tests\Integration\Area;
 
 use Uhifadhi\Entity\AreaOfInterest;
-use UhifadhiLabs\Trunk\Entity\AreaModule;
-use UhifadhiLabs\Trunk\Service\AreaModuleLedger;
-use UhifadhiLabs\Trunk\Service\AreaModuleService;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Trunk\Entity\AreaModule;
+use Uhifadhi\Trunk\Service\AreaModuleLedger;
+use Uhifadhi\Trunk\Service\AreaModuleService;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 3 — PER-AREA INSTALL STATE: the record of what each area actually has.

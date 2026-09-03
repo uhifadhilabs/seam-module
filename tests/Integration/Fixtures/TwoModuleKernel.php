@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Fixtures;
+namespace Uhifadhi\Trunk\Tests\Integration\Fixtures;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use UhifadhiLabs\Trunk\Tests\Integration\TestKernel;
-use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
+use Uhifadhi\Trunk\Tests\Integration\TestKernel;
+use Uhifadhi\Trunk\UhifadhiTrunkBundle;
 
 /**
  * The trunk with two modules on it, arriving by each of the seam's two
@@ -43,6 +43,6 @@ final class TwoModuleKernel extends TestKernel
             ->autoconfigure();
 
         $services->set(TaggedByHandModuleProvider::class)
-            ->tag(UhifadhiLabsTrunkBundle::MODULE_TAG);
+            ->tag(UhifadhiTrunkBundle::MODULE_TAG);
     }
 }

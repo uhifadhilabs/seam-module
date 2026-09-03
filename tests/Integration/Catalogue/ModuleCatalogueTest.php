@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Catalogue;
+namespace Uhifadhi\Trunk\Tests\Integration\Catalogue;
 
-use UhifadhiLabs\Trunk\Service\ModuleCatalogue;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Trunk\Service\ModuleCatalogue;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 1 & 2 — REGISTRATION, AND ZERO.

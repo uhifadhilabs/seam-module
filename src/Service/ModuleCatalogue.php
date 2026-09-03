@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Service;
+namespace Uhifadhi\Trunk\Service;
 
-use UhifadhiLabs\ModuleContracts\ModuleProviderInterface;
-use UhifadhiLabs\Trunk\Entity\Module;
-use UhifadhiLabs\Trunk\Repository\ModuleRepository;
+use Uhifadhi\ModuleContracts\ModuleProviderInterface;
+use Uhifadhi\Trunk\Entity\Module;
+use Uhifadhi\Trunk\Repository\ModuleRepository;
 
 /**
  * WHAT MODULES THIS DEPLOYMENT HAS — read once, in one place, by everything that
@@ -33,7 +33,7 @@ use UhifadhiLabs\Trunk\Repository\ModuleRepository;
  *
  * The intersection is computed per call, from the providers actually registered
  * in this container and the rows actually in the table. Nothing is memoised;
- * see {@see \UhifadhiLabs\Trunk\Repository\AreaModuleRepository} for why.
+ * see {@see \Uhifadhi\Trunk\Repository\AreaModuleRepository} for why.
  */
 final readonly class ModuleCatalogue
 {

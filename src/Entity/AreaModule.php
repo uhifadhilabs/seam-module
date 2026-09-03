@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Entity;
+namespace Uhifadhi\Trunk\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use UhifadhiLabs\Trunk\Entity\Trait\TimestampableTrait;
-use UhifadhiLabs\Trunk\Entity\Trait\UuidTrait;
-use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Trunk\Entity\Trait\TimestampableTrait;
+use Uhifadhi\Trunk\Entity\Trait\UuidTrait;
+use Uhifadhi\Trunk\Repository\AreaModuleRepository;
 
 /**
  * A {@see Module} as one area holds it: on the area's sub-nav or parked in its

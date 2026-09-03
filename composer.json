@@ -34,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "UhifadhiLabs\\Trunk\\": "src/"
+            "Uhifadhi\\Trunk\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "UhifadhiLabs\\Trunk\\Tests\\": "tests/",
+            "Uhifadhi\\Trunk\\Tests\\": "tests/",
             "Uhifadhi\\Entity\\": "tests/Integration/Fixtures/Uhifadhi/Entity/"
         }
     },

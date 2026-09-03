@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Repository;
+namespace Uhifadhi\Trunk\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use UhifadhiLabs\Trunk\Entity\AreaInterface;
-use UhifadhiLabs\Trunk\Entity\AreaModule;
+use Uhifadhi\Trunk\Entity\AreaInterface;
+use Uhifadhi\Trunk\Entity\AreaModule;
 
 /**
  * Per-area install state, read in the area's own order.

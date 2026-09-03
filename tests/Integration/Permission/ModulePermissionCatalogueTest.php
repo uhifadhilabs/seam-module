@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Permission;
+namespace Uhifadhi\Trunk\Tests\Integration\Permission;
 
-use UhifadhiLabs\ModuleContracts\ModulePermission;
-use UhifadhiLabs\Trunk\Service\ModulePermissionCatalogue;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\ModuleContracts\ModulePermission;
+use Uhifadhi\Trunk\Service\ModulePermissionCatalogue;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 6 — PERMISSIONS DECLARED BY MODULES, SURFACED THROUGH THE SEAM.

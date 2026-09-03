@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Repository;
+namespace Uhifadhi\Trunk\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use UhifadhiLabs\Trunk\Entity\Module;
+use Uhifadhi\Trunk\Entity\Module;
 
 /**
  * The catalogue table's query surface.
@@ -24,7 +24,7 @@ use UhifadhiLabs\Trunk\Entity\Module;
  * wrote them — removing a module bundle leaves its row and the areas' data
  * behind on purpose — so "every row in this table" and "every module this
  * deployment has" are different questions.
- * {@see \UhifadhiLabs\Trunk\Service\ModuleCatalogue} answers the second one and
+ * {@see \Uhifadhi\Trunk\Service\ModuleCatalogue} answers the second one and
  * is what a surface should read.
  *
  * NOT FINAL. This bundle is installed by other packages, and a Doctrine

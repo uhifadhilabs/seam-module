@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Command;
+namespace Uhifadhi\Trunk\Tests\Integration\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use UhifadhiLabs\Trunk\Service\AreaModuleService;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Trunk\Service\AreaModuleService;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 5 — THE SEED IS CREATE-ONLY, AND THAT IS A PRODUCTION PROMISE.

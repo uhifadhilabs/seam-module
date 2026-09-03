@@ -11,18 +11,18 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Module;
+namespace Uhifadhi\Trunk\Tests\Integration\Module;
 
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\BareModuleProvider;
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\CollectedModules;
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\TaggedByHandModuleProvider;
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\TwoModuleKernel;
-use UhifadhiLabs\Trunk\Tests\Integration\TrunkKernelTestCase;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\BareModuleProvider;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\CollectedModules;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\TaggedByHandModuleProvider;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\TwoModuleKernel;
+use Uhifadhi\Trunk\Tests\Integration\TrunkKernelTestCase;
 
 /**
  * REGISTRATION, AT THE SEAM ITSELF. "Install the bundle and you are in the
  * catalogue" is two claims: that a provider reaches the trunk (here), and that
- * the trunk then puts it in the catalogue ({@see \UhifadhiLabs\Trunk\Tests\Integration\Catalogue\ModuleCatalogueTest}).
+ * the trunk then puts it in the catalogue ({@see \Uhifadhi\Trunk\Tests\Integration\Catalogue\ModuleCatalogueTest}).
  * This is the first half, at the tag, before any of it has been read.
  */
 final class ModuleSeamRegistrationTest extends TrunkKernelTestCase

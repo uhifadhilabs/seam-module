@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration\Area;
+namespace Uhifadhi\Trunk\Tests\Integration\Area;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Uhifadhi\Entity\AreaOfInterest;
-use UhifadhiLabs\Trunk\Entity\AreaInterface;
-use UhifadhiLabs\Trunk\Entity\AreaModule;
-use UhifadhiLabs\Trunk\Entity\Module;
-use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
+use Uhifadhi\Trunk\Entity\AreaInterface;
+use Uhifadhi\Trunk\Entity\AreaModule;
+use Uhifadhi\Trunk\Entity\Module;
+use Uhifadhi\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * WHAT THE EXTRACTION MOVES, AND WHAT IT MUST NOT RENAME.

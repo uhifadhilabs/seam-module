@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk;
+namespace Uhifadhi\Trunk;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-use UhifadhiLabs\ModuleContracts\ModuleProviderInterface;
-use UhifadhiLabs\Trunk\DependencyInjection\TrunkConfiguration;
+use Uhifadhi\ModuleContracts\ModuleProviderInterface;
+use Uhifadhi\Trunk\DependencyInjection\TrunkConfiguration;
 
 /**
  * The TRUNK — the seam runtime every uhifadhi module registers with.
@@ -45,7 +45,7 @@ use UhifadhiLabs\Trunk\DependencyInjection\TrunkConfiguration;
  * the bundle registers, its config is keyed under "trunk:", its entity
  * directory is mapped, and it autoconfigures the module tag.
  */
-final class UhifadhiLabsTrunkBundle extends AbstractBundle
+final class UhifadhiTrunkBundle extends AbstractBundle
 {
     /**
      * The tag every module provider carries. Published as a constant because
@@ -55,7 +55,7 @@ final class UhifadhiLabsTrunkBundle extends AbstractBundle
      */
     public const string MODULE_TAG = 'uhifadhi.module';
 
-    /** Config lives under "trunk:", not the class-derived "uhifadhi_labs_trunk:". */
+    /** Config lives under "trunk:", not the class-derived "uhifadhi_trunk:". */
     protected string $extensionAlias = 'trunk';
 
     public function configure(DefinitionConfigurator $definition): void
@@ -90,10 +90,10 @@ final class UhifadhiLabsTrunkBundle extends AbstractBundle
             $container->extension('doctrine', [
                 'orm' => [
                     'mappings' => [
-                        'UhifadhiLabsTrunk' => [
+                        'UhifadhiTrunk' => [
                             'type' => 'attribute',
                             'dir' => __DIR__.'/Entity',
-                            'prefix' => 'UhifadhiLabs\\Trunk\\Entity',
+                            'prefix' => 'Uhifadhi\\Trunk\\Entity',
                             'is_bundle' => false,
                         ],
                     ],

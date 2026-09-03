@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Service;
+namespace Uhifadhi\Trunk\Service;
 
-use UhifadhiLabs\Trunk\Entity\AreaInterface;
-use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Trunk\Entity\AreaInterface;
+use Uhifadhi\Trunk\Repository\AreaModuleRepository;
 
 /**
  * WHAT THIS AREA HAS AND WHAT IT DOES NOT — read once, in one place.

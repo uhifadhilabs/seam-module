@@ -11,12 +11,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Service;
+namespace Uhifadhi\Trunk\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use UhifadhiLabs\Trunk\Entity\AreaInterface;
-use UhifadhiLabs\Trunk\Entity\AreaModule;
-use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
+use Uhifadhi\Trunk\Entity\AreaInterface;
+use Uhifadhi\Trunk\Entity\AreaModule;
+use Uhifadhi\Trunk\Repository\AreaModuleRepository;
 
 /**
  * PER-AREA INSTALL STATE: what THIS area has switched on, and the writes that

@@ -11,15 +11,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration;
+namespace Uhifadhi\Trunk\Tests\Integration;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\CollectedModules;
-use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\CollectedModules;
+use Uhifadhi\Trunk\UhifadhiTrunkBundle;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 
@@ -43,7 +43,7 @@ class TestKernel extends Kernel
     {
         yield new FrameworkBundle();
         yield new DoctrineBundle();
-        yield new UhifadhiLabsTrunkBundle();
+        yield new UhifadhiTrunkBundle();
     }
 
     protected function configureContainer(ContainerConfigurator $container): void
@@ -67,7 +67,7 @@ class TestKernel extends Kernel
         // receives this iterator.
         $container->services()
             ->set(CollectedModules::class)
-            ->args([tagged_iterator(UhifadhiLabsTrunkBundle::MODULE_TAG)])
+            ->args([tagged_iterator(UhifadhiTrunkBundle::MODULE_TAG)])
             ->public();
     }
 

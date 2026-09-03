@@ -8,7 +8,7 @@
          failOnNotice="true"
          failOnWarning="true">
     <php>
-        <env name="KERNEL_CLASS" value="UhifadhiLabs\Trunk\Tests\Integration\TestKernel"/>
+        <env name="KERNEL_CLASS" value="Uhifadhi\Trunk\Tests\Integration\TestKernel"/>
         <!--
             The trunk owns the platform's catalogue tables — the catalogue and
             the per-area install record are its data, not its host's — so unlike

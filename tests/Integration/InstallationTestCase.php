@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Integration;
+namespace Uhifadhi\Trunk\Tests\Integration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Uhifadhi\Entity\AreaOfInterest;
-use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\HostKernel;
+use Uhifadhi\Trunk\Tests\Integration\Fixtures\HostKernel;
 
 /**
  * Shared plumbing for the specifications that need a database and a set of
