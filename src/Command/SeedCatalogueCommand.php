@@ -58,8 +58,8 @@ use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
     name: 'seam:catalogue:seed',
     // BOTH OLD NAMES SURVIVE AS ALIASES, and neither is dead weight.
     //
-    //   app:seed:catalogue    the host's name, from before the extraction.
-    //   trunk:catalogue:seed  this bundle's name, from before it was the seam.
+    //   app:seed:catalogue    the name the host application used.
+    //   trunk:catalogue:seed  this package's earlier name.
     //
     // Each is written into a deploy pipeline somewhere, and a command name is
     // the one part of a rename that breaks a DEPLOY rather than a test — it

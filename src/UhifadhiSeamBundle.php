@@ -39,11 +39,9 @@ use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
  * a slug the runtime recognises. A test sweeps src/ for that property, and the
  * sweep is why this paragraph names nothing either.
  *
- * PHASE 1 — this repository is the scaffold and the RED specification. The
- * runtime itself arrives in phase 2 by EXTRACTION from the host application,
- * against the failing suite in tests/Phase2. What is here today is the plug:
- * the bundle registers, its config is keyed under "seam:", its entity
- * directory is mapped, and it autoconfigures the module tag.
+ * THIS CLASS IS THE PLUG: the bundle registers, its config is keyed under
+ * "seam:", its entity directory is mapped, and it autoconfigures the module
+ * tag. The runtime itself lives in src/Service and src/Repository.
  */
 final class UhifadhiSeamBundle extends AbstractBundle
 {
@@ -73,8 +71,8 @@ final class UhifadhiSeamBundle extends AbstractBundle
         // autoconfigured services — a reusable bundle's own services are not, so
         // a module BUNDLE still writes the tag by hand. Both ends meet here.
         //
-        // Lifted from the host's Kernel::build(): it lives with the collector,
-        // not in the application, so a fresh installation plus this bundle is
+        // The autoconfiguration lives with the collector, not in the
+        // application's Kernel, so a fresh installation plus this bundle is
         // already a working seam.
         $container->registerForAutoconfiguration(ModuleProviderInterface::class)
             ->addTag(self::MODULE_TAG);
@@ -84,8 +82,6 @@ final class UhifadhiSeamBundle extends AbstractBundle
     {
         // Zero-config persistence: the seam maps its own entities, so a host
         // never writes a doctrine mappings block for the catalogue tables.
-        // Wired now, empty until the extraction lands — an attribute driver over
-        // a directory with no entities simply contributes no metadata.
         if ($builder->hasExtension('doctrine')) {
             $container->extension('doctrine', [
                 'orm' => [

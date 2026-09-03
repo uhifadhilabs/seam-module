@@ -1,11 +1,7 @@
 # uhifadhi/seam-module
 
 The **seam**: the module seam runtime every uhifadhi module registers with. A
-[uhifadhi](https://github.com/uhifadhilabs) platform bundle.
-
-> **> [uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) and into this
-> bundle, against a specification that was written first and failing. See
-> [How this was built](#how-this-was-built).
+[uhifadhi](https://github.com/uhifadhilabs) platform module.
 
 ## Contents
 
@@ -21,9 +17,9 @@ The **seam**: the module seam runtime every uhifadhi module registers with. A
 
 ## The architecture
 
-**Uhifadhi is one skeleton and a set of bundles.**
+**Uhifadhi is one skeleton and a set of modules.**
 `uhifadhi/uhifadhi` is the project skeleton — copied once, never updated;
-everything else arrives as a bundle, updated forever. A module **registers
+everything else arrives as a module, updated forever. A module **registers
 with the seam** (`uhifadhi/seam-module` — this repository) and **renders in
 the shell** (`uhifadhi/shell-module`); everything a deployment can do —
 patrols, incidents, rosters — is a module.
@@ -33,8 +29,8 @@ patrols, incidents, rosters — is a module.
 **The seam carries; it does not show.** It owns four things and no more:
 
 - **The catalogue** — what modules exist in this deployment. Not a list anyone
-  edits: a module is in the catalogue because its bundle is installed and its
-  provider carries the `uhifadhi.module` tag.
+  edits: a module is in the catalogue because it is installed and its provider
+  carries the `uhifadhi.module` tag.
 - **Per-area install state** — which modules an area has switched on, in which
   order. Deliberately a different table from the catalogue: a deployment can
   have a module that only one of its areas wants.
@@ -43,8 +39,8 @@ patrols, incidents, rosters — is a module.
 - **The seed command** — the command that reconciles the catalogue with what is
   installed, without ever overruling an admin.
 
-**Zero modules is a working installation.** A fresh installation with this
-bundle on it boots, has an empty catalogue, and is harmless. A runtime that only
+**Zero modules is a working installation.** A fresh installation with the seam
+on it boots, has an empty catalogue, and is harmless. A runtime that only
 functions once somebody installs a module has a hidden dependency on its own
 modules.
 
@@ -59,7 +55,7 @@ Every row below is a test, and the table is the order they were written in:
 
 | # | Behaviour | Where |
 |---|---|---|
-| 1 | A bundle tagging a provider `uhifadhi.module` appears in the catalogue; the trait defaults (`base()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (the seam half) + `Integration/Catalogue/ModuleCatalogueTest` |
+| 1 | A module whose provider carries the `uhifadhi.module` tag appears in the catalogue; the trait defaults (`base()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (the seam half) + `Integration/Catalogue/ModuleCatalogueTest` |
 | 2 | Zero modules: the catalogue boots, is empty, and the seed succeeds writing nothing | `Integration/EmptyCatalogueTest` + `Integration/Catalogue/ModuleCatalogueTest` |
 | 3 | Per-area install/uninstall flips state for that area alone; `base()` seeds active and installable seeds parked; a pinned module can never be switched off; uninstalling removes the module's presence from the area's ledger immediately, and keeps its data | `Integration/Area/AreaModuleInstallationTest` |
 | 4 | Category and status are coerced, never trusted; an unknown category falls back to **Operations** | `Unit/Catalogue/ProviderCatalogueMapperTest` |
@@ -232,7 +228,7 @@ seam:
 
 Both keys have defaults; the tree is closed, so an unknown key fails loudly
 rather than being ignored. There is deliberately **no key listing modules** —
-installing a bundle is the declaration, and a second place to enable a module is
+installing a module is the declaration, and a second place to enable one is
 a second place for the two to disagree.
 
 ## Development
@@ -243,8 +239,10 @@ composer check   # cs:check -> phpstan (max) -> the suite
 ```
 
 - PHP 8.4+, PHPStan level **max**, php-cs-fixer `@Symfony` + `@Symfony:risky`.
-- **Tests first, always.** This repository is that rule taken literally: the
-  whole specification was written before a line of the runtime existed.
+- **Tests first, always.** A behaviour change starts as a failing test naming
+  the class or service id it wants; the change is the commit that makes it
+  pass. CI gates on `composer check`: one suite, one verdict, and a failure
+  there is a failure.
 - `tests/Integration/TestKernel.php` is the seam alone — framework, doctrine,
   this bundle — and opens no connection, which is what a host that has not
   migrated yet must still be able to boot.
