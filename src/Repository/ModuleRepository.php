@@ -21,7 +21,7 @@ use Uhifadhi\Seam\Entity\Module;
  * The catalogue table's query surface.
  *
  * Note what it is NOT: the catalogue itself. Rows outlive the bundles that
- * wrote them — removing a module bundle leaves its row and the areas' data
+ * wrote them — removing a module leaves its row and the areas' data
  * behind on purpose — so "every row in this table" and "every module this
  * deployment has" are different questions.
  * {@see \Uhifadhi\Seam\Service\ModuleCatalogue} answers the second one and

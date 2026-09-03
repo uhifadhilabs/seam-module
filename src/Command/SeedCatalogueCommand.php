@@ -31,7 +31,7 @@ use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
  * RECONCILE THE CATALOGUE WITH WHAT IS INSTALLED — the command a deploy runs.
  *
  * PROVIDER-DRIVEN, WITHOUT EXCEPTION. Every row comes from a tagged
- * {@see ModuleProviderInterface}: a module bundle declares itself and appears
+ * {@see ModuleProviderInterface}: a module declares itself and appears
  * here, and nothing else does. There is no row the runtime writes for itself and
  * no slug it recognises — `pinned` and `base` are flags a provider declares.
  *

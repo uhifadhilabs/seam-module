@@ -20,7 +20,7 @@ use Uhifadhi\Seam\Enum\ModuleStatus;
 /**
  * A provider's answers, turned into a catalogue row.
  *
- * COERCED, NEVER TRUSTED. A module bundle is written by somebody else and ships
+ * COERCED, NEVER TRUSTED. A module is written by somebody else and ships
  * on its own release cadence; its category and status are strings, and a typo in
  * one must not be able to break the catalogue for every other module. So an
  * unrecognised value falls back rather than throwing. The coercion is silent by
