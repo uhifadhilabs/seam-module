@@ -26,7 +26,19 @@ namespace UhifadhiLabs\Trunk\Entity;
  *     doctrine:
  *         orm:
  *             resolve_target_entities:
- *                 UhifadhiLabs\Trunk\Entity\AreaInterface: App\Entity\AreaOfInterest
+ *                 UhifadhiLabs\Trunk\Entity\AreaInterface: <YourRoot>\Entity\AreaOfInterest
+ *
+ * The placeholder is deliberate, and not only because Unit\BoundaryTest forbids
+ * a host namespace in this directory: the stock doctrine-bundle recipe writes an
+ * `App\Entity` mapping prefix, which is NOT the root of a project planted from
+ * the uhifadhi seed, and an example spelling `App\Entity` here is how that trap
+ * gets copied. The README and the recipe name the seed's real root.
+ *
+ * REQUIRED, NOT OPTIONAL. The bundle boots without it — a host that has not
+ * written its area entity yet must still boot — but nothing can build a schema
+ * without it: the association below is NOT NULL, so every metadata walk stops
+ * with "Class 'UhifadhiLabs\Trunk\Entity\AreaInterface' does not exist". See
+ * Integration/InstallabilityTest.
  *
  * A bare id or uuid column was the alternative and was rejected: it would make
  * every "the modules of this area" query a join written by hand, and it would

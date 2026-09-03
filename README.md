@@ -92,6 +92,7 @@ Every row below is a test, and the table is the order they were written in:
 | 7 | Boundaries: no module named in `src/`, no host namespace, no templates, no controllers, no routes | `Unit/BoundaryTest` |
 | 8 | A module's entry route is read live from its provider, never from a stored column | `Integration/Routing/ModuleEntryRouteResolverTest` |
 | 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Integration/Area/CataloguePersistenceTest` |
+| 10 | Installability: the trunk alone boots without an area mapping and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
 
 ### The attention-list promise (spec 3)
 
@@ -199,19 +200,63 @@ doctrine mappings block for the catalogue tables.
 
 ```bash
 composer require uhifadhi/trunk-module
-bin/console trunk:catalogue:seed
 ```
 
 The bundle registers via Flex (`"type": "symfony-bundle"`), which adds
-`UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle` to `config/bundles.php`. A host
-also resolves the trunk's area interface to its own area entity:
+`UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle` to `config/bundles.php` and copies
+`config/packages/trunk.yaml` in.
+
+### The area mapping is required, not optional
+
+This used to read as an extra you added when you wanted the per-area half. It
+is not. The trunk owns two tables and the per-area one has a `NOT NULL` foreign
+key to an area, so until the interface resolves to a class there is no schema
+to create — every tool that walks the association stops:
+
+```console
+$ bin/console doctrine:schema:create
+In MappingException.php line 72:
+  Class 'UhifadhiLabs\Trunk\Entity\AreaInterface' does not exist
+```
+
+Booting is fine — a host between `composer require` and its first entity must
+still boot, and `Integration/InstallabilityTest` pins both halves of that.
+
+So give the application an area entity implementing `AreaInterface` (it asks
+for `getId()` and nothing else) and name it:
 
 ```yaml
+# config/packages/trunk.yaml
 doctrine:
     orm:
         resolve_target_entities:
-            UhifadhiLabs\Trunk\Entity\AreaInterface: App\Entity\AreaOfInterest
+            UhifadhiLabs\Trunk\Entity\AreaInterface: Uhifadhi\Entity\AreaOfInterest
 ```
+
+`Uhifadhi\Entity`, not `App\Entity` — that is the PSR-4 root of a project
+planted from the [seed](https://github.com/uhifadhilabs/uhifadhi). The stock
+doctrine-bundle recipe writes an `App\Entity` mapping prefix into
+`config/packages/doctrine.yaml`, which against a seed-planted project answers
+`The class 'Uhifadhi\Entity\AreaOfInterest' was not found in the chain
+configured namespaces App\Entity, …`. The seed ships that line corrected.
+
+### Then the tables
+
+```bash
+bin/console doctrine:database:create
+bin/console doctrine:migrations:diff      # your history, your migration
+bin/console doctrine:migrations:migrate
+bin/console trunk:catalogue:seed
+```
+
+`doctrine/doctrine-migrations-bundle` is a dependency of **this** bundle: the
+ring that adds tables brings the tool that creates them, the same way it has
+always brought the ORM. A planted project that lacked it had no
+`doctrine:migrations:*` commands at all and no hint that it should.
+
+What the trunk deliberately does **not** ship is migration versions. The tables
+are the trunk's; the migration history is the installation's, and a vendor
+replaying its own versions into it would fight every `diff` the host ever runs.
 
 ## Configuration
 
