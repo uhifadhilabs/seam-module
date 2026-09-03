@@ -90,7 +90,7 @@ would show.
 **The module grid is not here, and neither is the customize screen.** This was
 the phase-1 decision worth arguing, so here is the argument.
 
-The test is independent life: can this ring live alone and still be useful? The
+The test is independent life: can this bundle live alone and still be useful? The
 runtime can — a catalogue, a per-area install record, a permission collector and
 a seed command are complete and meaningful with nothing rendering them, and a
 CLI or an API can use every one of them. A module grid cannot live alone: it is
@@ -160,19 +160,43 @@ Booting is fine — a host between `composer require` and its first entity must
 still boot, and `Integration/InstallabilityTest` pins both halves of that.
 
 So give the application an area entity implementing `AreaInterface` (it asks
-for `getId()` and nothing else) and name it:
+for `getId()` and nothing else):
+
+```php
+// src/Entity/AreaOfInterest.php (your application)
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Uhifadhi\Seam\Entity\AreaInterface;
+
+#[ORM\Entity]
+class AreaOfInterest implements AreaInterface
+{
+    #[ORM\Id] #[ORM\GeneratedValue] #[ORM\Column]
+    private ?int $id = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+}
+```
+
+and name it:
 
 ```yaml
-# config/packages/seam.yaml
+# config/packages/seam.yaml (your application)
 doctrine:
     orm:
         resolve_target_entities:
             Uhifadhi\Seam\Entity\AreaInterface: App\Entity\AreaOfInterest
 ```
 
-`App\Entity` is the PSR-4 root of a project planted from the
-[seed](https://github.com/uhifadhilabs/uhifadhi) — the seed is stock Symfony, so
-the mapping prefix the doctrine-bundle recipe writes into
+`App\Entity` is the PSR-4 root of a project created from the skeleton
+([`uhifadhi/uhifadhi`](https://github.com/uhifadhilabs/uhifadhi)) — the skeleton
+is stock Symfony, so the mapping prefix the doctrine-bundle recipe writes into
 `config/packages/doctrine.yaml` already covers the area entity and needs no
 correction. `Uhifadhi\` on its own is the platform's, not an application's — this
 bundle is `Uhifadhi\Seam\` — so do not reach for it here. An existing host with
@@ -189,7 +213,7 @@ bin/console seam:catalogue:seed
 ```
 
 `doctrine/doctrine-migrations-bundle` is a dependency of **this** bundle: the
-ring that adds tables brings the tool that creates them, the same way it has
+bundle that adds tables brings the tool that creates them, the same way it has
 always brought the ORM. A planted project that lacked it had no
 `doctrine:migrations:*` commands at all and no hint that it should.
 
@@ -200,7 +224,7 @@ replaying its own versions into it would fight every `diff` the host ever runs.
 ## Configuration
 
 ```yaml
-# config/packages/seam.yaml
+# config/packages/seam.yaml (your application)
 seam:
     default_category: operations   # where an unplaced module is filed
     dev_tools: false               # dev-only tooling; enable via when@dev / when@test
