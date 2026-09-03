@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * These are cheap, crude tests that read the shipped source as text, and they
  * are the only kind that can catch what they catch: an extraction is a large
  * move under time pressure, and "just this one reference, for now" is how a
- * runtime acquires a dependency on a branch. They were written before the
+ * runtime acquires a dependency on a module. They were written before the
  * extraction and their job is to still be green long after it.
  *
  * Three rules:
@@ -74,9 +74,10 @@ final class BoundaryTest extends TestCase
     /**
      * The impersonatable HOST TREE. Every subtree an application owns, under
      * either root a host may carry: the product host is `Uhifadhi\`, a project
-     * installed from the skeleton is stock-Symfony `App\`. These are exactly the FQCNs a test
-     * stub is allowed to impersonate (tests/Integration/Fixtures/Uhifadhi/…) and
-     * exactly the ones the shipped runtime must never name.
+     * installed from the skeleton is stock-Symfony `App\`. These are exactly
+     * the FQCNs a test stub is allowed to impersonate
+     * (tests/Integration/Fixtures/Uhifadhi/…) and exactly the ones the shipped
+     * runtime must never name.
      *
      * @return \Generator<string, array{string}>
      */
@@ -101,8 +102,8 @@ final class BoundaryTest extends TestCase
      * The seam is `Uhifadhi\Seam\` now, so the root alone proves nothing —
      * what still proves something is the SUBTREE. `Uhifadhi\Seam\Service\…` is
      * the seam's own; `Uhifadhi\Service\…` is the host's, and so is
-     * `App\Service\…` in an installed project. The narrowing is a real loss of reach
-     * (a host tree not on the list slips through) traded for a rule that is
+     * `App\Service\…` in an installed project. The narrowing is a real loss of
+     * reach (a host tree not on the list slips through) traded for a rule that is
      * true; the list is cheap to extend when a host grows a tree.
      *
      * @param non-empty-string $namespace

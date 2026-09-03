@@ -23,13 +23,13 @@ use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
 /**
  * The SEAM — the runtime every uhifadhi module registers with.
  *
- * The skeleton is installed, the seam carries, the branches are the modules and the
- * shell is what you see. This ring is the carrying: the module catalogue, the
+ * The skeleton is the application, the seam carries the modules, and the shell
+ * is what you see. This bundle is the carrying: the module catalogue, the
  * per-area record of what is switched on, the permissions modules declare, and
  * the seed command that keeps the catalogue in step with what is installed.
  *
  * IT RENDERS NOTHING. No templates, no controllers, no routes — the visible
- * crown is the shell's job. The seam answers questions in data and services,
+ * surface is the shell's job. The seam answers questions in data and services,
  * and anything that draws a module grid reads it. See the README's boundaries
  * section for why the grid is not here.
  *

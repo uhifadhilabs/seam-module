@@ -25,9 +25,9 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 
 /**
  * THE SKELETON, PLUS THE SEAM, AND NOTHING ELSE: framework + doctrine + this
- * bundle. That is not a convenience for testing — it is the growth step this
+ * bundle. That is not a convenience for testing — it is the installation this
  * bundle exists to make possible, and the kernel here is as close as a test can
- * get to a fresh installation with one ring on it.
+ * get to a fresh project with the seam on it and nothing more.
  *
  * It opens no database connection. That is what the bundle's own boot has to
  * survive — a host that has not migrated yet, or has not resolved the area

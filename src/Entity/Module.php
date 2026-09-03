@@ -30,7 +30,7 @@ use Uhifadhi\Seam\Repository\ModuleRepository;
  * the next seed follows, because the seed upserts by SLUG, which is the module's
  * identity.
  *
- * THE TABLE IS DELIBERATELY UNPREFIXED. Every branch bundle prefixes its tables
+ * THE TABLE IS DELIBERATELY UNPREFIXED. Every module bundle prefixes its tables
  * with its domain word, and by that rule this would be `seam_module`. It is
  * not: renaming it is a production migration on the platform's most-referenced
  * table, bought with nothing but consistency — and the prefix rule exists to

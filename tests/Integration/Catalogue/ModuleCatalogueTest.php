@@ -43,10 +43,10 @@ final class ModuleCatalogueTest extends InstallationTestCase
 
     /**
      * ZERO IS A REAL NUMBER OF MODULES, and the first one every installation
-     * has. Skeleton + seam and nothing else must give a working, empty catalogue —
-     * a runtime that only functions once a module is installed has a hidden
-     * dependency on its own branches. The seed command runs, succeeds, and
-     * writes nothing.
+     * has. Skeleton + seam and nothing else must give a working, empty
+     * catalogue — a runtime that only functions once a module is installed has
+     * a hidden dependency on its own modules. The seed command runs, succeeds,
+     * and writes nothing.
      */
     public function testAnInstallationWithNoModulesHasAnEmptyCatalogue(): void
     {

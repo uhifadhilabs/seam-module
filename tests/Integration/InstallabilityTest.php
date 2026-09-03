@@ -34,10 +34,11 @@ use Doctrine\Persistence\Mapping\MappingException;
  *    unresolved interface. The claim under test is the honest one — a bundle
  *    that boots without the mapping and cannot be schema'd without it.
  *
- * 2. THE TOOL THAT CREATES THOSE TABLES SHIPS WITH THE RING THAT ADDS THEM.
- *    An installed project had no `doctrine:migrations:*` commands, because nothing
- *    in the chain required the bundle — the seam contributed two tables and
- *    left the operator to discover there was nothing to create them with.
+ * 2. THE TOOL THAT CREATES THOSE TABLES SHIPS WITH THE BUNDLE THAT ADDS THEM.
+ *    An installed project had no `doctrine:migrations:*` commands, because
+ *    nothing in the chain required the bundle — the seam contributed two
+ *    tables and left the operator to discover there was nothing to create them
+ *    with.
  */
 final class InstallabilityTest extends SeamKernelTestCase
 {

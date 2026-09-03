@@ -35,8 +35,8 @@ use Uhifadhi\Seam\Tests\Integration\InstallationTestCase;
  * for in downtime and risk, bought with nothing but consistency — and the
  * prefix rule exists to stop two bundles colliding on a common noun, which
  * cannot happen to the runtime every bundle registers with. The convention is
- * followed by every branch and deliberately not by the seam; this test is that
- * decision, written where a refactor will trip over it.
+ * followed by every module bundle and deliberately not by the seam; this test
+ * is that decision, written where a refactor will trip over it.
  *
  * THE AREA IS THE HOST'S. An AreaModule points at an area, and the host owns
  * areas — so the seam maps the association to its own interface and the host

@@ -64,7 +64,7 @@ final class SeedCatalogueCommandTest extends InstallationTestCase
 
     /**
      * ZERO MODULES IS A SUCCESSFUL SEED. A fresh installation, one seam, no
-     * branches: the command has to run and report nothing rather than fail on
+     * modules: the command has to run and report nothing rather than fail on
      * an empty iterator.
      */
     public function testSeedingAnInstallationWithNoModulesSucceedsAndWritesNothing(): void

@@ -52,7 +52,7 @@ use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
  * run on production.
  *
  * ZERO MODULES IS A SUCCESSFUL SEED. A fresh installation with no
- * branches on it runs this and is told, correctly, that there was nothing to do.
+ * modules on it runs this and is told, correctly, that there was nothing to do.
  */
 #[AsCommand(
     name: 'seam:catalogue:seed',

@@ -17,14 +17,14 @@ use Uhifadhi\Seam\Tests\Integration\Fixtures\CollectedModules;
 use Uhifadhi\Seam\UhifadhiSeamBundle;
 
 /**
- * THE GROWTH STEP: skeleton + seam, and no modules at all.
+ * THE FIRST INSTALLATION STEP: skeleton + seam, and no modules at all.
  *
  * This is what a real installation looks like the moment after
- * `composer require uhifadhi/seam-module` and before the first branch — and it
+ * `composer require uhifadhi/seam-module` and before the first module — and it
  * has to be a boring, working, EMPTY installation: the container compiles, the
  * seam exists, and it carries nothing. A runtime that only works once somebody
  * installs a module is a runtime with a hidden dependency on modules, and the
- * whole point of a seam is that the branches attach to it rather than the
+ * whole point of a seam is that the modules attach to it rather than the
  * other way round.
  *
  * Zero is a real number of modules. It is also the first one every installation
