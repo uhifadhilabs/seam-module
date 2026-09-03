@@ -159,7 +159,7 @@ deliberate change the extraction made:
    command belongs in the bundle's namespace — with `app:seed:catalogue` kept as
    an alias, because that string is in the deploy pipeline and in every module's
    README, and renaming it silently would break a deploy rather than a test.
-4. **The tables are deliberately unprefixed.** Every branch prefixes its tables
+4. **The tables are deliberately unprefixed.** Every module prefixes its tables
    with its domain word; the seam keeps `module` and `area_module`. A rename
    here is a production migration on the platform's most-referenced tables,
    bought with nothing but consistency — and the prefix rule exists to stop two
