@@ -69,7 +69,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     public function testADeclaredPermissionSurfacesWithItsUmbrellaAndAction(): void
     {
         $this->install(['sightings' => ['permissions' => [
-            new ModulePermission('sightings.verify', 'Sightings', 'Verify'),
+            new ModulePermission('sightings.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.'),
         ]]]);
 
         $declared = $this->permissions()->declared();
@@ -90,11 +90,11 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     {
         $this->install([
             'sightings' => ['permissions' => [
-                new ModulePermission('sightings.verify', 'Sightings', 'Verify'),
-                new ModulePermission('sightings.export', 'Sightings', 'Export'),
+                new ModulePermission('sightings.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.'),
+                new ModulePermission('sightings.export', 'Sightings', 'Export', 'Take the sightings out of the product as a file.'),
             ]],
             'ferries' => ['permissions' => [
-                new ModulePermission('ferries.dispatch', 'Ferries', 'Dispatch'),
+                new ModulePermission('ferries.dispatch', 'Ferries', 'Dispatch', 'Send a ferry out and record that it went.'),
             ]],
         ]);
 
@@ -115,8 +115,8 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     public function testTwoModulesCollidingOnAValueDoNotFightOverIt(): void
     {
         $this->install([
-            'sightings' => ['permissions' => [new ModulePermission('shared.verify', 'Sightings', 'Verify')]],
-            'ferries' => ['permissions' => [new ModulePermission('shared.verify', 'Ferries', 'Approve')]],
+            'sightings' => ['permissions' => [new ModulePermission('shared.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.')]],
+            'ferries' => ['permissions' => [new ModulePermission('shared.verify', 'Ferries', 'Approve', 'Sign off a ferry crossing.')]],
         ]);
 
         $declared = $this->permissions()->declared();
@@ -134,7 +134,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     public function testUninstallingAModuleTakesItsPermissionsWithIt(): void
     {
         $this->install(['sightings' => ['permissions' => [
-            new ModulePermission('sightings.verify', 'Sightings', 'Verify'),
+            new ModulePermission('sightings.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.'),
         ]]]);
         self::assertTrue($this->permissions()->has('sightings.verify'));
 
@@ -145,15 +145,20 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
 
     /**
      * A DECLARATION CARRIES NO HOLDERS. The seam hands the host a value, an
-     * umbrella and an action — and nothing that could name a role, a position or
-     * a default grant, because there is nowhere in the contract to put one. This
-     * asserts the shape of what crosses the seam, which is the only place the
-     * "never grants" rule can actually be enforced rather than promised.
+     * umbrella, an action and the sentence printed under them — and nothing that
+     * could name a role, a position or a default grant, because there is nowhere
+     * in the contract to put one. This asserts the shape of what crosses the
+     * seam, which is the only place the "never grants" rule can actually be
+     * enforced rather than promised.
+     *
+     * The description joined the shape in module-contracts v0.3.0 and changes
+     * nothing about that rule: it is prose for the administrator reading the
+     * matrix, not a fourth thing the module gets to decide about who holds what.
      */
     public function testADeclarationCannotCarryAGrant(): void
     {
         $this->install(['sightings' => ['permissions' => [
-            new ModulePermission('sightings.verify', 'Sightings', 'Verify'),
+            new ModulePermission('sightings.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.'),
         ]]]);
 
         $properties = array_map(
@@ -161,7 +166,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
             new \ReflectionClass($this->permissions()->declared()[0])->getProperties(),
         );
 
-        self::assertSame(['value', 'umbrella', 'action'], $properties);
+        self::assertSame(['value', 'umbrella', 'action', 'description'], $properties);
     }
 
     /**
@@ -172,7 +177,7 @@ final class ModulePermissionCatalogueTest extends InstallationTestCase
     public function testADeclarationIsDeploymentWideNotPerArea(): void
     {
         $this->install(['sightings' => ['permissions' => [
-            new ModulePermission('sightings.verify', 'Sightings', 'Verify'),
+            new ModulePermission('sightings.verify', 'Sightings', 'Verify', 'Confirm or reject somebody else’s sighting.'),
         ]]]);
         $this->area();
         $this->seed();
