@@ -4,7 +4,7 @@ The **trunk**: the module seam runtime every uhifadhi module registers with. A
 [uhifadhi](https://github.com/uhifadhilabs) platform bundle.
 
 > **Status: the runtime is here.** The seam was extracted out of the
-> [uhifadhi](https://github.com/uhifadhilabs/uhifadhi) host and into this
+> [uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) and into this
 > bundle, against a specification that was written first and failing. See
 > [How this was built](#how-this-was-built).
 
@@ -26,7 +26,8 @@ The **trunk**: the module seam runtime every uhifadhi module registers with. A
 
 Uhifadhi is structured like the thing it protects:
 
-> **`uhifadhi/seed`** (planted once) → **`trunk-module`** (this repository: the
+> **the seed — [`uhifadhi/uhifadhi`](https://github.com/uhifadhilabs/uhifadhi)**
+> (planted once) → **`trunk-module`** (this repository: the
 > seam runtime every module registers with) → **branches** (the modules) →
 > **`canopy-module`** (the visible crown).
 
@@ -62,7 +63,7 @@ slug the runtime recognises. A test sweeps `src/` for that property.
 ## How this was built
 
 The module seam already existed, working, inside the
-[uhifadhi](https://github.com/uhifadhilabs/uhifadhi) host application. This
+[uhifadhi host](https://github.com/uhifadhilabs/uhifadhi-host) application. This
 repository extracted it — and because this project is test-first, the
 specification was written *before* the move rather than after it: 47 tests
 naming classes and service ids that did not exist yet, red by design, in a
