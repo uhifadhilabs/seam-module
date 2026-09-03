@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Catalogue;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Catalogue;
 
 use UhifadhiLabs\Trunk\Service\ModuleCatalogue;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 1 & 2 — REGISTRATION, AND ZERO.
@@ -31,7 +31,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * rows that list seven; the host's ledger exists because that happened. One
  * catalogue, read once.
  */
-final class ModuleCatalogueTest extends Phase2TestCase
+final class ModuleCatalogueTest extends InstallationTestCase
 {
     private function catalogue(): ModuleCatalogue
     {

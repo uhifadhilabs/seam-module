@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Fixtures;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Fixtures;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use UhifadhiLabs\Trunk\Tests\Integration\TestKernel;
@@ -71,9 +71,18 @@ final class HostKernel extends TestKernel
 
         // Every installed module, tagged by hand — a module bundle's services
         // are never autoconfigured, so this is the entrance the real ones use.
-        foreach (self::$modules as $slug => $overrides) {
+        //
+        // ONLY THE SLUG CROSSES INTO THE CONTAINER. A specification dials a
+        // provider with real objects (a ModulePermission is one), and a service
+        // definition argument can only hold scalars, parameters and references —
+        // so the overrides stay here, on this class, and the provider reads them
+        // by slug at call time. That is also the more honest fixture: a real
+        // module's answers are code it runs, not values baked into a compiled
+        // container, and reading them live is what makes uninstalling a bundle
+        // observable at all.
+        foreach (array_keys(self::$modules) as $slug) {
             $services->set('test.module.'.$slug, SpecModuleProvider::class)
-                ->args([$slug, $overrides])
+                ->args([$slug])
                 ->tag(UhifadhiLabsTrunkBundle::MODULE_TAG);
         }
 
@@ -96,7 +105,7 @@ final class HostKernel extends TestKernel
      */
     public function getCacheDir(): string
     {
-        return sys_get_temp_dir().'/trunk-module-tests/cache/phase2/'
+        return sys_get_temp_dir().'/trunk-module-tests/cache/installation/'
             .substr(hash('xxh128', serialize(self::$modules)), 0, 12);
     }
 }

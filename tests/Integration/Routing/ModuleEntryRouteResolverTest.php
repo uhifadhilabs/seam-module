@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Routing;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Routing;
 
 use UhifadhiLabs\Trunk\Service\ModuleEntryRouteResolver;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * WHERE A MODULE'S TILE LINKS — the one piece of routing the trunk carries, and
@@ -29,7 +29,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * seed time then the tile would point at a dead route until someone re-ran a
  * command. The live reading is the design.
  */
-final class ModuleEntryRouteResolverTest extends Phase2TestCase
+final class ModuleEntryRouteResolverTest extends InstallationTestCase
 {
     private function resolver(): ModuleEntryRouteResolver
     {

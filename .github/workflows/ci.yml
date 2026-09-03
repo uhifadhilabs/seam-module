@@ -20,11 +20,8 @@ jobs:
       matrix:
         php: ['8.4', '8.5']
 
-    # Real PostGIS, standing ready. `composer check` runs the SCAFFOLD suite,
-    # which boots a kernel and opens no connection — the catalogue entities
-    # arrive with the phase-2 extraction. The service is here in the siblings'
-    # shape so that the first entity needs no CI change, and so the phase2
-    # suite can be switched on here the day it goes green.
+    # Real Postgres, in the siblings' shape. The trunk owns the platform's
+    # catalogue tables, so unlike its siblings its suite genuinely connects.
     services:
       postgres:
         image: ghcr.io/fundistadi/postgis:17
@@ -73,20 +70,7 @@ jobs:
       - name: Static analysis (PHPStan max)
         run: composer phpstan
 
-      # The scaffold suite. It is green and it stays green — a failure here is a
-      # broken build, never a pending feature.
+      # The whole suite, in one step. It is green and it stays green — a
+      # failure here is a broken build, never a pending feature.
       - name: Tests (PHPUnit)
         run: composer test
-
-      # THE RED SPECIFICATION, REPORTED AND NOT ENFORCED. tests/Phase2 describes
-      # the runtime that phase 2 extracts from the host; it fails today because
-      # the implementation does not exist yet, which is the point of writing it
-      # first. Running it here keeps the todo list visible in every build
-      # without ever letting "red by design" be mistaken for "broken" — the job
-      # does not fail on it.
-      #
-      # When the extraction lands, this step loses its `continue-on-error` and
-      # the files move into tests/{Unit,Integration}.
-      - name: Specification for phase 2 (expected to fail until the extraction)
-        run: composer test:phase2
-        continue-on-error: true

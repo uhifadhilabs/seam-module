@@ -21,8 +21,8 @@ use PHPUnit\Framework\TestCase;
  * These are cheap, crude tests that read the shipped source as text, and they
  * are the only kind that can catch what they catch: an extraction is a large
  * move under time pressure, and "just this one reference, for now" is how a
- * runtime acquires a dependency on a branch. They are green today, and their
- * job is to be green the day AFTER phase 2 as well.
+ * runtime acquires a dependency on a branch. They were written before the
+ * extraction and their job is to still be green long after it.
  *
  * Three rules:
  *

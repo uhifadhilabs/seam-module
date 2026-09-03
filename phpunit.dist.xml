@@ -10,40 +10,24 @@
     <php>
         <env name="KERNEL_CLASS" value="UhifadhiLabs\Trunk\Tests\Integration\TestKernel"/>
         <!--
-            The trunk owns the platform's catalogue tables, so it WILL connect —
-            but not until the extraction brings the entities across. The scaffold
-            suite boots the kernel and opens no connection; the phase2 suite is
-            written against this database on the fundi cluster (port 5434).
+            The trunk owns the platform's catalogue tables — the catalogue and
+            the per-area install record are its data, not its host's — so unlike
+            its sibling bundles it genuinely connects. There is no honest
+            version of this suite that does not.
         -->
         <env name="TRUNK_TEST_DATABASE_URL"
              value="postgresql://app:app@127.0.0.1:5434/trunk_bundle_test?serverVersion=17&amp;charset=utf8"/>
     </php>
     <testsuites>
         <!--
-            GREEN, AND IT STAYS GREEN. The scaffold: the bundle boots, its
-            container compiles, its config tree holds, an installation with no
-            modules at all is harmless, and the boundaries hold. This is what
-            `composer test` and CI run.
+            ONE SUITE. There were two while the runtime was still in the host and
+            its specification was here ahead of it, so that "red by design" could
+            never be mistaken for "broken". The extraction closed that gap: every
+            test here is green and a failure is a failure.
         -->
-        <testsuite name="scaffold">
+        <testsuite name="default">
             <directory>tests/Unit</directory>
             <directory>tests/Integration</directory>
-        </testsuite>
-        <!--
-            RED BY DESIGN. The behavioural specification of the seam runtime,
-            written before the runtime exists: phase 2 satisfies it by
-            EXTRACTING the implementation from the host. Run it with
-            `composer test:phase2` and expect errors — a test here that passes
-            today would mean it asserts nothing.
-
-            It is a separate suite, not a skipped one, so "red by design" and
-            "broken" can never be confused: CI runs `scaffold` and must be
-            green; `phase2` is the todo list, and the extraction is done when
-            this suite is green and these files have moved into the two
-            directories above.
-        -->
-        <testsuite name="phase2">
-            <directory>tests/Phase2</directory>
         </testsuite>
     </testsuites>
     <source restrictNotices="true" restrictWarnings="true">

@@ -11,15 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2;
+namespace UhifadhiLabs\Trunk\Tests\Integration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Uhifadhi\Entity\AreaOfInterest;
-use UhifadhiLabs\Trunk\Tests\Integration\TrunkKernelTestCase;
-use UhifadhiLabs\Trunk\Tests\Phase2\Fixtures\HostKernel;
+use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\HostKernel;
 
 /**
  * Shared plumbing for the specifications that need a database and a set of
@@ -30,7 +29,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Fixtures\HostKernel;
  * per-area install record are its data, not the host's — so there is no honest
  * version of this suite that avoids a connection.
  */
-abstract class Phase2TestCase extends TrunkKernelTestCase
+abstract class InstallationTestCase extends TrunkKernelTestCase
 {
     protected static function getKernelClass(): string
     {
@@ -131,9 +130,6 @@ abstract class Phase2TestCase extends TrunkKernelTestCase
 
     protected function service(string $id): object
     {
-        $service = self::getContainer()->get('test.'.$id);
-        \assert(\is_object($service));
-
-        return $service;
+        return self::getContainer()->get('test.'.$id);
     }
 }

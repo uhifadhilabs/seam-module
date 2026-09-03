@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Command;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use UhifadhiLabs\Trunk\Service\AreaModuleService;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 5 — THE SEED IS CREATE-ONLY, AND THAT IS A PRODUCTION PROMISE.
@@ -34,7 +34,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * are one-line mistakes to make and neither is visible until somebody's screen
  * changes overnight.
  */
-final class SeedCatalogueCommandTest extends Phase2TestCase
+final class SeedCatalogueCommandTest extends InstallationTestCase
 {
     private function areaModules(): AreaModuleService
     {

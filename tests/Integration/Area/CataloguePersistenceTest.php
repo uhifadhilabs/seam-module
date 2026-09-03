@@ -11,13 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Area;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Area;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Uhifadhi\Entity\AreaOfInterest;
 use UhifadhiLabs\Trunk\Area\AreaInterface;
 use UhifadhiLabs\Trunk\Entity\AreaModule;
 use UhifadhiLabs\Trunk\Entity\Module;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * WHAT THE EXTRACTION MOVES, AND WHAT IT MUST NOT RENAME.
@@ -41,7 +42,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * areas — so the trunk maps the association to its own interface and the host
  * resolves it (see the AreaOfInterest fixture for why not a bare id).
  */
-final class CataloguePersistenceTest extends Phase2TestCase
+final class CataloguePersistenceTest extends InstallationTestCase
 {
     /**
      * @return ClassMetadata<object>
@@ -100,7 +101,7 @@ final class CataloguePersistenceTest extends Phase2TestCase
 
         $association = $this->metadata(AreaModule::class)->getAssociationMapping('area');
 
-        self::assertSame(\Uhifadhi\Entity\AreaOfInterest::class, $association->targetEntity,
+        self::assertSame(AreaOfInterest::class, $association->targetEntity,
             'the host resolved the trunk\'s area interface to its own entity');
         self::assertTrue(interface_exists(AreaInterface::class),
             'and the interface the trunk maps is the trunk\'s to publish');
@@ -117,7 +118,9 @@ final class CataloguePersistenceTest extends Phase2TestCase
         $area = $this->area();
         $this->seed();
 
-        $this->em()->remove($this->em()->find(\Uhifadhi\Entity\AreaOfInterest::class, $area->getId()));
+        $reloaded = $this->em()->find(AreaOfInterest::class, $area->getId());
+        self::assertNotNull($reloaded);
+        $this->em()->remove($reloaded);
         $this->em()->flush();
 
         self::assertSame(

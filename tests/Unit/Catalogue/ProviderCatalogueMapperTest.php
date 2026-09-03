@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Catalogue;
+namespace UhifadhiLabs\Trunk\Tests\Unit\Catalogue;
 
 use PHPUnit\Framework\TestCase;
 use UhifadhiLabs\Trunk\Enum\ModuleCategory;
 use UhifadhiLabs\Trunk\Enum\ModuleStatus;
 use UhifadhiLabs\Trunk\Service\ProviderCatalogueMapper;
-use UhifadhiLabs\Trunk\Tests\Phase2\Fixtures\SpecModuleProvider;
+use UhifadhiLabs\Trunk\Tests\Integration\Fixtures\SpecModuleProvider;
 
 /**
  * SPEC 4 — CATEGORY MAPPING, AND WHAT AN UNPLACED MODULE IS.

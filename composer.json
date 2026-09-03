@@ -1,6 +1,6 @@
 {
     "name": "uhifadhi/trunk-module",
-    "description": "The trunk: the module seam runtime every uhifadhi module registers with — the catalogue, per-area installation, the permission declarations modules contribute, and the seed that keeps them in step.",
+    "description": "The trunk: the module seam runtime every uhifadhi module registers with \u2014 the catalogue, per-area installation, the permission declarations modules contribute, and the seed that keeps them in step.",
     "type": "symfony-bundle",
     "keywords": [
         "module",
@@ -28,6 +28,7 @@
         "symfony/dependency-injection": "^7.3 || ^8.0",
         "symfony/framework-bundle": "^7.3 || ^8.0",
         "symfony/http-kernel": "^7.3 || ^8.0",
+        "symfony/uid": "^7.3 || ^8.0",
         "uhifadhi/module-contracts": "dev-main"
     },
     "autoload": {
@@ -38,7 +39,7 @@
     "autoload-dev": {
         "psr-4": {
             "UhifadhiLabs\\Trunk\\Tests\\": "tests/",
-            "Uhifadhi\\Entity\\": "tests/Phase2/Fixtures/Uhifadhi/Entity/"
+            "Uhifadhi\\Entity\\": "tests/Integration/Fixtures/Uhifadhi/Entity/"
         }
     },
     "require-dev": {
@@ -50,8 +51,7 @@
         "cs:fix": "php-cs-fixer fix",
         "cs:check": "php-cs-fixer fix --dry-run --diff",
         "phpstan": "phpstan analyse --no-progress --memory-limit=1G",
-        "test": "phpunit --testsuite scaffold",
-        "test:phase2": "phpunit --testsuite phase2",
+        "test": "phpunit",
         "check": [
             "@cs:check",
             "@phpstan",

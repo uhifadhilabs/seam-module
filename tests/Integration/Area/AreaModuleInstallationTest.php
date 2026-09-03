@@ -11,11 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Area;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Area;
 
+use Uhifadhi\Entity\AreaOfInterest;
+use UhifadhiLabs\Trunk\Entity\AreaModule;
 use UhifadhiLabs\Trunk\Service\AreaModuleLedger;
 use UhifadhiLabs\Trunk\Service\AreaModuleService;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 3 — PER-AREA INSTALL STATE: the record of what each area actually has.
@@ -30,7 +32,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * parking. It never deletes the area's data, and it never removes the module
  * from the deployment.
  */
-final class AreaModuleInstallationTest extends Phase2TestCase
+final class AreaModuleInstallationTest extends InstallationTestCase
 {
     private function areaModules(): AreaModuleService
     {
@@ -51,10 +53,10 @@ final class AreaModuleInstallationTest extends Phase2TestCase
     /**
      * @return list<string>
      */
-    private function activeSlugs(object $area): array
+    private function activeSlugs(AreaOfInterest $area): array
     {
         return array_map(
-            static fn (object $areaModule): ?string => $areaModule->getModule()?->getSlug(),
+            static fn (AreaModule $areaModule): string => (string) $areaModule->getModule()?->getSlug(),
             $this->areaModules()->activeFor($area),
         );
     }
@@ -239,7 +241,7 @@ final class AreaModuleInstallationTest extends Phase2TestCase
     /**
      * @param array<string, array<string, mixed>>|list<string> $modules
      */
-    private function areaAfterInstalling(array $modules): object
+    private function areaAfterInstalling(array $modules): AreaOfInterest
     {
         $this->install($modules);
         $area = $this->area();

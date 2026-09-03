@@ -3,19 +3,19 @@
 The **trunk**: the module seam runtime every uhifadhi module registers with. A
 [uhifadhi](https://github.com/uhifadhilabs) platform bundle.
 
-> **Status: scaffold + specification.** This repository contains the bundle,
-> its configuration seam, the module tag — and a deliberately **failing** test
-> suite describing the runtime that has not been extracted yet. See
-> [Phase 1 and phase 2](#phase-1-and-phase-2).
+> **Status: the runtime is here.** The seam was extracted out of the
+> [uhifadhi](https://github.com/uhifadhilabs/uhifadhi) host and into this
+> bundle, against a specification that was written first and failing. See
+> [How this was built](#how-this-was-built).
 
 ## Contents
 
 - [The tree](#the-tree)
 - [Charter](#charter)
-- [Phase 1 and phase 2](#phase-1-and-phase-2)
-- [The specification](#the-specification)
+- [How this was built](#how-this-was-built)
+- [What it guarantees](#what-it-guarantees)
 - [Boundaries: what the trunk is not](#boundaries-what-the-trunk-is-not)
-- [Deltas from the host's behaviour today](#deltas-from-the-hosts-behaviour-today)
+- [Deltas from the host's previous behaviour](#deltas-from-the-hosts-previous-behaviour)
 - [What is here](#what-is-here)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -59,51 +59,38 @@ installation has. A module is whatever tagged itself, and everything the trunk
 treats specially (`pinned`, `core`) is a flag the provider declares, never a
 slug the runtime recognises. A test sweeps `src/` for that property.
 
-## Phase 1 and phase 2
+## How this was built
 
-The module seam exists today, working, inside the
+The module seam already existed, working, inside the
 [uhifadhi](https://github.com/uhifadhilabs/uhifadhi) host application. This
-repository extracts it — and because this project is test-first, the
-specification is written before the move rather than after it.
-
-| | Phase 1 (this commit) | Phase 2 |
-|---|---|---|
-| `src/` | the bundle, its config tree, the module tag | the extracted runtime |
-| `tests/Unit`, `tests/Integration` | **green**, and stays green | joined by the specification below |
-| `tests/Phase2` | **red by design** — 47 tests, 47 errors | green, then deleted as a directory |
-
-The two suites are separate, not skipped, because "red by design" and "broken"
-must never be confusable:
+repository extracted it — and because this project is test-first, the
+specification was written *before* the move rather than after it: 47 tests
+naming classes and service ids that did not exist yet, red by design, in a
+suite of their own so that "red by design" and "broken" could never be
+confused. The extraction is the commit that made them pass and folded them into
+`tests/Unit` and `tests/Integration`, where they are now simply tests.
 
 ```bash
-composer check        # cs -> phpstan max -> the SCAFFOLD suite. Green. CI gates on this.
-composer test:phase2  # the specification. Red until the extraction. CI reports, does not gate.
+composer check   # cs -> phpstan max -> the whole suite. CI gates on this.
 ```
 
-`tests/Phase2` is excluded from PHPStan for the same reason it is excluded from
-`composer test`: it names classes that do not exist yet, and static analysis
-would report their absence as an error rather than as the point. php-cs-fixer
-still covers it — style is checkable without the classes. **When the extraction
-lands, the exclusion in `phpstan.dist.neon`, the second suite in
-`phpunit.dist.xml` and the `continue-on-error` step in CI are all deleted in the
-commit that moves the files.** If any of them is still there, the extraction is
-not finished.
+There is one suite and one verdict. A failure here is a failure.
 
-## The specification
+## What it guarantees
 
-What phase 2 has to satisfy, in the order the tests are written:
+Every row below is a test, and the table is the order they were written in:
 
 | # | Behaviour | Where |
 |---|---|---|
-| 1 | A bundle tagging a provider `uhifadhi.module` appears in the catalogue; the trait defaults (`core()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (seam half, **green**) + `Phase2/Catalogue/ModuleCatalogueTest` |
-| 2 | Zero modules: the catalogue boots, is empty, and the seed succeeds writing nothing | `Integration/EmptyCatalogueTest` (**green**) + `Phase2/Catalogue/ModuleCatalogueTest` |
-| 3 | Per-area install/uninstall flips state for that area alone; `core()` seeds active and installable seeds parked; a pinned module can never be switched off; uninstalling removes the module's presence from the area's ledger immediately, and keeps its data | `Phase2/Area/AreaModuleInstallationTest` |
-| 4 | Category and status are coerced, never trusted; an unknown category falls back to **Operations** | `Phase2/Catalogue/ProviderCatalogueMapperTest` |
-| 5 | The seed is idempotent and **create-only** for per-area rows: a deploy never overrules an admin's on/off or ordering, and never deletes an uninstalled module's history | `Phase2/Command/SeedCatalogueCommandTest` |
-| 6 | Declared permissions surface through the seam, grouped by umbrella, first-declaration-wins, and vanish with the module — carrying no role and no holders | `Phase2/Permission/ModulePermissionCatalogueTest` |
-| 7 | Boundaries: no module named in `src/`, no host namespace, no templates, no controllers, no routes | `Unit/BoundaryTest` (**green**) |
-| 8 | A module's entry route is read live from its provider, never from a stored column | `Phase2/Routing/ModuleEntryRouteResolverTest` |
-| 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Phase2/Area/CataloguePersistenceTest` |
+| 1 | A bundle tagging a provider `uhifadhi.module` appears in the catalogue; the trait defaults (`core()` = false, live, unpinned, generic page, no permissions) hold all the way through | `Integration/Module` (the seam half) + `Integration/Catalogue/ModuleCatalogueTest` |
+| 2 | Zero modules: the catalogue boots, is empty, and the seed succeeds writing nothing | `Integration/EmptyCatalogueTest` + `Integration/Catalogue/ModuleCatalogueTest` |
+| 3 | Per-area install/uninstall flips state for that area alone; `core()` seeds active and installable seeds parked; a pinned module can never be switched off; uninstalling removes the module's presence from the area's ledger immediately, and keeps its data | `Integration/Area/AreaModuleInstallationTest` |
+| 4 | Category and status are coerced, never trusted; an unknown category falls back to **Operations** | `Unit/Catalogue/ProviderCatalogueMapperTest` |
+| 5 | The seed is idempotent and **create-only** for per-area rows: a deploy never overrules an admin's on/off or ordering, and never deletes an uninstalled module's history | `Integration/Command/SeedCatalogueCommandTest` |
+| 6 | Declared permissions surface through the seam, grouped by umbrella, first-declaration-wins, and vanish with the module — carrying no role and no holders | `Integration/Permission/ModulePermissionCatalogueTest` |
+| 7 | Boundaries: no module named in `src/`, no host namespace, no templates, no controllers, no routes | `Unit/BoundaryTest` |
+| 8 | A module's entry route is read live from its provider, never from a stored column | `Integration/Routing/ModuleEntryRouteResolverTest` |
+| 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Integration/Area/CataloguePersistenceTest` |
 
 ### The attention-list promise (spec 3)
 
@@ -151,22 +138,22 @@ a page — a view-model, and the trunk has no viewer.
 Concretely: this bundle ships **no `templates/` directory, no controllers and no
 routes**, and `Unit/BoundaryTest` fails the build if that changes.
 
-## Deltas from the host's behaviour today
+## Deltas from the host's previous behaviour
 
-Where the host's current behaviour is accidental or undocumented, the
-specification pins the honest version rather than the incumbent one. Each of
-these is a deliberate change the extraction must make:
+Where the host's behaviour was accidental or undocumented, the specification
+pinned the honest version rather than the incumbent one. Each of these is a
+deliberate change the extraction made:
 
 1. **`position()` is honoured.** `ModuleProviderInterface::position()` is
-   documented as an ordering hint, and today nothing reads it — the seed passes
-   its own loop index and the provider's answer is discarded. A contract method
+   documented as an ordering hint, and in the host nothing read it — the seed
+   passed its own loop index and the provider's answer was discarded. A contract method
    nothing reads is a lie in the contract, and an author who sets it has no way
    to find out it did nothing. The trunk honours a declared position and uses
    registration order only as the tie-break (which, given the trait default of
    `0`, leaves the common case unchanged).
-2. **There is no hub row.** The host's seed command still says in its docblock
-   that the catalogue is "the host's own Overview hub plus every provider"; the
-   code has not created a hub row since the catalogue became provider-driven.
+2. **There is no hub row.** The host's seed command still claimed in its
+   docblock that the catalogue was "the host's own hub plus every provider"; the
+   code had not created a hub row since the catalogue became provider-driven.
    The trunk states the honest rule: every row comes from a provider, and
    `pinned` is a flag a provider declares — the runtime never knows the hub's
    slug.
@@ -181,8 +168,7 @@ these is a deliberate change the extraction must make:
    bundles colliding on a common noun, which cannot happen to the runtime every
    bundle registers with.
 5. **Permissions are the module half only.** The host's permission catalogue
-   merges its core enum (Areas, Ingestion, Modules, Team) with module
-   declarations. The trunk collects only the declarations; the host keeps its
+   merges its own core enum with module declarations. The trunk collects only the declarations; the host keeps its
    own enum and stays the only thing that decides who holds what. A runtime that
    also owned the core permissions would own the host's team model with it.
 6. **A declaration is deployment-wide, not per area** — a module switched off
@@ -197,18 +183,18 @@ these is a deliberate change the extraction must make:
 |---|---|
 | The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiLabsTrunkBundle.php` |
 | Config tree (`trunk:`) | `src/DependencyInjection/TrunkConfiguration.php` |
-| Static service wiring (empty, with the ids phase 2 must land on) | `config/services.php` |
+| Static service wiring, and the published ids | `config/services.php` |
+| The area seam a host resolves | `src/Area/AreaInterface.php` |
+| The catalogue and the per-area ledger | `src/Entity/`, `src/Repository/` |
+| The runtime | `src/Service/` |
+| The create-only seed | `src/Command/SeedCatalogueCommand.php` |
 | Test host app | `tests/Integration/TestKernel.php` |
-| A host, minimally: area entity + resolved target entity | `tests/Phase2/Fixtures/HostKernel.php` |
-| The specification | `tests/Phase2/` |
+| A host, minimally: area entity + resolved target entity | `tests/Integration/Fixtures/HostKernel.php` |
 
-The bundle maps its own entity directory (`src/Entity`, empty for now), so a
-host will never need to write a doctrine mappings block for the catalogue
-tables.
+The bundle maps its own entity directory, so a host never needs to write a
+doctrine mappings block for the catalogue tables.
 
 ## Installation
-
-Not yet — the runtime lands in phase 2. For the record, the steps will be:
 
 ```bash
 composer require uhifadhi/trunk-module
@@ -244,17 +230,18 @@ a second place for the two to disagree.
 
 ```bash
 composer install
-composer check        # cs:check -> phpstan (max) -> the scaffold suite
-composer test:phase2  # the specification: red until the extraction
+composer check   # cs:check -> phpstan (max) -> the suite
 ```
 
 - PHP 8.4+, PHPStan level **max**, php-cs-fixer `@Symfony` + `@Symfony:risky`.
 - **Tests first, always.** This repository is that rule taken literally: the
   whole specification was written before a line of the runtime existed.
-- The scaffold suite boots a real kernel (`tests/Integration/TestKernel.php`)
-  and opens no database connection. The phase-2 suite does connect — the trunk
-  genuinely owns tables — to `postgresql://app:app@127.0.0.1:5434/trunk_bundle_test`
-  on the fundi cluster.
+- `tests/Integration/TestKernel.php` is the trunk alone — framework, doctrine,
+  this bundle — and opens no connection, which is what a host that has not
+  migrated yet must still be able to boot.
+  `tests/Integration/Fixtures/HostKernel.php` adds a stand-in host on top and
+  does connect, because the trunk genuinely owns tables:
+  `postgresql://app:app@127.0.0.1:5434/trunk_bundle_test` on the fundi cluster.
 
 ## License
 

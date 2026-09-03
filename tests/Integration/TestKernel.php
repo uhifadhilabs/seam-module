@@ -29,10 +29,11 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
  * bundle exists to make possible, and the kernel here is as close as a test can
  * get to a freshly planted installation with one ring on it.
  *
- * No database connection is opened: the catalogue entities arrive with the
- * phase-2 extraction, and until then there is nothing to persist. Phase-2 tests
- * boot {@see \UhifadhiLabs\Trunk\Tests\Phase2\Fixtures\HostKernel} instead,
- * which adds a stand-in host on top of this one.
+ * It opens no database connection. That is what the bundle's own boot has to
+ * survive — a host that has not migrated yet, or has not resolved the area
+ * interface, still boots. The specifications that need the catalogue tables
+ * boot {@see Fixtures\HostKernel}
+ * instead, which adds a stand-in host on top of this one.
  */
 class TestKernel extends Kernel
 {

@@ -15,8 +15,11 @@ namespace UhifadhiLabs\Trunk\Tests\Integration;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\MappingDriver as DoctrineBundleMappingDriver;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use UhifadhiLabs\Trunk\Entity\AreaModule;
+use UhifadhiLabs\Trunk\Entity\Module;
 use UhifadhiLabs\Trunk\UhifadhiLabsTrunkBundle;
 
 /**
@@ -64,8 +67,8 @@ final class BundleBootTest extends TrunkKernelTestCase
 
     /**
      * Zero-config persistence: the trunk maps its own entity directory, so a
-     * host never writes a doctrine mappings block for the catalogue tables. The
-     * mapping is registered now and stays empty until the extraction lands.
+     * host never writes a doctrine mappings block for the catalogue tables —
+     * `composer require` is the whole of the installation.
      */
     public function testItMapsItsOwnEntityDirectory(): void
     {
@@ -84,8 +87,16 @@ final class BundleBootTest extends TrunkKernelTestCase
 
         self::assertInstanceOf(MappingDriverChain::class, $driver);
         self::assertArrayHasKey('UhifadhiLabs\Trunk\Entity', $driver->getDrivers());
-        // Nothing mapped yet, and that is the point: the seam is wired, the
-        // catalogue entities arrive with the phase-2 extraction.
-        self::assertSame([], $em->getMetadataFactory()->getAllMetadata());
+        // And the catalogue is what comes out of it — mapped by a bundle the
+        // host did nothing to configure beyond installing it. Note the kernel
+        // this runs on: the trunk alone, with no host resolving the area
+        // interface, which a host that has not got there yet must still boot.
+        self::assertSame(
+            [AreaModule::class, Module::class],
+            array_map(
+                static fn (ClassMetadata $metadata): string => $metadata->getName(),
+                $em->getMetadataFactory()->getAllMetadata(),
+            ),
+        );
     }
 }

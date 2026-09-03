@@ -22,9 +22,8 @@ use UhifadhiLabs\Trunk\Tests\Integration\TrunkKernelTestCase;
 /**
  * REGISTRATION, AT THE SEAM ITSELF. "Install the bundle and you are in the
  * catalogue" is two claims: that a provider reaches the trunk (here), and that
- * the trunk then puts it in the catalogue (tests/Phase2, red until the
- * extraction). This half is green today, because the tag and its
- * autoconfiguration moved into this bundle with it.
+ * the trunk then puts it in the catalogue ({@see \UhifadhiLabs\Trunk\Tests\Integration\Catalogue\ModuleCatalogueTest}).
+ * This is the first half, at the tag, before any of it has been read.
  */
 final class ModuleSeamRegistrationTest extends TrunkKernelTestCase
 {

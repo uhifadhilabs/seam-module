@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace UhifadhiLabs\Trunk\Tests\Phase2\Permission;
+namespace UhifadhiLabs\Trunk\Tests\Integration\Permission;
 
 use UhifadhiLabs\ModuleContracts\ModulePermission;
 use UhifadhiLabs\Trunk\Service\ModulePermissionCatalogue;
-use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
+use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;
 
 /**
  * SPEC 6 — PERMISSIONS DECLARED BY MODULES, SURFACED THROUGH THE SEAM.
@@ -41,7 +41,7 @@ use UhifadhiLabs\Trunk\Tests\Phase2\Phase2TestCase;
  * it is pinned below rather than quietly fixed here, because narrowing it is a
  * ruling about the team model and not the trunk's to make.
  */
-final class ModulePermissionCatalogueTest extends Phase2TestCase
+final class ModulePermissionCatalogueTest extends InstallationTestCase
 {
     private function permissions(): ModulePermissionCatalogue
     {
