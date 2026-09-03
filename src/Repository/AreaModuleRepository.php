@@ -15,7 +15,7 @@ namespace UhifadhiLabs\Trunk\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use UhifadhiLabs\Trunk\Area\AreaInterface;
+use UhifadhiLabs\Trunk\Entity\AreaInterface;
 use UhifadhiLabs\Trunk\Entity\AreaModule;
 
 /**

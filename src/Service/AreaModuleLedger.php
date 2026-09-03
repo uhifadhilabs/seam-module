@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace UhifadhiLabs\Trunk\Service;
 
-use UhifadhiLabs\Trunk\Area\AreaInterface;
+use UhifadhiLabs\Trunk\Entity\AreaInterface;
 use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
 
 /**

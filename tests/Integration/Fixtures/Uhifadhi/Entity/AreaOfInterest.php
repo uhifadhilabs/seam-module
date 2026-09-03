@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Uhifadhi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use UhifadhiLabs\Trunk\Area\AreaInterface;
+use UhifadhiLabs\Trunk\Entity\AreaInterface;
 
 /**
  * THE HOST'S AREA, PLAYED BY A STAND-IN — and the reason the trunk needs a seam

@@ -184,7 +184,7 @@ deliberate change the extraction made:
 | The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiLabsTrunkBundle.php` |
 | Config tree (`trunk:`) | `src/DependencyInjection/TrunkConfiguration.php` |
 | Static service wiring, and the published ids | `config/services.php` |
-| The area seam a host resolves | `src/Area/AreaInterface.php` |
+| The area seam a host resolves | `src/Entity/AreaInterface.php` |
 | The catalogue and the per-area ledger | `src/Entity/`, `src/Repository/` |
 | The runtime | `src/Service/` |
 | The create-only seed | `src/Command/SeedCatalogueCommand.php` |
@@ -209,7 +209,7 @@ also resolves the trunk's area interface to its own area entity:
 doctrine:
     orm:
         resolve_target_entities:
-            UhifadhiLabs\Trunk\Area\AreaInterface: App\Entity\AreaOfInterest
+            UhifadhiLabs\Trunk\Entity\AreaInterface: App\Entity\AreaOfInterest
 ```
 
 ## Configuration

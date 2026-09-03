@@ -15,7 +15,7 @@ namespace UhifadhiLabs\Trunk\Tests\Integration\Area;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Uhifadhi\Entity\AreaOfInterest;
-use UhifadhiLabs\Trunk\Area\AreaInterface;
+use UhifadhiLabs\Trunk\Entity\AreaInterface;
 use UhifadhiLabs\Trunk\Entity\AreaModule;
 use UhifadhiLabs\Trunk\Entity\Module;
 use UhifadhiLabs\Trunk\Tests\Integration\InstallationTestCase;

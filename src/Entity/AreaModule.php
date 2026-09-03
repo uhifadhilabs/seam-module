@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace UhifadhiLabs\Trunk\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use UhifadhiLabs\Trunk\Area\AreaInterface;
 use UhifadhiLabs\Trunk\Entity\Trait\TimestampableTrait;
 use UhifadhiLabs\Trunk\Entity\Trait\UuidTrait;
 use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;

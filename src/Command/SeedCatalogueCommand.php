@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use UhifadhiLabs\ModuleContracts\ModuleProviderInterface;
-use UhifadhiLabs\Trunk\Area\AreaInterface;
+use UhifadhiLabs\Trunk\Entity\AreaInterface;
 use UhifadhiLabs\Trunk\Entity\AreaModule;
 use UhifadhiLabs\Trunk\Entity\Module;
 use UhifadhiLabs\Trunk\Repository\AreaModuleRepository;
