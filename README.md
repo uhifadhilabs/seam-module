@@ -10,7 +10,7 @@ The **seam**: the module seam runtime every uhifadhi module registers with. A
 
 ## Contents
 
-- [The tree](#the-tree)
+- [The architecture](#the-architecture)
 - [Charter](#charter)
 - [How this was built](#how-this-was-built)
 - [What it guarantees](#what-it-guarantees)
@@ -22,27 +22,14 @@ The **seam**: the module seam runtime every uhifadhi module registers with. A
 - [Development](#development)
 - [License](#license)
 
-## The tree
+## The architecture
 
-Uhifadhi is structured like the thing it protects:
-
-> **the seed — [`uhifadhi/uhifadhi`](https://github.com/uhifadhilabs/uhifadhi)**
-> (planted once) → **the seam —
-> [`uhifadhi/seam-module`](https://github.com/uhifadhilabs/seam-module)** (this
-> repository: where every module registers) → **branches** (the modules) →
-> **the shell —
-> [`uhifadhi/shell-module`](https://github.com/uhifadhilabs/shell-module)**
-> (what you see).
-
-The seed is copied once and is then yours forever. Everything above it is a
-bundle, updated through composer. This is the package every other one attaches
-to.
-
-**The tree is a picture, not a naming scheme.** It is kept here because it is
-the fastest way to explain the shape to somebody new, and it is kept *only*
-here — in prose. The packages themselves are named for what they do, so that a
-newcomer reading an import knows what they are looking at without having been
-told the metaphor first.**
+**Uhifadhi is one skeleton and a set of bundles.**
+`uhifadhi/uhifadhi` is the project skeleton — copied once, never updated;
+everything else arrives as a bundle, updated forever. A module **registers
+with the seam** (`uhifadhi/seam-module` — this repository) and **renders in
+the shell** (`uhifadhi/shell-module`); everything a deployment can do —
+patrols, incidents, rosters — is a module.
 
 ## Charter
 
@@ -56,13 +43,13 @@ told the metaphor first.**
   have a module that only one of its areas wants.
 - **Declared permissions** — the granular permissions modules declare, gathered
   for the host to fold into its matrix. Declared, never granted.
-- **The seed** — the command that reconciles the catalogue with what is
+- **The seed command** — the command that reconciles the catalogue with what is
   installed, without ever overruling an admin.
 
-**Zero modules is a working installation.** A freshly planted seed with this
+**Zero modules is a working installation.** A fresh installation with this
 bundle on it boots, has an empty catalogue, and is harmless. A runtime that only
 functions once somebody installs a module has a hidden dependency on its own
-branches.
+modules.
 
 **It knows no module by name.** Not one — not even the pinned hub every
 installation has. A module is whatever tagged itself, and everything the seam
