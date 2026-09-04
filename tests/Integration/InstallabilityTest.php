@@ -17,28 +17,44 @@ use Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\Mapping\MappingException;
+use Uhifadhi\Seam\Entity\AreaInterface;
+use Uhifadhi\Seam\Entity\AreaModule;
 
 /**
- * FROM `composer require` TO TABLES — the two claims the seam's recipe makes
- * about that road, pinned here so the documentation cannot quietly become a
- * lie.
+ * FROM `composer require` TO TABLES — the claims the seam's recipe makes about
+ * that road, pinned here so the documentation cannot quietly become a lie.
  *
- * Both were found the same way: by installing a project with
+ * The first two were found the same way: by installing a project with
  * `composer create-project` and following the instructions as written. Neither
  * survived the walk, and the recipe's comments now say what these tests say.
  *
- * 1. THE AREA MAPPING IS REQUIRED, NOT OPTIONAL. The recipe used to describe
+ * 1. AN AREA IS REQUIRED, NOT OPTIONAL. The recipe used to describe
  *    `resolve_target_entities` as the step that buys you the per-area half,
  *    implying an installation without it simply had less. It has less *and* no
  *    schema at all: every tool that resolves the association stops on the
  *    unresolved interface. The claim under test is the honest one — a bundle
- *    that boots without the mapping and cannot be schema'd without it.
+ *    that boots without an answer and cannot be schema'd without one.
  *
  * 2. THE TOOL THAT CREATES THOSE TABLES SHIPS WITH THE BUNDLE THAT ADDS THEM.
  *    An installed project had no `doctrine:migrations:*` commands, because
  *    nothing in the chain required the bundle — the seam contributed two
  *    tables and left the operator to discover there was nothing to create them
  *    with.
+ *
+ * 3. THE SEAM ANSWERS ITS OWN CONTRACT FOR NOBODY, AND MUST NOT. Whoever knows
+ *    the answer states the resolution: the seam does not know one, because it
+ *    holds the per-area table for installations whose area model is their own.
+ *    So it yields — and that abstention is what lets uhifadhi/area-module
+ *    prepend the answer and an installation write no doctrine line at all. It
+ *    is asserted here rather than assumed, because a resolution quietly added
+ *    to this bundle would break every installation that brought its own area
+ *    and nothing would say so.
+ *
+ * WHAT THIS SUITE CANNOT DO is install the answer-module and watch the schema
+ * build: area-module requires the seam, so the seam requiring it back would be
+ * a cycle. That half is pinned on the other side, in area-module's own
+ * `Integration/InstallabilityTest`, which boots this bundle alongside it and
+ * asserts all three tables appear with no doctrine configuration at all.
  */
 final class InstallabilityTest extends SeamKernelTestCase
 {
@@ -96,6 +112,26 @@ final class InstallabilityTest extends SeamKernelTestCase
             [],
             glob(\dirname(__DIR__, 2).'/migrations/*.php') ?: [],
             'and the seam ships no versions of its own: the history is the host\'s',
+        );
+    }
+
+    /**
+     * THE SEAM YIELDS. Its own kernel resolves the association to the INTERFACE
+     * and not to a class, which is the state that makes an answer-module's
+     * prepend the effective one — and the state an installation with its own
+     * area entity depends on.
+     */
+    public function testTheSeamPrependsNoAnswerOfItsOwn(): void
+    {
+        self::bootKernel();
+
+        self::assertSame(
+            AreaInterface::class,
+            $this->entityManager()
+                ->getClassMetadata(AreaModule::class)
+                ->getAssociationMapping('area')
+                ->targetEntity,
+            'the seam must not name an area class; whoever knows the answer states the resolution',
         );
     }
 

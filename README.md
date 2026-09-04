@@ -63,8 +63,9 @@ Every row below is a test, and the table is the order they were written in:
 | 6 | Declared permissions surface through the seam, grouped by umbrella, first-declaration-wins, and vanish with the module — carrying no role and no holders | `Integration/Permission/ModulePermissionCatalogueTest` |
 | 7 | Boundaries: no module named in `src/`, no host namespace, no templates, no controllers, no routes | `Unit/BoundaryTest` |
 | 8 | A module's entry route is read live from its provider, never from a stored column | `Integration/Routing/ModuleEntryRouteResolverTest` |
-| 9 | The catalogue tables keep their production names; the area association is resolved to the host's own entity | `Integration/Area/CataloguePersistenceTest` |
-| 10 | Installability: the seam alone boots without an area mapping and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
+| 9 | The catalogue tables keep their production names; the area association is resolved to a real entity | `Integration/Area/CataloguePersistenceTest` |
+| 10 | Installability: the seam alone boots without an area and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
+| 11 | The seam answers its own area contract for nobody — it yields, which is what lets an answer-module state the resolution and an installation write no doctrine line | `Integration/InstallabilityTest` |
 
 ### The attention-list promise
 
@@ -119,7 +120,7 @@ routes**, and `Unit/BoundaryTest` fails the build if that changes.
 | The Symfony plug, and the `uhifadhi.module` tag | `src/UhifadhiSeamBundle.php` |
 | Config tree (`seam:`) | `src/DependencyInjection/SeamConfiguration.php` |
 | Static service wiring, and the published ids | `config/services.php` |
-| The area seam a host resolves | `src/Entity/AreaInterface.php` |
+| The area contract, which a module answers | `src/Entity/AreaInterface.php` |
 | The catalogue and the per-area ledger | `src/Entity/`, `src/Repository/` |
 | The runtime | `src/Service/` |
 | The create-only seed | `src/Command/SeedCatalogueCommand.php` |
@@ -139,12 +140,11 @@ The bundle registers via Flex (`"type": "symfony-bundle"`), which adds
 `Uhifadhi\Seam\UhifadhiSeamBundle` to `config/bundles.php` and copies
 `config/packages/seam.yaml` in.
 
-### The area mapping is required, not optional
+### An area is required, and a module answers it
 
-This used to read as an extra you added when you wanted the per-area half. It
-is not. The seam owns two tables and the per-area one has a `NOT NULL` foreign
-key to an area, so until the interface resolves to a class there is no schema
-to create — every tool that walks the association stops:
+The seam owns two tables and the per-area one has a `NOT NULL` foreign key to an
+area, so until `AreaInterface` resolves to a class there is no schema to create —
+every tool that walks the association stops:
 
 ```console
 $ bin/console doctrine:schema:create
@@ -152,51 +152,62 @@ In MappingException.php line 72:
   Class 'Uhifadhi\Seam\Entity\AreaInterface' does not exist
 ```
 
-Booting is fine — a host between `composer require` and its first entity must
-still boot, and `Integration/InstallabilityTest` pins both halves of that.
+Booting is fine — an installation between `composer require` and its first entity
+must still boot, and `Integration/InstallabilityTest` pins both halves of that.
 
-So give the application an area entity implementing `AreaInterface` (it asks
-for `getId()` and nothing else):
+**Whoever knows the answer states the resolution.** That is the fleet's rule and
+it settles this one: the seam cannot name an area class, because it holds the
+per-area table for installations whose area model is their own — but the module
+that *provides* an area can, and does.
 
-```php
-// src/Entity/AreaOfInterest.php (your application)
-declare(strict_types=1);
-
-namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use Uhifadhi\Seam\Entity\AreaInterface;
-
-#[ORM\Entity]
-class AreaOfInterest implements AreaInterface
-{
-    #[ORM\Id] #[ORM\GeneratedValue] #[ORM\Column]
-    private ?int $id = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-}
+```bash
+composer require uhifadhi/area-module
 ```
 
-and name it:
+[`uhifadhi/area-module`](https://github.com/uhifadhilabs/area-module) maps its own
+entity and prepends the resolution, exactly the way
+[`uhifadhi/team-module`](https://github.com/uhifadhilabs/team-module) answers the
+user contract. **Your installation writes no `doctrine.yaml` line at all** — with
+both answer-modules installed, a bare installation reaches
+`doctrine:migrations:diff` with zero doctrine edits.
+
+**This used to be a hand-step**, and it was the fleet's oldest: write a
+placeholder class yourself, then uncomment a block in `config/packages/seam.yaml`.
+A hand-step is for a decision only the installation can make, and "what is an
+area" was only a decision because nothing shipped one. Forgetting either half
+failed a long way from its cause — the container compiled, the kernel booted, and
+the diff stopped on the message above with nothing pointing back at the paragraph
+that was missed.
+
+#### Bringing your own area
+
+You write a resolution line only to **disagree**. An installation whose areas are
+its own entity — its own columns, its own name for the thing — names that class
+in its own config and wins, because prepended configuration loses to the
+application's by Symfony's own design:
 
 ```yaml
-# config/packages/seam.yaml (your application)
+# config/packages/doctrine.yaml (your application)
 doctrine:
     orm:
         resolve_target_entities:
-            Uhifadhi\Seam\Entity\AreaInterface: App\Entity\AreaOfInterest
+            Uhifadhi\Seam\Entity\AreaInterface: App\Entity\ManagementUnit
 ```
 
-`App\Entity` is the PSR-4 root of a project created from the skeleton
-([`uhifadhi/uhifadhi`](https://github.com/uhifadhilabs/uhifadhi)) — the skeleton
-is stock Symfony, so the mapping prefix the doctrine-bundle recipe writes into
-`config/packages/doctrine.yaml` already covers the area entity and needs no
-correction. `Uhifadhi\` on its own is the platform's, not an application's — this
-bundle is `Uhifadhi\Seam\` — so do not reach for it here. An existing host with
-a root of its own substitutes that on the right-hand side; the left-hand side is
+Merge it into the `doctrine:` block already in that file, under the existing
+`orm:`, beside `mappings` — a second `doctrine:` key in one file is not valid
+YAML. Your class needs `getId()` and nothing else, and it has to be in the
+mapping chain: the stock doctrine-bundle recipe writes an `App\Entity` prefix, so
+an entity in `src/Entity/` is already covered. If it is not, the line resolves and
+the class it names is still missing from the chain:
+
+```console
+The class 'App\Entity\ManagementUnit' was not found in the chain
+configured namespaces App\Entity, Uhifadhi\Seam\Entity
+```
+
+`Uhifadhi\` on its own is the platform's, not an application's — this bundle is
+`Uhifadhi\Seam\` — so do not reach for it as your own root. The left-hand side is
 the seam's and never changes.
 
 ### Then the tables
