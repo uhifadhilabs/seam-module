@@ -32,8 +32,8 @@ use PHPUnit\Framework\TestCase;
  *     reach back into one. REDEFINED at the namespace alignment — see
  *     testTheSeamReachesIntoNoHostApplication for what the rule now forbids
  *     and why it cannot be "no Uhifadhi\ in src/" any more.
- *  3. The seam renders nothing. See the README's boundaries section: the
- *     module grid, the customize screen and every tile is the shell's.
+ *  3. The seam renders nothing. See docs/boundaries.md: the module grid, the
+ *     customize screen and every tile is the shell's.
  */
 final class BoundaryTest extends TestCase
 {
@@ -127,7 +127,7 @@ final class BoundaryTest extends TestCase
     /**
      * THE SEAM RENDERS NOTHING. No templates directory, no controllers, no
      * routes — a module grid is a picture of the catalogue, and pictures are the
-     * shell's. The README says why at length; this is the part a refactor
+     * shell's. docs/boundaries.md says why at length; this is the part a refactor
      * cannot quietly disagree with.
      */
     public function testTheSeamShipsNoUserInterface(): void

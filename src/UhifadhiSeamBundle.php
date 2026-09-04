@@ -30,8 +30,8 @@ use Uhifadhi\Seam\DependencyInjection\SeamConfiguration;
  *
  * IT RENDERS NOTHING. No templates, no controllers, no routes — the visible
  * surface is the shell's job. The seam answers questions in data and services,
- * and anything that draws a module grid reads it. See the README's boundaries
- * section for why the grid is not here.
+ * and anything that draws a module grid reads it. See docs/boundaries.md for
+ * why the grid is not here.
  *
  * IT KNOWS NO MODULE BY NAME — not one, not even the pinned hub every
  * installation has. A module is whatever tagged itself, and everything the

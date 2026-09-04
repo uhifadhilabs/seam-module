@@ -37,7 +37,7 @@ namespace Uhifadhi\Seam\Entity;
  * loses to the application's. The right-hand side is deliberately not spelled
  * out here: Unit\BoundaryTest sweeps this directory for an application tree
  * under either root one may carry, so no example may name a concrete class. The
- * README and the recipe do.
+ * docs/configuration.md and the recipe do.
  *
  * IT USED TO BE A HAND-STEP — a placeholder class the installation wrote and a
  * block it uncommented — and that was the wrong shape. A hand-step is for a
