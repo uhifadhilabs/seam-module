@@ -15,6 +15,59 @@ Every row below is a test, and the table is the order they were written in:
 | 9 | The catalogue tables keep their production names; the area association is resolved to a real entity | `Integration/Area/CataloguePersistenceTest` |
 | 10 | Installability: the seam alone boots without an area and cannot be schema'd without one; the migration tool arrives with the bundle, and no migration versions do | `Integration/InstallabilityTest` |
 | 11 | The seam answers its own area contract for nobody — it yields, which is what lets an answer-module state the resolution and an installation write no doctrine line | `Integration/InstallabilityTest` |
+| 12 | A module an area has parked — or never took — answers **404** on its own routes, before its controller runs; an active module is untouched, a non-module route costs nothing, and the area's own screens on the same path shape stay open | `Integration/Routing/ParkedModuleRouteTest` |
+
+## Parking closes the routes
+
+Parking a module used to be a tidier menu. It is a decision now: where an area
+has parked a module, every one of that module's pages answers **404**, and it
+answers before the module's controller is asked anything.
+
+**404, not 403.** A 403 confirms the thing exists and is being withheld; parking
+withholds nothing. The module is not part of this area — which is exactly what
+the area's own screens already say, with the module sitting in the shop rather
+than the sub-nav. The URL now agrees with them.
+
+**One enforcement point, no per-module code.** The seam owns the per-area
+ledger, so the seam is the only thing that can answer "is this switched on
+here". A check written into each module is a check each module can forget, and
+the ones likeliest to forget it are the ones written after everybody stopped
+thinking about it.
+
+**How a request is recognised as a module's**, in this order:
+
+1. **The marker** — the route default `_uhifadhi_module: <slug>`
+   (`UhifadhiSeamBundle::MODULE_ROUTE_DEFAULT`), which a module writes once per
+   controller. Precise, self-declaring, works wherever the route lives, and
+   costs an array lookup. A route that carries its area's uuid in a parameter
+   not called `uuid` names that parameter with
+   `_uhifadhi_module_area: <parameter>`.
+2. **The fleet's path shape** — `/areas/{uuid}/modules/{slug}/…` — as the safety
+   net under a module that has not added its line, and **only when the segment
+   names a module the catalogue actually has**. That last clause is not a
+   detail: `/areas/{uuid}/modules/customize` is the area's own screen, the one
+   an admin unparks *from*, and a gate that read the shape alone would lock them
+   out of it.
+
+**What it costs.** One indexed row read (`area_module` joined to `module` and
+the area, `LIMIT 1`) per recognised request. A request with the marker pays only
+that; a request without one that wears the path shape pays the catalogue read as
+well, which is the price of the safety net and the reason the marker is the
+recommended line. Every other request — every asset, every page outside an area
+— exits on an anchored string comparison. Nothing is cached, deliberately: see
+the attention-list promise below.
+
+**What it does not do.** It does not preempt anything else. An area that does
+not exist, a page whose own entity is missing and a caller without permission
+are all still answered where they were answered before. It runs on main requests
+only — what was ruled is that a parked module must not be reachable by URL, and
+a sub-request is a render the application asked for itself. And where an
+installation resolves the area contract to a class with no uuid, the gate cannot
+read a URL and stands aside rather than guessing.
+
+**An area created between two seeds holds no rows at all**, so every module
+reads as absent there — in the shop on its screens, and 404 on its URLs. One
+click on the customize screen, or the next `seam:catalogue:seed`, gives it rows.
 
 ## The attention-list promise
 

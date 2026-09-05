@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Uhifadhi\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 use Uhifadhi\Seam\Entity\AreaInterface;
 
 /**
@@ -55,6 +56,7 @@ use Uhifadhi\Seam\Entity\AreaInterface;
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'area_of_interest')]
+#[ORM\HasLifecycleCallbacks]
 class AreaOfInterest implements AreaInterface
 {
     #[ORM\Id]
@@ -62,12 +64,33 @@ class AreaOfInterest implements AreaInterface
     #[ORM\Column]
     private ?int $id = null; // @phpstan-ignore property.unusedType (assigned by Doctrine via reflection)
 
+    /**
+     * ADDRESSED PUBLICLY BY UUID, like the class it impersonates — the host's
+     * area carries a UUIDv7 and its routes are `/areas/{uuid}/…`, never the
+     * sequential id. The stub grew this column when the seam learned to close a
+     * parked module's routes: that gate reads an area out of a URL, so the field
+     * the URL carries is part of what the suite has to exercise.
+     */
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private ?Uuid $uuid = null;
+
     #[ORM\Column(length: 120)]
     private string $name = '';
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?Uuid
+    {
+        return $this->uuid;
+    }
+
+    #[ORM\PrePersist]
+    public function generateUuid(): void
+    {
+        $this->uuid ??= Uuid::v7();
     }
 
     public function getName(): string

@@ -53,6 +53,28 @@ final class UhifadhiSeamBundle extends AbstractBundle
      */
     public const string MODULE_TAG = 'uhifadhi.module';
 
+    /**
+     * THE ROUTE MARKER. A route default a module writes on its own routes —
+     * `_uhifadhi_module: <its slug>` — which is how the seam recognises a
+     * request as belonging to a module and closes it where the area has parked
+     * that module. Published for the same reason the tag is: the seam is the
+     * end that READS it, and the end that writes it should not retype a string.
+     *
+     * A route that carries it is read precisely; a route that does not is still
+     * caught by the fleet's `/areas/{uuid}/modules/{slug}/…` path shape when the
+     * segment names a module in the catalogue. See docs/guarantees.md.
+     */
+    public const string MODULE_ROUTE_DEFAULT = '_uhifadhi_module';
+
+    /**
+     * Which route parameter carries the area's uuid, for a module route that
+     * does not call it `uuid`. Optional; the fleet's convention is the default.
+     */
+    public const string MODULE_ROUTE_AREA_DEFAULT = '_uhifadhi_module_area';
+
+    /** The parameter a module route carries its area's uuid in, unless it says otherwise. */
+    public const string DEFAULT_AREA_PARAMETER = 'uuid';
+
     /** Config lives under "seam:", not the class-derived "uhifadhi_seam:". */
     protected string $extensionAlias = 'seam';
 

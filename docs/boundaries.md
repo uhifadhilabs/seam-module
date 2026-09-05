@@ -28,3 +28,17 @@ a page — a view-model, and the seam has no viewer.
 
 Concretely: this bundle ships **no `templates/` directory, no controllers and no
 routes**, and `Unit/BoundaryTest` fails the build if that changes.
+
+## It draws no route, and it closes them
+
+There is one place the line looks blurred and is not. Since 0.2 the seam carries
+a `kernel.request` listener that answers **404** for a module route in an area
+that has parked the module (see `docs/guarantees.md`). It defines no route,
+generates no URL and renders no page — it answers a question about the ledger,
+which is the seam's table, at the only moment the answer can still prevent a
+controller from running.
+
+The alternative was a check inside every module, and it fails the same test the
+grid fails, from the other side: it is not a picture, it is the *same* answer
+computed in a dozen places, each free to forget. Whoever knows the answer
+enforces it.

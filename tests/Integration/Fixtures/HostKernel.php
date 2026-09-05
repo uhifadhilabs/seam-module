@@ -32,8 +32,12 @@ use Uhifadhi\Seam\UhifadhiSeamBundle;
  * the sanctioned way to observe exactly the ones a specification is about — and
  * the extraction has to land on these names (config/services.php lists the same
  * set).
+ *
+ * NOT FINAL: {@see RoutedHostKernel} is this host with routes on it, which is
+ * what the route-gate specification needs and what no other specification
+ * should have to carry.
  */
-final class HostKernel extends TestKernel
+class HostKernel extends TestKernel
 {
     /**
      * The installed modules, as slug => provider overrides. Set before booting.

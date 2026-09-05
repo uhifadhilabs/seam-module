@@ -5,7 +5,7 @@ where each piece lives in this repository.
 
 ## What it owns
 
-**The seam carries; it does not show.** It owns four things and no more:
+**The seam carries; it does not show.** It owns five things and no more:
 
 - **The catalogue** — what modules exist in this deployment. Not a list anyone
   edits: a module is in the catalogue because it is installed and its provider
@@ -17,6 +17,10 @@ where each piece lives in this repository.
   for the host to fold into its matrix. Declared, never granted.
 - **The seed command** — the command that reconciles the catalogue with what is
   installed, without ever overruling an admin.
+- **The route gate** — where an area has parked a module, that module's routes
+  answer 404 there. One enforcement point, no per-module code, and nothing
+  rendered: see `docs/guarantees.md` for how a request is recognised and
+  `docs/boundaries.md` for why closing a route is not drawing one.
 
 **Zero modules is a working installation.** A fresh installation with the seam
 on it boots, has an empty catalogue, and is harmless. A runtime that only
@@ -38,6 +42,7 @@ slug the runtime recognises. A test sweeps `src/` for that property.
 | The area contract, which a module answers | `src/Entity/AreaInterface.php` |
 | The catalogue and the per-area ledger | `src/Entity/`, `src/Repository/` |
 | The runtime | `src/Service/` |
+| The route gate, applied to every request | `src/EventListener/ParkedModuleListener.php` |
 | The create-only seed | `src/Command/SeedCatalogueCommand.php` |
 | Test host app | `tests/Integration/TestKernel.php` |
 | A host, minimally: area entity + resolved target entity | `tests/Integration/Fixtures/HostKernel.php` |

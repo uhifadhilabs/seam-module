@@ -53,6 +53,24 @@ bin/console seam:catalogue:seed
 The seam ships no migration versions: the tables are the seam's, the migration
 history is the installation's.
 
+## Parking a module closes its routes
+
+Where an area has parked a module, that module's pages answer **404** there —
+enforced once, in the seam, before any controller runs. Nothing is asked of the
+module, but a module that says which one it is gets read precisely rather than
+inferred from its URL. One line per controller:
+
+```php
+use Uhifadhi\Seam\UhifadhiSeamBundle;
+
+#[Route(defaults: [UhifadhiSeamBundle::MODULE_ROUTE_DEFAULT => 'your-slug'])]
+final class YourModuleController { /* every route below is yours */ }
+```
+
+404 and not 403: parking withholds nothing, it means the area is not running the
+module. See [docs/guarantees.md](docs/guarantees.md) for the recognition rules,
+the cost, and what the gate deliberately does not do.
+
 ## Configuration
 
 ```yaml

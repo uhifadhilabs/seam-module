@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Uhifadhi\Seam\Command\SeedCatalogueCommand;
+use Uhifadhi\Seam\EventListener\ParkedModuleListener;
 use Uhifadhi\Seam\Repository\AreaModuleRepository;
 use Uhifadhi\Seam\Repository\ModuleRepository;
 use Uhifadhi\Seam\Service\AreaModuleLedger;
@@ -21,6 +22,7 @@ use Uhifadhi\Seam\Service\AreaModuleService;
 use Uhifadhi\Seam\Service\ModuleCatalogue;
 use Uhifadhi\Seam\Service\ModuleEntryRouteResolver;
 use Uhifadhi\Seam\Service\ModulePermissionCatalogue;
+use Uhifadhi\Seam\Service\ModuleRouteGate;
 use Uhifadhi\Seam\Service\ProviderCatalogueMapper;
 use Uhifadhi\Seam\UhifadhiSeamBundle;
 
@@ -50,6 +52,8 @@ use Uhifadhi\Seam\UhifadhiSeamBundle;
  *   seam.area_modules          per-area install state: install, uninstall, order
  *   seam.area_module_ledger    what an area has and what it does not
  *   seam.entry_routes          where a module's tile links
+ *   seam.module_route_gate     is this request for a module the area parked?
+ *   seam.parked_module_listener  the gate, applied to every incoming request
  *   seam.permissions           the permissions installed modules declare
  *   seam.seed_catalogue        the create-only catalogue seed command
  */
@@ -98,6 +102,23 @@ return static function (ContainerConfigurator $container): void {
 
     $services->set('seam.entry_routes', ModuleEntryRouteResolver::class)
         ->args([$providers]);
+
+    /*
+     * THE ROUTE GATE, and the listener that is its only caller. Parking a
+     * module for an area closes that module's routes there — the seam owns the
+     * ledger, so the seam is where the question is answered, once, for every
+     * module at the same time.
+     *
+     * Priority 8 puts the listener after Symfony's RouterListener (32), whose
+     * work — the route's defaults, on the request — is what the gate reads, and
+     * well before any controller runs.
+     */
+    $services->set('seam.module_route_gate', ModuleRouteGate::class)
+        ->args([service(AreaModuleRepository::class), service('seam.catalogue')]);
+
+    $services->set('seam.parked_module_listener', ParkedModuleListener::class)
+        ->args([service('seam.module_route_gate')])
+        ->tag('kernel.event_listener', ['event' => 'kernel.request', 'priority' => 8]);
 
     $services->set('seam.permissions', ModulePermissionCatalogue::class)
         ->args([$providers]);
