@@ -42,11 +42,12 @@ final class BoundaryTest extends TestCase
     /**
      * Real modules, plus the two the platform is likeliest to smuggle in:
      * "overview" (the pinned hub — pinned is a flag, not a slug the seam knows)
-     * and "map" (the first base module — base is a flag too).
+     * and "map" (infrastructure — the seam must not know it by name any more than
+     * it knew it as a base module).
      */
     public static function moduleNames(): \Generator
     {
-        foreach (['patrol', 'incident', 'roster', 'ingestion', 'storage', 'workflow', 'uhakiki', 'forest', 'overview'] as $name) {
+        foreach (['patrol', 'incident', 'roster', 'ingestion', 'storage', 'workflow', 'uhakiki', 'forest', 'overview', 'map'] as $name) {
             yield $name => [$name];
         }
     }

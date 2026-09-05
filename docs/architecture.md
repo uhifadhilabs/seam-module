@@ -32,6 +32,51 @@ installation has. A module is whatever tagged itself, and everything the seam
 treats specially (`pinned`, `base`) is a flag the provider declares, never a
 slug the runtime recognises. A test sweeps `src/` for that property.
 
+## Two tiers: infrastructure and capability
+
+Everything the seam catalogues is a **capability** module — patrol, incident —
+the per-area grid an admin governs: switched on and off per area, arriving
+default off, and written as an `area_module` row. That is the only tier the seam
+sees, and it is right for a capability an area may not want.
+
+The fleet's other tier never reaches the seam at all. An **infrastructure**
+module — map, widget, storage, area, team — is machinery a screen already relies
+on: installed means on, everywhere, and there is no honest per-area choice to
+offer for something whose absence breaks screens rather than removing features.
+An infrastructure module therefore carries **no** `uhifadhi.module` provider. It
+is guaranteed present by the composer graph (area-module hard-requires map, for
+one), not by a ledger row, so it appears in **no** catalogue, in **no** per-area
+grid, and in **no** `area_module` row. The distinction is a property of the
+bundle — whether it tags a provider — not a flag the seam reads; the seam simply
+never learns such a module exists, which is exactly the point.
+
+> This replaces the earlier `base()` treatment of map. `base()` still exists and
+> still means "seeded active rather than parked" for a capability module that
+> genuinely is one; it is not how infrastructure is expressed. "On by default in
+> the ledger" and "not in the ledger at all" are different claims, and for
+> machinery every map-bearing screen imports, the honest claim is the latter.
+
+**Upgrade note — a stale ledger row is inert, not a bug.** A deployment seeded
+before this ruling, while map was a `base()` provider, holds an active
+`area_module` row for map in every area, and a `module` catalogue row too.
+Nothing cleans either up and nothing needs to. The seed is create-only: it never
+deletes an uninstalled module's rows and never revisits a per-area row it already
+wrote. What retires map is not deletion but the catalogue itself — `ModuleCatalogue`
+is the *intersection* of the registered providers and the table, so with map's
+provider gone it drops out of `all()` and `find()` returns null for it, exactly
+as if the row were absent. Every offer is drawn from that catalogue, so the
+Customize grid no longer lists map: there is no toggle to switch it on and none
+to park it. `AreaModuleService::install()` is unreachable for map anyway — with
+no route to it, nothing calls it — and were it called for a fresh slug the
+catalogue miss returns null. Map also has no routes, so requests to it 404 for
+want of a route, never through the parked-module gate.
+
+The one visible residue is that raw per-area "what's on" reads
+(`AreaModuleService::activeFor()`, `AreaModuleLedger.installed`) are *not*
+intersected with the catalogue, so a still-active map row can linger in those
+lists until it is cleaned up out of band. It carries no behaviour — it is a name
+in a list, nothing more.
+
 ## What is here
 
 | Piece | File |
